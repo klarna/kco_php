@@ -1,0 +1,29 @@
+#!/bin/bash
+
+function run_phpcs {
+    phpcs --report-emacs "${1}"
+}
+
+function run_phpmd {
+    phpmd "${1}" text codesize,design,naming,unusedcode
+}
+
+case "${1}" in
+    --about )
+        echo "Perform static analysis of php source files"
+        ;;
+    * )
+        # stash away unstaged changes to run tests on code to be commited
+        git stash -u --keep-index || exit 1
+
+        # call out to tools
+        git diff --cached --name-only --diff-filter=ACM | while read file; do
+            run_phpcs "${file}"
+            run_phpmd "${file}"
+        done
+
+        # restore working directory
+        git reset --hard
+        git stash pop -q --index
+        ;;
+esac
