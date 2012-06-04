@@ -13,16 +13,28 @@ case "${1}" in
         echo "Perform static analysis of php source files"
         ;;
     * )
+        error=0
+
         # stash away unstaged changes to run tests on code to be commited
         git stash -u --keep-index || exit 1
 
         # call out to tools
-        git diff --cached --name-only --diff-filter=ACM | while read file; do
-            run_phpcs "${file}"
-            run_phpmd "${file}"
+        for file in `git diff --cached --name-only --diff-filter=ACM`; do
+            if echo $file | grep -e '\.php$' > /dev/null ; then
+                run_phpcs "${file}"
+                if [ $? -ne 0 ] ; then
+                    error=1
+                fi
+
+                run_phpmd "${file}"
+                if [ $? -ne 0 ] ; then
+                    error=1
+                fi
+            fi
         done
 
         # restore working directory
         git stash pop -q --index
+        exit $error
         ;;
 esac
