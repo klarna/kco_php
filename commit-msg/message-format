@@ -1,0 +1,21 @@
+#!/bin/awk -f
+
+NR == 1 {
+    if (length > 50) {
+        print "title to long"
+        exit 1
+    }
+}
+
+NR == 2 {
+    if (length != 0) {
+        print "2nd line should be empty"
+        exit 2
+    }
+}
+
+{
+    if (length > 72) {
+        print "line $FNR to long";
+    }
+}
