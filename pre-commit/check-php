@@ -23,7 +23,6 @@ case "${1}" in
         done
 
         # restore working directory
-        git reset --hard
         git stash pop -q --index
         ;;
 esac
