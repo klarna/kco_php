@@ -1,5 +1,12 @@
 #!/bin/awk -f
 
+BEGIN {
+    if (ARGV[1] == "--about") {
+        print "make sure commit message is within line width limits"
+        exit
+    }
+}
+
 NR == 1 {
     if (length > 50) {
         print "title to long"
