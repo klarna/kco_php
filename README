@@ -1,0 +1,12 @@
+install
+-------
+
+git remote add -f hooks gitolite@msgit.internal.machines:git-hooks
+git merge -s recursive -Xsubtree=git_hooks hooks/master --no-ff --log
+
+
+updating
+--------
+
+git fetch hooks
+git merge -s subtree hooks/master
