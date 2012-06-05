@@ -1,0 +1,54 @@
+#!/bin/bash
+
+config=`git config --get jshint.config`
+if [ -z "$config" ]; then
+    config=`dirname $0`"/../jshint"
+    config=`readlink -f "$config"`
+    echo "$config"
+    if [ ! -e "$config" ]; then
+        config=''
+    fi
+fi
+
+function run_jshint {
+    if [ -n "$config" ]; then
+        jshint --config "${config}" "${1}"
+    else
+        jshint "${1}"
+    fi
+}
+
+case "${1}" in
+    --about )
+        if [ -z "$config" ]; then
+            config='default config'
+        fi
+        echo "Perform static analysis of js source files (${config})"
+        ;;
+    * )
+        which jshint > /dev/null
+        if [ $? -eq 0 ]; then
+            echo "Please install jshint: npm install -g jshint"
+            exit 0
+        fi
+
+        error=0
+
+        # stash away unstaged changes to run tests on code to be commited
+        git stash -u --keep-index || exit 1
+
+        # call out to tools
+        for file in `git diff --cached --name-only --diff-filter=ACM`; do
+            if echo $file | grep -e '\.js$' > /dev/null ; then
+                run_jshint "${file}"
+                if [ $? -ne 0 ] ; then
+                    error=1
+                fi
+            fi
+        done
+
+        # restore working directory
+        git stash pop -q --index
+        exit $error
+        ;;
+esac
