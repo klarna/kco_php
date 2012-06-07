@@ -9,11 +9,12 @@ BEGIN {
 
 /^#/ {
     NR--
+    next
 }
 
 NR == 1 {
     if (length > 50) {
-        print "title to long"
+        print "title too long"
         exit 1
     }
 }
