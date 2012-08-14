@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<project name="zoidberg" default="tests">
+    <property name="work.dir" location="${user.dir}" />
+    <property name="build.base" location="base.xml"/>
+    <import file="${build.base}" />
+
+    <patternset id="source">
+        <include name="**/*.php" />
+        <exclude name="${tests.dir}" />
+        <exclude name="${tmp.dir}" />
+    </patternset>
+</project>
