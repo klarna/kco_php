@@ -4,7 +4,6 @@ config=`git config --get jshint.config`
 if [ -z "$config" ]; then
     config=`dirname $0`"/../jshint"
     config=`readlink -f "$config"`
-    echo "$config"
     if [ ! -e "$config" ]; then
         config=''
     fi
@@ -12,10 +11,23 @@ fi
 
 function run_jshint {
     if [ -n "$config" ]; then
-        jshint --config "${config}" "${1}"
+        jshint --config "${config}" "${@}"
     else
-        jshint "${1}"
+        jshint "${@}"
     fi
+}
+
+function changed_files {
+    git diff --cached --name-only --diff-filter=ACM
+}
+
+function write_staged {
+    while read file; do
+        name=`basename $file`
+        tmpfile=`mktemp /tmp/XXXXX-${name}`
+        git show ":$file" > $tmpfile
+        echo "$tmpfile"
+    done
 }
 
 case "${1}" in
@@ -26,29 +38,16 @@ case "${1}" in
         echo "Perform static analysis of js source files (${config})"
         ;;
     * )
-        which jshint > /dev/null
-        if [ $? -eq 0 ]; then
+        if ! which jshint > /dev/null; then
             echo "Please install jshint: npm install -g jshint"
             exit 0
         fi
 
-        error=0
-
-        # stash away unstaged changes to run tests on code to be commited
-        git stash -u --keep-index || exit 1
-
         # call out to tools
-        for file in `git diff --cached --name-only --diff-filter=ACM`; do
-            if echo $file | grep -e '\.js$' > /dev/null ; then
-                run_jshint "${file}"
-                if [ $? -ne 0 ] ; then
-                    error=1
-                fi
-            fi
-        done
-
-        # restore working directory
-        git stash pop -q --index
-        exit $error
+        files=`changed_files | grep -e '\.js$' | write_staged`
+        run_jshint $files
+        status=$?
+        rm $files
+        exit $status
         ;;
 esac

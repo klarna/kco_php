@@ -1,11 +1,27 @@
 #!/bin/bash
 
+phpmd_output=text
+phpmd_rules='codesize,design,naming,unusedcode'
+
 function run_phpcs {
-    phpcs --report-emacs "${1}"
+    phpcs --report-emacs ${@}
 }
 
 function run_phpmd {
-    phpmd "${1}" text codesize,design,naming,unusedcode
+    phpmd "$1" "$phpmd_output" "$phpmd_rules"
+}
+
+function changed_files {
+    git diff --cached --name-only --diff-filter=ACM
+}
+
+function write_staged {
+    while read file; do
+        name=`basename $file`
+        tmpfile=`mktemp /tmp/XXXXX-${name}`
+        git show ":$file" > $tmpfile
+        echo "$tmpfile"
+    done
 }
 
 case "${1}" in
@@ -13,28 +29,19 @@ case "${1}" in
         echo "Perform static analysis of php source files"
         ;;
     * )
-        error=0
-
-        # stash away unstaged changes to run tests on code to be commited
-        git stash -u --keep-index || exit 1
+        if ! which phpcs phpmd > /dev/null; then
+            echo "Please install phpcs and phpmd: somehow"
+            exit 0
+        fi
 
         # call out to tools
-        for file in `git diff --cached --name-only --diff-filter=ACM`; do
-            if echo $file | grep -e '\.php$' > /dev/null ; then
-                run_phpcs "${file}"
-                if [ $? -ne 0 ] ; then
-                    error=1
-                fi
-
-                run_phpmd "${file}"
-                if [ $? -ne 0 ] ; then
-                    error=1
-                fi
-            fi
-        done
-
-        # restore working directory
-        git stash pop -q --index
-        exit $error
+        files=`changed_files | grep -e '\.php$' | write_staged`
+        run_phpcs $files
+        phpcs_status=$?
+        run_phpmd `echo $files | tr ' ' ','`
+        phpmd_status=$?
+        rm $files
+        test "$phpcs_status" -eq 0 -a "$phpmd_status" -eq 0
+        exit $?
         ;;
 esac
