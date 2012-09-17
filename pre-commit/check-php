@@ -36,6 +36,9 @@ case "${1}" in
 
         # call out to tools
         files=`changed_files | grep -e '\.php$' | write_staged`
+        if [ -z "$files" ]; then
+            exit 0
+        fi
         run_phpcs $files
         phpcs_status=$?
         run_phpmd `echo $files | tr ' ' ','`

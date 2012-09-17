@@ -11,9 +11,9 @@ fi
 
 function run_jshint {
     if [ -n "$config" ]; then
-        jshint --config "${config}" "${@}"
+        jshint --config "${config}" ${@}
     else
-        jshint "${@}"
+        jshint ${@}
     fi
 }
 
@@ -45,6 +45,9 @@ case "${1}" in
 
         # call out to tools
         files=`changed_files | grep -e '\.js$' | write_staged`
+        if [ -z "$files" ]; then
+            exit 0
+        fi
         run_jshint $files
         status=$?
         rm $files
