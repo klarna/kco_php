@@ -131,4 +131,87 @@
         if="coverage" />
 
     <!-- TASKS !-->
+    <macrodef name="phpunit">
+        <attribute name="conf" default="phpunit.xml"/>
+        <attribute name="dir" default="." />
+
+        <sequential>
+            <exec dir="${work.dir}" executable="phpunit" failonerror="true">
+                <arg line="--stderr -c @{conf} @{dir}" />
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="coverage">
+        <attribute name="dir" default="." />
+        <attribute name="clover" />
+        <attribute name="html" />
+        <attribute name="log" />
+        <attribute name="conf" />
+
+        <sequential>
+            <exec dir="${work.dir}" executable="phpunit" failonerror="true">
+                <arg line="--stderr" />
+                <arg line="-d memory_limit=256M" />
+                <arg line="-c @{conf}" />
+                <arg line="--coverage-clover @{clover}" />
+                <arg line="--coverage-html @{html}" />
+                <arg line="--log-junit @{log}" />
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="phpmd">
+        <attribute name="format" default="xml" />
+        <attribute name="rules" default="codesize,design,naming,unusedcode" />
+        <attribute name="dir" default="${src.dir}" />
+        <attribute name="dest" />
+        <element name="targets" implicit="true" />
+
+        <sequential>
+            <fileset dir="@{dir}" id="phpmd.set">
+                <targets/>
+            </fileset>
+            <pathconvert pathsep="," property="phpmd.files" refid="phpmd.set"/>
+            <exec dir="${work.dir}" executable="phpmd" failonerror="false">
+                <arg line="${phpmd.files}" />
+                <arg line="@{format}" />
+                <arg line="@{rules}" />
+                <arg line="--reportfile @{dest}" />
+                <arg line="--suffixes=.php" />
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="phpdoc">
+        <attribute name="dir" default="${src.dir}" />
+        <attribute name="dest" default="${docs.dir}/phpdoc" />
+
+        <sequential>
+            <exec dir="${work.dir}" executable="phpdoc">
+                <arg value="-d" />
+                <arg value="@{dir}" />
+                <arg value="-t" />
+                <arg value="@{dest}" />
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="checkstyle">
+        <attribute name="standard" default="PEAR" />
+        <attribute name="dest" />
+        <attribute name="dir" default="${src.dir}" />
+        <element name="targets" implicit="true" />
+
+        <sequential>
+            <apply parallel="true" dir="${work.dir}" executable="phpcs">
+                <arg line="--report=checkstyle" />
+                <arg line="--report-file=@{dest}" />
+                <arg line="--standard=@{standard}" />
+                <fileset dir="@{dir}">
+                    <targets/>
+                </fileset>
+            </apply>
+        </sequential>
+    </macrodef>
 </project>

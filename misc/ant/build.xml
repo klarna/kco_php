@@ -3,10 +3,65 @@
     <property name="work.dir" location="${user.dir}" />
     <property name="build.base" location="base.xml"/>
     <import file="${build.base}" />
+    <property name="phpunit.conf" location="${tests.dir}/phpunit.conf.xml" />
+    <property name="checkstyle.standard" value="PEAR" />
+    <property name="phpmd.file" value="${tmp.dir}/phpmd.xml" />
+    <property name="phpdoc.dir" location="${docs.dir}/phpdoc" />
 
     <patternset id="source">
         <include name="**/*.php" />
         <exclude name="${tests.dir}" />
         <exclude name="${tmp.dir}" />
     </patternset>
+
+    <target
+        name="check"
+        description="Run static checks on the source"
+        depends="-init"
+    >
+        <parallel>
+            <phpmd
+                format="xml"
+                rules="${user.dir}/misc/phpmd.xml"
+                dest="${phpmd.file}"
+            >
+                <patternset refid="source" />
+            </phpmd>
+            <checkstyle
+                standard="${checkstyle.standard}"
+                dest="${checkstyle.file}"
+            >
+                <patternset refid="source" />
+            </checkstyle>
+
+        </parallel>
+    </target>
+
+    <target
+        name="create-doc"
+        description="Generate documentation"
+    >
+        <phpdoc dir="${src.dir}" dest="${phpdoc.dir}" />
+    </target>
+
+    <target
+        name="-unittest-nocov"
+        description="plain run of unittests"
+        unless="coverage"
+    >
+        <phpunit conf="${phpunit.conf}" dir="${tests.dir}" />
+    </target>
+
+    <target
+        name="-unittest-cov"
+        description="run unittest and output coverage data"
+        if="coverage"
+    >
+        <coverage
+            clover="${coverage.file}"
+            html="${coverage.dir}"
+            dir="${work.dir}"
+            conf="${phpunit.conf}"
+            log="${tests.juint}" />
+    </target>
 </project>
