@@ -16,7 +16,8 @@
     <property name="src.dir" location="${work.dir}" />
     <property name="tmp.dir" location="${work.dir}/data/tmp" />
     <property name="build.dir" location="${tmp.dir}/build" />
-    <property name="install.dir" location="/tmp/${product}" />
+    <property name="root.dir" location="/tmp/${product}" />
+    <property name="install.dir" location="${root.dir}" />
     <property name="docs.dir" location="${work.dir}/docs" />
     <property name="tests.dir" location="${work.dir}/tests" />
     <property name="archive.dir" location="${work.dir}/data/archive" />
@@ -60,9 +61,9 @@
 
     <target name="coverage" depends="-enable-coverage, unittest" />
     <target name="tests" depends="-init, check, unittest" />
-    <target name="unittest" depends="-init, -unittest-nocov, -unittest-cov"/>
+    <target name="unittest" depends="-init, -pre-unittest, -unittest-nocov, -unittest-cov"/>
 
-    <target name="archive">
+    <target name="archive" depends="-pre-archive">
         <exec dir="${work.dir}" executable="${git}">
             <arg value="archive" />
             <arg value="HEAD" />
@@ -72,10 +73,7 @@
         </exec>
     </target>
 
-    <target name="dist"
-        description="Create a distributable package"
-        depends="-init, tests, archive, fetch-resources, create-doc"
-    >
+    <target name="dist-extra" depends="archive, create-doc">
         <zip destfile="${zip.file}" update="true">
             <zipfileset
                 dir="${docs.dir}"
@@ -83,7 +81,12 @@
         </zip>
     </target>
 
-    <target name="install" description="Copy files to run-time folder">
+    <target name="dist"
+        description="Create a distributable package"
+        depends="-init, tests, archive, fetch-resources, dist-extra"
+    />
+
+    <target name="-install">
         <copy todir="${install.dir}">
             <fileset dir="${src.dir}">
                 <patternset refid="source" />
@@ -91,7 +94,24 @@
         </copy>
     </target>
 
+    <target name="install-extra" unless="recursive">
+        <antcall target="-install-extra" />
+    </target>
+
+    <target name="install" description="Copy files to run-time folder"
+        depends="-install, install-extra"
+    />
+
     <!-- STUBS !-->
+    <target
+        name="-pre-unittest"
+        description="hook to run tasks before unittests" />
+    <target
+        name="-pre-archive"
+        description="hook to run tasks before archiving" />
+    <target
+        name="-install-extra"
+        description="Install extra files such as demo files" />
     <target
         name="check"
         description="Run static checks on the source" />
