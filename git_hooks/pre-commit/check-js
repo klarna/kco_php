@@ -1,0 +1,56 @@
+#!/bin/bash
+
+config=`git config --get jshint.config`
+if [ -z "$config" ]; then
+    config=`dirname $0`"/../jshint"
+    config=`readlink -f "$config"`
+    if [ ! -e "$config" ]; then
+        config=''
+    fi
+fi
+
+function run_jshint {
+    if [ -n "$config" ]; then
+        jshint --config "${config}" ${@}
+    else
+        jshint ${@}
+    fi
+}
+
+function changed_files {
+    git diff --cached --name-only --diff-filter=ACM
+}
+
+function write_staged {
+    while read file; do
+        name=`basename $file`
+        tmpfile=`mktemp /tmp/XXXXX-${name}`
+        git show ":$file" > $tmpfile
+        echo "$tmpfile"
+    done
+}
+
+case "${1}" in
+    --about )
+        if [ -z "$config" ]; then
+            config='default config'
+        fi
+        echo "Perform static analysis of js source files (${config})"
+        ;;
+    * )
+        if ! which jshint > /dev/null; then
+            echo "Please install jshint: npm install -g jshint"
+            exit 0
+        fi
+
+        # call out to tools
+        files=`changed_files | grep -e '\.js$' | write_staged`
+        if [ -z "$files" ]; then
+            exit 0
+        fi
+        run_jshint $files
+        status=$?
+        rm $files
+        exit $status
+        ;;
+esac

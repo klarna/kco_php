@@ -1,0 +1,33 @@
+#!/usr/bin/awk -f
+
+BEGIN {
+    if (ARGV[1] == "--about") {
+        print "make sure commit message is within line width limits"
+        exit
+    }
+}
+
+/^#/ {
+    NR--
+    next
+}
+
+NR == 1 {
+    if (length > 50) {
+        print "title too long"
+        exit 1
+    }
+}
+
+NR == 2 {
+    if (length != 0) {
+        print "2nd line should be empty"
+        exit 2
+    }
+}
+
+{
+    if (length > 72) {
+        print "line ", FNR, " is to long";
+    }
+}

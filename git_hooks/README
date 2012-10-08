@@ -1,0 +1,14 @@
+install
+-------
+
+git remote add -f hooks gitolite@msgit.internal.machines:git-hooks
+git merge -s ours --no-commit hooks/master
+git read-tree --prefix=git_hooks -u hooks/master
+git commit -m "imported git hooks"
+
+
+updating
+--------
+
+git fetch hooks
+git merge -s subtree hooks/master

@@ -1,0 +1,50 @@
+#!/bin/bash
+
+phpmd_output=text
+phpmd_rules='codesize,design,naming,unusedcode'
+
+function run_phpcs {
+    phpcs --report-emacs ${@}
+}
+
+function run_phpmd {
+    phpmd "$1" "$phpmd_output" "$phpmd_rules"
+}
+
+function changed_files {
+    git diff --cached --name-only --diff-filter=ACM
+}
+
+function write_staged {
+    while read file; do
+        name=`basename $file`
+        tmpfile=`mktemp /tmp/XXXXX-${name}`
+        git show ":$file" > $tmpfile
+        echo "$tmpfile"
+    done
+}
+
+case "${1}" in
+    --about )
+        echo "Perform static analysis of php source files"
+        ;;
+    * )
+        if ! which phpcs phpmd > /dev/null; then
+            echo "Please install phpcs and phpmd: somehow"
+            exit 0
+        fi
+
+        # call out to tools
+        files=`changed_files | grep -e '\.php$' | write_staged`
+        if [ -z "$files" ]; then
+            exit 0
+        fi
+        run_phpcs $files
+        phpcs_status=$?
+        run_phpmd `echo $files | tr ' ' ','`
+        phpmd_status=$?
+        rm $files
+        test "$phpcs_status" -eq 0 -a "$phpmd_status" -eq 0
+        exit $?
+        ;;
+esac
