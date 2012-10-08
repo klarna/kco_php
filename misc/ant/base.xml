@@ -133,11 +133,11 @@
     <!-- TASKS !-->
     <macrodef name="phpunit">
         <attribute name="conf" default="phpunit.xml"/>
-        <attribute name="dir" default="." />
+        <attribute name="dir" default="IGNORED" />
 
         <sequential>
             <exec dir="${work.dir}" executable="phpunit" failonerror="true">
-                <arg line="--stderr -c @{conf} @{dir}" />
+                <arg line="--stderr -c @{conf}" />
             </exec>
         </sequential>
     </macrodef>
