@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkour_Exception class
+ * File containing the Klarna_Checkout_Exception class
  *
  * PHP version 5.3
  *

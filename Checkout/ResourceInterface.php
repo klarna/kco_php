@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkour_Resource interface
+ * File containing the Klarna_Checkout_Resource interface
  *
  * PHP version 5.3
  *
@@ -52,7 +52,7 @@ interface Klarna_Checkout_ResourceInterface
      *
      * @param string $location URL of the resource
      *
-     * @return  void
+     * @return void
      */
     public function setLocation($location);
 

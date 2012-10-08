@@ -1,0 +1,5 @@
+<phpunit convertErrorsToExceptions="true" convertNoticesToException="true" convertWarningsToExceptions="true" verbose="true" strict="true">
+	<php>
+		<includePath>../</includePath>
+	</php>
+</phpunit>
