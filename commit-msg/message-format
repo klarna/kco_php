@@ -1,12 +1,11 @@
-#!/usr/bin/awk -f
+#!/bin/bash
 
-BEGIN {
-    if (ARGV[1] == "--about") {
-        print "make sure commit message is within line width limits"
-        exit
-    }
-}
-
+case "${1}" in
+    --about )
+        echo "make sure commit message is within line width limits"
+        ;;
+    * )
+        awk '
 /^#/ {
     NR--
     next
@@ -30,4 +29,5 @@ NR == 2 {
     if (length > 72) {
         print "line ", FNR, " is to long";
     }
-}
+}' "${1}"
+esac
