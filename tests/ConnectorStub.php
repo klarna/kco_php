@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_Resource interface
+ * File containing the Klarna_Checkout_ConnectorStub class
  *
  * PHP version 5.3
  *
@@ -28,7 +28,7 @@
  */
 
 /**
- * Interface for the resource object
+ * Stub implementation of the Connector
  *
  * @category  Payment
  * @package   Klarna_Checkout
@@ -38,44 +38,30 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-interface Klarna_Checkout_ResourceInterface
+class Klarna_Checkout_ConnectorStub implements Klarna_Checkout_ConnectorInterface
 {
-    /**
-     * Get the URL of the resource
-     *
-     * @return string
-     */
-    public function getLocation();
+    public $applied;
 
     /**
-     * Set the URL of the resource
+     * Applying the method on the specific resource
      *
-     * @param string $location URL of the resource
+     * @param string                            $method   Http methods
+     * @param Klarna_Checkout_ResourceInterface $resource Resource
+     * @param array                             $options  Options
      *
      * @return void
      */
-    public function setLocation($location);
+    public function apply(
+        $method,
+        Klarna_Checkout_ResourceInterface $resource,
+        array $options = null
+    ) {
+        $this->applied = array(
+            "method" => $method,
+            "resource" => $resource,
+            "options" => $options
+        );
 
-    /**
-     * Return content type of the resource
-     *
-     * @return string Content type
-     */
-    public function getContentType();
-
-    /**
-     * Update resource with the new data
-     *
-     * @param array $data data
-     *
-     * @return void
-     */
-    public function parse(array $data);
-
-    /**
-     * Basic representation of the object
-     *
-     * @return array data
-     */
-    public function marshal();
+        $resource->setLocation("http://stub");
+    }
 }

@@ -45,8 +45,13 @@ interface Klarna_Checkout_ConnectorInterface
      *
      * @param string                            $method   Http methods
      * @param Klarna_Checkout_ResourceInterface $resource resource
+     * @param array                             $options  Options
      *
      * @return void
      */
-    public function apply($method, Klarna_Checkout_ResourceInterface $resource);
+    public function apply(
+        $method,
+        Klarna_Checkout_ResourceInterface $resource,
+        array $options = null
+    );
 }
