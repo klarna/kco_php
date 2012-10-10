@@ -2,4 +2,12 @@
 	<php>
 		<includePath>../</includePath>
 	</php>
+	<testsuite name="Unit Test">
+		<directory>unit</directory>
+	</testsuite>
+	<filter>
+		<whitelist>
+			<directory>../Checkout</directory>
+		</whitelist>
+	</filter>
 </phpunit>
