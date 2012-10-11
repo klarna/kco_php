@@ -29,9 +29,8 @@
 require_once 'Checkout/ResourceInterface.php';
 require_once 'Checkout/Order.php';
 require_once 'Checkout/ConnectorInterface.php';
-require_once 'tests/ConnectorStub.php';
 /**
- * UnitTest for the Order class
+ * UnitTest for the Order class, basic functionality
  *
  * @category  Payment
  * @package   Klarna_Checkout
@@ -51,13 +50,6 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
     protected $order;
 
     /**
-     * Connector Instance
-     *
-     * @var Klarna_Checkout_ConnectorStub
-     */
-    protected $connector;
-
-    /**
      * Setup function
      *
      * @return void
@@ -65,7 +57,6 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->order = new Klarna_Checkout_Order();
-        $this->connector = new Klarna_Checkout_ConnectorStub();
     }
 
     /**
@@ -157,93 +148,11 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that create works as intended
-     *
-     * @return void
-     */
-    public function testCreate()
-    {
-        $data = array("foo" => "boo");
-        $order = Klarna_Checkout_Order::create($this->connector, $data);
-
-        $this->assertInstanceOf("Klarna_Checkout_Order", $order);
-        $this->assertInstanceOf("Klarna_Checkout_ResourceInterface", $order);
-        $this->assertEquals("boo", $order->get("foo"));
-        $this->assertEquals("POST", $this->connector->applied["method"]);
-        $this->assertEquals($order, $this->connector->applied["resource"]);
-        $this->assertEquals($order->getLocation(), "http://stub");
-        $this->assertArrayHasKey("url", $this->connector->applied["options"]);
-    }
-
-    /**
-     * Test that fetch works as intended
-     *
-     * @return void
-     */
-    public function testFetch()
-    {
-        $this->order->setLocation("http://klarna.com/foo/bar/15");
-        $url = $this->order->getLocation();
-        $this->order->fetch($this->connector);
-
-        $this->assertEquals("GET", $this->connector->applied["method"]);
-        $this->assertEquals($this->order, $this->connector->applied["resource"]);
-        $this->assertArrayHasKey("url", $this->connector->applied["options"]);
-        $this->assertEquals($url, $this->connector->applied["options"]["url"]);
-    }
-
-    /**
-     * Test that update works as intended
-     *
-     * @return void
-     */
-    public function testUpdate()
-    {
-        $this->order->setLocation("http://klarna.com/foo/bar/15");
-        $url = $this->order->getLocation();
-        $this->order->update($this->connector);
-
-        $this->assertEquals("POST", $this->connector->applied["method"]);
-        $this->assertEquals($this->order, $this->connector->applied["resource"]);
-        $this->assertArrayHasKey("url", $this->connector->applied["options"]);
-        $this->assertEquals($url, $this->connector->applied["options"]["url"]);
-    }
-
-    /**
-     * Test that entry point (Base URL) can be changed
-     *
-     * @return void
-     */
-    public function testCreateAlternativeEntryPoint()
-    {
-        $data = array("foo" => "boo");
-        $baseUrl = "https://checkout.klarna.com/beta/checkout/orders";
-        Klarna_Checkout_Order::$baseUrl = $baseUrl;
-        Klarna_Checkout_Order::create($this->connector, $data);
-
-        $this->assertEquals($baseUrl, $this->connector->applied["options"]["url"]);
-    }
-
-    /**
      * Test that get and set work
      *
      * @return void
      */
     public function testSetGetValues()
-    {
-        $key = "testKey";
-        $value = "testValue";
-        $this->order->set($key, $value);
-
-        $this->assertEquals($value, $this->order->get($key));
-    }
-
-    /**
-     * Test that set overwrite the keys
-     *
-     * @return void
-     */
-    public function testSetGetValuesOverwrite()
     {
         $key = "testKey1";
         $this->order->set($key, "testValue1");
