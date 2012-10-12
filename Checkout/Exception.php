@@ -38,8 +38,59 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-
 class Klarna_Checkout_Exception extends Exception
 {
 
+}
+
+/**
+ * Connection exception
+ *
+ * @category  Payment
+ * @package   Klarna_Checkout
+ * @author    Rickard D. <rickard.dybeck@klarna.com>
+ * @author    Christer G. <christer.gustavsson@klarna.com>
+ * @copyright 2012 Klarna AB
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
+ * @link      http://integration.klarna.com/
+ */
+class Klarna_Checkout_ConnectionErrorException extends Klarna_Checkout_Exception
+{
+
+}
+/**
+ * Http Status code exception
+ *
+ * @category  Payment
+ * @package   Klarna_Checkout
+ * @author    Rickard D. <rickard.dybeck@klarna.com>
+ * @author    Christer G. <christer.gustavsson@klarna.com>
+ * @copyright 2012 Klarna AB
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
+ * @link      http://integration.klarna.com/
+ */
+class Klarna_Checkout_HTTP_Status_Exception extends Klarna_Checkout_Exception
+{
+
+}
+/**
+ * Response content format exception
+ *
+ * @category  Payment
+ * @package   Klarna_Checkout
+ * @author    Rickard D. <rickard.dybeck@klarna.com>
+ * @author    Christer G. <christer.gustavsson@klarna.com>
+ * @copyright 2012 Klarna AB
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
+ * @link      http://integration.klarna.com/
+ */
+class Klarna_Checkout_FormatException extends Klarna_Checkout_Exception
+{
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct('Bad format on response content.');
+    }
 }
