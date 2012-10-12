@@ -1,13 +1,14 @@
 <phpunit convertErrorsToExceptions="true" convertNoticesToException="true" convertWarningsToExceptions="true" verbose="true" strict="true">
-	<php>
-		<includePath>../</includePath>
-	</php>
-	<testsuite name="Unit Test">
-		<directory>unit</directory>
-	</testsuite>
-	<filter>
-		<whitelist>
-			<directory>../Checkout</directory>
-		</whitelist>
-	</filter>
+    <php>
+        <includePath>../</includePath>
+    </php>
+    <testsuite name="Unit Test">
+        <directory>unit</directory>
+    </testsuite>
+    <filter>
+        <whitelist>
+            <directory>../Checkout</directory>
+            <exclude><directory suffix="Interface.php">../Checkout</directory></exclude>
+        </whitelist>
+    </filter>
 </phpunit>

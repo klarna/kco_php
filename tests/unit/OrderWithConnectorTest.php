@@ -41,7 +41,7 @@ require_once 'tests/ConnectorStub.php';
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Order Instance
