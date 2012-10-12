@@ -182,6 +182,14 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
         }
     }
 
+    /**
+     * Act upon the status of a response
+     *
+     * @param Klarna_Checkout_HTTP_Response     $result   response from server
+     * @param Klarna_Checkout_ResourceInterface $resource associated resource
+     *
+     * @return Klarna_Checkout_HTTP_Response
+     */
     protected function handleResponse(
         Klarna_Checkout_HTTP_Response $result,
         Klarna_Checkout_ResourceInterface $resource

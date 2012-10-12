@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2012 Klarna AB
  *
@@ -29,67 +28,78 @@
  */
 
 /**
- * A simple class handling the header callback for cURL.
+ * A wrapper around the cURL functions
  *
  * @category   Payment
  * @package    Payment_Klarna
  * @subpackage HTTP
- * @author     Klarna <support@klarna.com>
+ * @author     David K. <david.keijser@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://integration.klarna.com/
  */
-class Klarna_Checkout_HTTP_CURLHeaders
+class Klarna_Checkout_HTTP_CURLHandle
+    implements Klarna_Checkout_HTTP_CURLHandleInterface
 {
     /**
-     * Response headers, cleared for each request.
-     *
-     * @var array
+     * cURL handle
+     * @var resource
      */
-    protected $headers;
+    private $_handle = null;
 
     /**
-     * Initializes a new instance of the HTTP cURL class.
+     * Create a new cURL handle
      */
     public function __construct()
     {
-        $this->headers = array();
-    }
-
-    /**
-     * Callback method to handle custom headers.
-     *
-     * @param resource $curl   the cURL resource.
-     * @param string   $header the header data.
-     *
-     * @return int the number of bytes handled.
-     */
-    public function processHeader($curl, $header)
-    {
-        $curl = null;
-        //TODO replace with regexp, e.g. /^([^:]+):([^:]*)$/ ?
-        $pos = strpos($header, ':');
-        // Didn't find a colon.
-        if ($pos === false) {
-            // Not real header, abort.
-            return strlen($header);
+        if (!extension_loaded('curl')) {
+            throw new RuntimeException(
+                'cURL extension is requred.'
+            );
         }
-
-        $key = substr($header, 0, $pos);
-        $value = trim(substr($header, $pos+1));
-
-        $this->headers[$key] = trim($value);
-
-        return strlen($header);
+        $this->_handle = curl_init();
     }
 
     /**
-     * Gets the accumulated headers.
+     * Set an option for the cURL transfer
+     *
+     * @param int   $name  option the set
+     * @param mixed $value the value to be set on option
+     *
+     * @return void
+     */
+    public function setOption($name, $value)
+    {
+        curl_setopt($this->_handle, $name, $value);
+    }
+
+    /**
+     * Perform the cURL session
+     *
+     * @return mixed response
+     */
+    public function execute()
+    {
+        return curl_exec($this->_handle);
+    }
+
+    /**
+     * Get information regarding this transfer
      *
      * @return array
      */
-    public function getHeaders()
+    public function getInfo()
     {
-        return $this->headers;
+        return curl_getinfo($this->_handle);
+    }
+
+    /**
+     * Close the cURL session
+     *
+     * @return void
+     */
+    public function close()
+    {
+        curl_close($this->_handle);
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2012 Klarna AB
  *
@@ -31,6 +30,8 @@
 require_once 'Checkout/HTTP/HTTPInterface.php';
 require_once 'Checkout/HTTP/CURL.php';
 require_once 'Checkout/HTTP/Request.php';
+require_once 'Checkout/HTTP/CURLFactory.php';
+require_once 'tests/CURLHandleStub.php';
 
 /**
  * PHPUnit test case for the HTTP CURL wrapper.
@@ -57,7 +58,11 @@ class Klarna_Checkout_HTTP_CURLTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->http = new Klarna_Checkout_HTTP_CURL();
+        $this->factory = $this->getMock(
+            'Klarna_Checkout_HTTP_CURLFactory',
+            array('handle')
+        );
+        $this->http = new Klarna_Checkout_HTTP_CURL($this->factory);
     }
 
     /**
@@ -91,6 +96,18 @@ class Klarna_Checkout_HTTP_CURLTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that the timout can be set
+     *
+     * @return void
+     */
+    public function testSetTimeout()
+    {
+        $timeout = 10;
+        $this->http->setTimeout($timeout);
+        $this->assertEquals($timeout, $this->http->getTimeout());
+    }
+
+    /**
      * Make sure that createRequest returns a usuable request object.
      *
      * @return void
@@ -103,5 +120,118 @@ class Klarna_Checkout_HTTP_CURLTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('', $request->getData());
         $this->assertEquals(0, count($request->getHeaders()));
+    }
+
+    /**
+     * Make sure that if no curl handle could be created a exception is thrown
+     *
+     * @return void
+     */
+    public function testCurlFailureThrowsException()
+    {
+        $this->setExpectedException('RuntimeException');
+        $this->factory->expects($this->once())
+            ->method('handle')
+            ->will($this->returnValue(false));
+        $request = $this->http->createRequest('url');
+        $this->http->send($request);
+    }
+
+    /**
+     * Make sure that the correct cURL options is set
+     *
+     * @return void
+     */
+    public function testSendSetsOptions()
+    {
+        $url = 'maybe-localhost';
+        $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $this->factory->expects($this->once())
+            ->method('handle')
+            ->will($this->returnValue($handle));
+        $request = $this->http->createRequest($url);
+        $this->http->send($request);
+        $this->assertEquals($url, $handle->options[CURLOPT_URL]);
+        $this->assertFalse(
+            array_key_exists(CURLOPT_POST, $handle->options) &&
+            $handle->options[CURLOPT_POST]
+        );
+        $this->assertTrue($handle->options[CURLOPT_RETURNTRANSFER]);
+        $this->assertEquals(
+            $this->http->getTimeout(),
+            $handle->options[CURLOPT_RETURNTRANSFER]
+        );
+    }
+
+    /**
+     * Make sure that the correct additional options for POST request are set
+     *
+     * @return void
+     */
+    public function testSendPostOptions()
+    {
+        $url = 'maybe-localhost';
+        $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $this->factory->expects($this->once())
+            ->method('handle')
+            ->will($this->returnValue($handle));
+        $request = $this->http->createRequest($url);
+        $request->setMethod('POST');
+        $this->http->send($request);
+        $this->assertTrue(
+            array_key_exists(CURLOPT_POST, $handle->options) &&
+            $handle->options[CURLOPT_POST]
+        );
+        $this->assertEquals(
+            $this->http->getTimeout(),
+            $handle->options[CURLOPT_RETURNTRANSFER]
+        );
+    }
+
+    /**
+     * Make sure that headers are sent in
+     *
+     * @return void
+     */
+    public function testSendHeaders()
+    {
+        $url = 'maybe-localhost';
+        $headers = array(
+            'Content-Type' => 'text/json'
+        );
+        $expectedHeaders = array(
+            'Content-Type: text/json'
+        );
+        $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $this->factory->expects($this->once())
+            ->method('handle')
+            ->will($this->returnValue($handle));
+        $request = $this->http->createRequest($url);
+        foreach ($headers as $header => $value) {
+            $request->setHeader($header, $value);
+        }
+        $this->http->send($request);
+        $this->assertEquals(
+            $expectedHeaders,
+            $handle->options[CURLOPT_HTTPHEADER]
+        );
+    }
+
+    /**
+     * Make sure that a exception is thrown on cURL internal errors
+     *
+     * @return void
+     */
+    public function testExceptionOnFailure()
+    {
+        $this->setExpectedException('Klarna_Checkout_ConnectionErrorException');
+        $url = 'maybe-localhost';
+        $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $this->factory->expects($this->once())
+            ->method('handle')
+            ->will($this->returnValue($handle));
+        $request = $this->http->createRequest($url);
+        $handle->response = false;
+        $this->http->send($request);
     }
 }

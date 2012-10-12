@@ -46,6 +46,8 @@ require_once 'Response.php';
  */
 class Klarna_Checkout_HTTP_CURL implements Klarna_Checkout_HTTP_HTTPInterface
 {
+    protected $curl;
+
     /**
      * Number of seconds before the connection times out.
      *
@@ -55,15 +57,12 @@ class Klarna_Checkout_HTTP_CURL implements Klarna_Checkout_HTTP_HTTPInterface
 
     /**
      * Initializes a new instance of the HTTP cURL class.
+     *
+     * @param Klarna_Checkout_HTTP_CURLFactory $curl factory to for curl handles
      */
-    public function __construct()
+    public function __construct(Klarna_Checkout_HTTP_CURLFactory $curl)
     {
-        if (!extension_loaded('curl')) {
-            throw new RuntimeException(
-                'cURL extension is requred.'
-            );
-        }
-
+        $this->curl = $curl;
         $this->timeout = 5; // default to 5 seconds
     }
 
@@ -102,7 +101,7 @@ class Klarna_Checkout_HTTP_CURL implements Klarna_Checkout_HTTP_HTTPInterface
      */
     public function send(Klarna_Checkout_HTTP_Request $request)
     {
-        $curl = curl_init();
+        $curl = $this->curl->handle();
         if ($curl === false) {
             throw new RuntimeException(
                 'Failed to initialize a HTTP handle.'
@@ -110,12 +109,12 @@ class Klarna_Checkout_HTTP_CURL implements Klarna_Checkout_HTTP_HTTPInterface
         }
 
         $url = $request->getURL();
-        curl_setopt($curl, CURLOPT_URL, $url);
+        $curl->setOption(CURLOPT_URL, $url);
 
         $method = $request->getMethod();
         if ($method === 'POST') {
-            curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $request->getData());
+            $curl->setOption(CURLOPT_POST, true);
+            $curl->setOption(CURLOPT_POSTFIELDS, $request->getData());
         }
 
         // Convert headers to cURL format.
@@ -124,24 +123,24 @@ class Klarna_Checkout_HTTP_CURL implements Klarna_Checkout_HTTP_HTTPInterface
             $requestHeaders[] = $key . ': ' . $value;
         }
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $requestHeaders);
+        $curl->setOption(CURLOPT_HTTPHEADER, $requestHeaders);
 
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->timeout);
+        $curl->setOption(CURLOPT_RETURNTRANSFER, true);
+        $curl->setOption(CURLOPT_CONNECTTIMEOUT, $this->timeout);
 
         $curlHeaders = new Klarna_Checkout_HTTP_CURLHeaders();
-        curl_setopt(
-            $curl, CURLOPT_HEADERFUNCTION,
+        $curl->setOption(
+            CURLOPT_HEADERFUNCTION,
             array(&$curlHeaders, 'processHeader')
         );
 
         // TODO remove me when real cert is in place
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        $curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
 
-        $payload = curl_exec($curl);
-        $info = curl_getinfo($curl);
+        $payload = $curl->execute();
+        $info = $curl->getInfo();
 
-        curl_close($curl);
+        $curl->close();
 
         /*
          * A failure occured if:

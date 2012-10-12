@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2012 Klarna AB
  *
@@ -29,67 +28,46 @@
  */
 
 /**
- * A simple class handling the header callback for cURL.
+ * Defines a cURL handle interface
  *
  * @category   Payment
  * @package    Payment_Klarna
  * @subpackage HTTP
- * @author     Klarna <support@klarna.com>
+ * @author     David K. <david.keijser@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://integration.klarna.com/
  */
-class Klarna_Checkout_HTTP_CURLHeaders
+interface Klarna_Checkout_HTTP_CURLHandleInterface
 {
     /**
-     * Response headers, cleared for each request.
+     * Set an option for the cURL transfer
      *
-     * @var array
+     * @param int   $name  option the set
+     * @param mixed $value the value to be set on option
+     *
+     * @return void
      */
-    protected $headers;
+    public function setOption($name, $value);
 
     /**
-     * Initializes a new instance of the HTTP cURL class.
+     * Perform the cURL session
+     *
+     * @return mixed response
      */
-    public function __construct()
-    {
-        $this->headers = array();
-    }
+    public function execute();
 
     /**
-     * Callback method to handle custom headers.
-     *
-     * @param resource $curl   the cURL resource.
-     * @param string   $header the header data.
-     *
-     * @return int the number of bytes handled.
-     */
-    public function processHeader($curl, $header)
-    {
-        $curl = null;
-        //TODO replace with regexp, e.g. /^([^:]+):([^:]*)$/ ?
-        $pos = strpos($header, ':');
-        // Didn't find a colon.
-        if ($pos === false) {
-            // Not real header, abort.
-            return strlen($header);
-        }
-
-        $key = substr($header, 0, $pos);
-        $value = trim(substr($header, $pos+1));
-
-        $this->headers[$key] = trim($value);
-
-        return strlen($header);
-    }
-
-    /**
-     * Gets the accumulated headers.
+     * Get information regarding this transfer
      *
      * @return array
      */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
+    public function getInfo();
+
+    /**
+     * Close the cURL session
+     *
+     * @return void
+     */
+    public function close();
 }
