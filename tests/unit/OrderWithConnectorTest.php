@@ -81,7 +81,7 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
         $order = new Klarna_Checkout_Order($data);
         $order->create($this->connector);
 
-        $this->assertEquals("boo", $order->get("foo"));
+        $this->assertEquals("boo", $order["foo"]);
         $this->assertEquals("POST", $this->connector->applied["method"]);
         $this->assertEquals($order, $this->connector->applied["resource"]);
         $this->assertEquals($location, $order->getLocation());

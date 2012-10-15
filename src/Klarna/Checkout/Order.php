@@ -38,7 +38,8 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_Order implements Klarna_Checkout_ResourceInterface
+class Klarna_Checkout_Order
+    implements Klarna_Checkout_ResourceInterface, ArrayAccess
 {
     /**
      * Base URL that is used to create order resources
@@ -192,7 +193,7 @@ class Klarna_Checkout_Order implements Klarna_Checkout_ResourceInterface
      *
      * @return mixed data
      */
-    public function get($key)
+    public function offsetGet($key)
     {
         if (!is_string($key)) {
             throw new InvalidArgumentException("Key must be string");
@@ -211,11 +212,35 @@ class Klarna_Checkout_Order implements Klarna_Checkout_ResourceInterface
      *
      * @return void
      */
-    public function set($key, $value)
+    public function offsetSet($key, $value)
     {
         if (!is_string($key)) {
             throw new InvalidArgumentException("Key must be string");
         }
         $this->_data[$key] = $value;
+    }
+
+    /**
+     * Check if a key exists in the resource
+     *
+     * @param string $key key
+     *
+     * @return boolean
+     */
+    public function offsetExists($key)
+    {
+        return array_key_exists($this->_data, $key);
+    }
+
+    /**
+     * Unset the value of a key
+     *
+     * @param string $key key
+     *
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        unset($this->_data[$key]);
     }
 }
