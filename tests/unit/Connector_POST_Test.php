@@ -29,12 +29,12 @@
 
 require_once 'Checkout/ResourceInterface.php';
 require_once 'Checkout/ConnectorInterface.php';
-require_once 'Checkout/HTTP/HTTPInterface.php';
+require_once 'Checkout/HTTP/TransportInterface.php';
 require_once 'Checkout/HTTP/Request.php';
 require_once 'Checkout/HTTP/Response.php';
 require_once 'Checkout/Connector.php';
 require_once 'tests/ResourceStub.php';
-require_once 'tests/CurlStub.php';
+require_once 'tests/TransportStub.php';
 
 /**
  * POST UnitTests for the Connector class
@@ -65,13 +65,13 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->httpInterface = $this->getMock(
-            'Klarna_Checkout_HTTP_HTTPInterface'
+            'Klarna_Checkout_HTTP_TransportInterface'
         );
 
         $this->orderStub = new Klarna_Checkout_ResourceStub;
 
         $this->digest = $this->getMock(
-            'Klarna_Checkout_Digester', array('createDigest')
+            'Klarna_Checkout_Digest', array('create')
         );
     }
 
@@ -82,7 +82,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
      */
     public function testApplyPost200()
     {
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $payload = '{"flobadob":["bobcat","wookie"]}';
         $data = array(
@@ -97,7 +97,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
         $expected = 'stnaeu\eu2341aoaaoae==';
 
         $this->digest->expects($this->once())
-            ->method('createDigest')
+            ->method('create')
             ->with("{$payload}aboogie")
             ->will($this->returnValue($expected));
 
@@ -134,7 +134,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Klarna_Checkout_FormatException');
 
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $payload = '{"flobadob"}';
         $data = array(
@@ -157,7 +157,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
     {
         $options = array('url' => 'localhost');
 
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $payload = '{"flobadob":["bobcat","wookie"]}';
 
@@ -173,7 +173,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
         $expected = 'stnaeu\eu2341aoaaoae==';
 
         $this->digest->expects($this->once())
-            ->method('createDigest')
+            ->method('create')
             ->with("{$payload}aboogie")
             ->will($this->returnValue($expected));
 
@@ -194,7 +194,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
     {
         $options = array('url' => 'localhost');
 
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $payload = '{"flobadob":["bobcat","wookie"]}';
         $redirect = 'not localhost';
@@ -219,12 +219,12 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
         $expected = 'stnaeu\eu2341aoaaoae==';
 
         $this->digest->expects($this->at(0))
-            ->method('createDigest')
+            ->method('create')
             ->with("{$payload}aboogie")
             ->will($this->returnValue($expected));
 
         $this->digest->expects($this->at(1))
-            ->method('createDigest')
+            ->method('create')
             ->with("aboogie")
             ->will($this->returnValue($expected));
 
@@ -250,7 +250,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
 
         $options = array('url' => 'localhost');
 
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $payload = 'Forbidden';
         $redirect = 'not localhost';
@@ -289,7 +289,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
      */
     public function testApplyPost201UpdatedLocation()
     {
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $payload = '{"flobadob":["bobcat","wookie"]}';
         $location = 'not localhost';
@@ -306,7 +306,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
         $expected = 'stnaeu\eu2341aoaaoae==';
 
         $this->digest->expects($this->once())
-            ->method('createDigest')
+            ->method('create')
             ->with("{$payload}aboogie")
             ->will($this->returnValue($expected));
 
@@ -351,7 +351,7 @@ class Klarna_Checkout_ConnectorTest_POST extends PHPUnit_Framework_TestCase
     {
         $options = array('url' => 'localhost');
 
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $payload = 'Forbidden';
         $redirect = 'not localhost';

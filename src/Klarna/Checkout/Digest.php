@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_Digester unittest
+ * File containing the Klarna_Checkout_Digester class
  *
  * PHP version 5.3
  *
@@ -27,10 +27,8 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once 'Checkout/Digester.php';
-
 /**
- * UnitTest for the Digester class
+ * Class to handle the digesting of hash string
  *
  * @category  Payment
  * @package   Klarna_Checkout
@@ -40,41 +38,17 @@ require_once 'Checkout/Digester.php';
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_DigesterTest extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_Digest
 {
-
     /**
-     * Test to create a Digest hash of a json encoded hash.
+     * create a digest from a supplied string
      *
-     * @return void
+     * @param string $digestString string to hash
+     *
+     * @return string Base64 and SHA256 hashed string
      */
-    public function testCreateDigest()
+    public function create($digestString)
     {
-        $expected = 'MO/6KvzsY2y+F+/SexH7Hyg16gFpsPDx5A2PtLZd0Zs=';
-
-        $digester = new Klarna_Checkout_Digester;
-
-        $json = array(
-            'eid' => 1245,
-            'goods_list' => array(
-                array(
-                    'artno' => 'id_1',
-                    'name' => 'product',
-                    'price' => 12345,
-                    'vat' => 25,
-                    'qty' => 1
-                )
-            ),
-            'currency' => 'SEK',
-            'country' => 'SWE',
-            'language' => 'SV'
-        );
-
-        $this->assertEquals(
-            $expected,
-            $digester->createDigest(json_encode($json).'mySecret'),
-            'JsonEncoded Hash Digest.'
-        );
+        return base64_encode(hash('sha256', $digestString, true));
     }
-
 }

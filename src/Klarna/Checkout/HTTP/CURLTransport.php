@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_HTTP_CURL class
+ * File containing the Klarna_Checkout_HTTP_CURLTransport class
  *
  * PHP version 5.2
  *
@@ -28,13 +28,8 @@
  * @link       http://integration.klarna.com/
  */
 
-require_once 'HTTPInterface.php';
-require_once 'CURLHeaders.php';
-require_once 'Request.php';
-require_once 'Response.php';
-
 /**
- * Klarna HTTP implementation for cURL
+ * Klarna HTTP transport implementation for cURL
  *
  * @category   Payment
  * @package    Payment_Klarna
@@ -44,7 +39,8 @@ require_once 'Response.php';
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://integration.klarna.com/
  */
-class Klarna_Checkout_HTTP_CURL implements Klarna_Checkout_HTTP_HTTPInterface
+class Klarna_Checkout_HTTP_CURLTransport
+    implements Klarna_Checkout_HTTP_TransportInterface
 {
     protected $curl;
 

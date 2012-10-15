@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_Digester class
+ * File containing the Klarna_Checkout_HTTP_Transport unittest
  *
  * PHP version 5.3
  *
@@ -26,29 +26,35 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
+require_once 'Checkout/HTTP/TransportInterface.php';
+require_once 'Checkout/HTTP/CURLTransport.php';
+require_once 'Checkout/HTTP/Transport.php';
+require_once 'Checkout/HTTP/Request.php';
+require_once 'Checkout/HTTP/CURLFactory.php';
 
 /**
- * Class to handle the digesting of hash string
+ * UnitTest for the Klarna_Checkout_HTTP_Transport factory
  *
  * @category  Payment
  * @package   Klarna_Checkout
- * @author    Rickard D. <rickard.dybeck@klarna.com>
- * @author    Christer G. <christer.gustavsson@klarna.com>
+ * @author    David K. <david.keijser@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_Digester
+class Klarna_Checkout_HTTP_TransportTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * create a digest from a supplied string
+     * Make sure the returned object implements the transport interface
      *
-     * @param string $digestString string to hash
-     *
-     * @return string Base64 and SHA256 hashed string
+     * @return void
      */
-    public function createDigest($digestString)
+    public function testCreate()
     {
-        return base64_encode(hash('sha256', $digestString, true));
+        $transport = Klarna_checkout_HTTP_Transport::create();
+        $this->assertInstanceOf(
+            'Klarna_Checkout_HTTP_TransportInterface',
+            $transport
+        );
     }
 }

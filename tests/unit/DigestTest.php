@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2012 Klarna AB
  *
@@ -14,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_ConnectorStub class
+ * File containing the Klarna_Checkout_Digest unittest
  *
  * PHP version 5.3
  *
@@ -26,45 +27,54 @@
  * @link      http://integration.klarna.com/
  */
 
+require_once 'Checkout/Digest.php';
+
 /**
- * Stub implementation of the Connector
+ * UnitTest for the Digester class
  *
  * @category  Payment
  * @package   Klarna_Checkout
- * @author    Majid G. <majid.garmaroudi@klarna.com>
- * @author    David K. <david.keijser@klarna.com>
+ * @author    Rickard D. <rickard.dybeck@klarna.com>
+ * @author    Christer G. <christer.gustavsson@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_ConnectorStub implements Klarna_Checkout_ConnectorInterface
+class Klarna_Checkout_DigestTest extends PHPUnit_Framework_TestCase
 {
-    public $applied;
-
-    public $location;
 
     /**
-     * Applying the method on the specific resource
-     *
-     * @param string                            $method   Http methods
-     * @param Klarna_Checkout_ResourceInterface $resource Resource
-     * @param array                             $options  Options
+     * Test to create a Digest hash of a json encoded hash.
      *
      * @return void
      */
-    public function apply(
-        $method,
-        Klarna_Checkout_ResourceInterface $resource,
-        array $options = null
-    ) {
-        $this->applied = array(
-            "method" => $method,
-            "resource" => $resource,
-            "options" => $options
+    public function testCreateDigest()
+    {
+        $expected = 'MO/6KvzsY2y+F+/SexH7Hyg16gFpsPDx5A2PtLZd0Zs=';
+
+        $digester = new Klarna_Checkout_Digest;
+
+        $json = array(
+            'eid' => 1245,
+            'goods_list' => array(
+                array(
+                    'artno' => 'id_1',
+                    'name' => 'product',
+                    'price' => 12345,
+                    'vat' => 25,
+                    'qty' => 1
+                )
+            ),
+            'currency' => 'SEK',
+            'country' => 'SWE',
+            'language' => 'SV'
         );
 
-        if ($this->location !== null) {
-            $resource->setLocation($this->location);
-        }
+        $this->assertEquals(
+            $expected,
+            $digester->create(json_encode($json).'mySecret'),
+            'JsonEncoded Hash Digest.'
+        );
     }
+
 }

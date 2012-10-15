@@ -29,12 +29,13 @@
 
 require_once 'Checkout/ResourceInterface.php';
 require_once 'Checkout/ConnectorInterface.php';
-require_once 'Checkout/HTTP/HTTPInterface.php';
+require_once 'Checkout/HTTP/TransportInterface.php';
 require_once 'Checkout/HTTP/Request.php';
 require_once 'Checkout/HTTP/Response.php';
+require_once 'Checkout/Exception.php';
 require_once 'Checkout/Connector.php';
 require_once 'tests/ResourceStub.php';
-require_once 'tests/CurlStub.php';
+require_once 'tests/TransportStub.php';
 
 /**
  * General UnitTest for the Connector class
@@ -65,13 +66,13 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->httpInterface = $this->getMock(
-            'Klarna_Checkout_HTTP_HTTPInterface'
+            'Klarna_Checkout_HTTP_TransportInterface'
         );
 
         $this->orderStub = new Klarna_Checkout_ResourceStub;
 
         $this->digest = $this->getMock(
-            'Klarna_Checkout_Digester', array('createDigest')
+            'Klarna_Checkout_Digest', array('create')
         );
     }
 
@@ -85,7 +86,7 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('InvalidArgumentException');
 
 
-        $digest = $this->getMock('Klarna_Checkout_Digester');
+        $digest = $this->getMock('Klarna_Checkout_Digest');
 
         $object = new Klarna_Checkout_Connector(
             $this->httpInterface, $digest, 'aboogie'
@@ -136,7 +137,7 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
             'Klarna_Checkout_HTTP_Status_Exception', $message, $code
         );
 
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $data = array(
             'code' => $code,
@@ -146,7 +147,7 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
         $curl->addResponse($data);
 
         $this->digest->expects($this->once())
-            ->method('createDigest')
+            ->method('create')
             ->with('aboogie')
             ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 
@@ -172,7 +173,7 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
             'Klarna_Checkout_HTTP_Status_Exception', $message, $code
         );
 
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $data = array(
             'code' => $code,
@@ -182,7 +183,7 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
         $curl->addResponse($data);
 
         $this->digest->expects($this->once())
-            ->method('createDigest')
+            ->method('create')
             ->with('[]aboogie')
             ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 
@@ -190,5 +191,16 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
         $result = $object->apply('POST', $this->orderStub);
 
         $this->assertNotNull($result, 'Response Object');
+    }
+
+    /**
+     * Make sure the factory returns a instance of the expected type
+     *
+     * @return void
+     */
+    public function testFactory()
+    {
+        $connector = Klarna_Checkout_Connector::create('sharedSecret');
+        $this->assertInstanceOf('Klarna_Checkout_Connector', $connector);
     }
 }

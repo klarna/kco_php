@@ -27,8 +27,8 @@
  * @link       http://integration.klarna.com/
  */
 
-require_once 'Checkout/HTTP/HTTPInterface.php';
-require_once 'Checkout/HTTP/CURL.php';
+require_once 'Checkout/HTTP/TransportInterface.php';
+require_once 'Checkout/HTTP/CURLTransport.php';
 require_once 'Checkout/HTTP/Request.php';
 require_once 'Checkout/HTTP/CURLFactory.php';
 require_once 'tests/CURLHandleStub.php';
@@ -44,7 +44,7 @@ require_once 'tests/CURLHandleStub.php';
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://integration.klarna.com/
  */
-class Klarna_Checkout_HTTP_CURLTest extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Klarna_HTTP_CURL
@@ -62,7 +62,7 @@ class Klarna_Checkout_HTTP_CURLTest extends PHPUnit_Framework_TestCase
             'Klarna_Checkout_HTTP_CURLFactory',
             array('handle')
         );
-        $this->http = new Klarna_Checkout_HTTP_CURL($this->factory);
+        $this->http = new Klarna_Checkout_HTTP_CURLTransport($this->factory);
     }
 
     /**
@@ -82,7 +82,10 @@ class Klarna_Checkout_HTTP_CURLTest extends PHPUnit_Framework_TestCase
      */
     public function testInterface()
     {
-        $this->assertInstanceOf('Klarna_Checkout_HTTP_HTTPInterface', $this->http);
+        $this->assertInstanceOf(
+            'Klarna_Checkout_HTTP_TransportInterface',
+            $this->http
+        );
     }
 
     /**

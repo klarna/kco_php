@@ -131,11 +131,11 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
     {
         $key1 = "testKey1";
         $value1 = "testValue1";
-        $this->order->set($key1, $value1);
+        $this->order[$key1] = $value1;
 
         $key2 = "testKey2";
         $value2 = "testValue2";
-        $this->order->set($key2, $value2);
+        $this->order[$key2] = $value2;
 
         $marshalData = $this->order->marshal();
 
@@ -155,12 +155,12 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
     public function testSetGetValues()
     {
         $key = "testKey1";
-        $this->order->set($key, "testValue1");
+        $this->order[$key] = "testValue1";
 
         $value2 = "testValue2";
-        $this->order->set($key, $value2);
+        $this->order[$key] = $value2;
 
-        $this->assertEquals($value2, $this->order->get($key));
+        $this->assertEquals($value2, $this->order[$key]);
     }
 
     /**
@@ -174,7 +174,7 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
         $value = "testValue";
 
         $this->setExpectedException("InvalidArgumentException");
-        $this->order->set($key, $value);
+        $this->order[$key] = $value;
     }
 
     /**
@@ -187,7 +187,7 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
         $key = array("1"=>"2");
 
         $this->setExpectedException("InvalidArgumentException");
-        $this->order->get($key);
+        $this->order[$key];
     }
 
     /**
@@ -200,6 +200,6 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
         $key = "test";
 
         $this->setExpectedException("OutOfBoundsException");
-        $this->order->get($key);
+        $this->order[$key];
     }
 }

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_HTTP_Curl_Stub class
+ * File containing the Klarna_Checkout_HTTP_TransportStub class
  *
  * PHP version 5.2
  *
@@ -29,7 +29,7 @@
  */
 
 /**
- * Stub of the Klarna HTTP implementation for cURL
+ * Stub implemenation of the Klarna HTTP Transport
  *
  * @category   Payment
  * @package    Payment_Klarna
@@ -39,8 +39,8 @@
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://integration.klarna.com/
  */
-class Klarna_Checkout_HTTP_Curl_Stub
-    implements Klarna_Checkout_HTTP_HTTPInterface
+class Klarna_Checkout_HTTP_TransportStub
+    implements Klarna_Checkout_HTTP_TransportInterface
 {
     public $code;
     public $headers;

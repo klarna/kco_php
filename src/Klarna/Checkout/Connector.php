@@ -27,8 +27,6 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once 'Checkout/Exception.php';
-
 /**
  * Implementation of the connector interface
  *
@@ -67,14 +65,30 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
     /**
      * Create a new Checkout Connector
      *
-     * @param Klarna_Checkout_HTTP_HTTPInterface $http     HTTP Implementation
-     * @param Klarna_Checkout_Digester           $digester Digest Generator
-     * @param string                             $secret   string used to sign
-     *                                                     requests
+     * @param string $secret string used to sign requests
+     *
+     * @return Klarna_Checkout_Connector
+     */
+    public static function create($secret)
+    {
+        return new Klarna_Checkout_Connector(
+            Klarna_Checkout_HTTP_Transport::create(),
+            new Klarna_Checkout_Digest,
+            $secret
+        );
+    }
+
+
+    /**
+     * Create a new Checkout Connector
+     *
+     * @param Klarna_Checkout_HTTP_TransportInterface $http     transport
+     * @param Klarna_Checkout_Digester                $digester Digest Generator
+     * @param string                                  $secret   shared secret
      */
     public function __construct(
-        Klarna_Checkout_HTTP_HTTPInterface $http,
-        Klarna_Checkout_Digester $digester,
+        Klarna_Checkout_HTTP_TransportInterface $http,
+        Klarna_Checkout_Digest $digester,
         $secret
     ) {
         $this->http = $http;
@@ -125,7 +139,7 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
         $url
     ) {
         // Generate the digest string
-        $digest = $this->digester->createDigest($payload . $this->_secret);
+        $digest = $this->digester->create($payload . $this->_secret);
 
         $request = $this->http->createRequest($url);
 
