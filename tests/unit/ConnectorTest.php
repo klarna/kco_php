@@ -29,13 +29,13 @@
 
 require_once 'Checkout/ResourceInterface.php';
 require_once 'Checkout/ConnectorInterface.php';
-require_once 'Checkout/HTTP/HTTPInterface.php';
+require_once 'Checkout/HTTP/TransportInterface.php';
 require_once 'Checkout/HTTP/Request.php';
 require_once 'Checkout/HTTP/Response.php';
 require_once 'Checkout/Exception.php';
 require_once 'Checkout/Connector.php';
 require_once 'tests/ResourceStub.php';
-require_once 'tests/CurlStub.php';
+require_once 'tests/TransportStub.php';
 
 /**
  * General UnitTest for the Connector class
@@ -66,7 +66,7 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->httpInterface = $this->getMock(
-            'Klarna_Checkout_HTTP_HTTPInterface'
+            'Klarna_Checkout_HTTP_TransportInterface'
         );
 
         $this->orderStub = new Klarna_Checkout_ResourceStub;
@@ -137,7 +137,7 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
             'Klarna_Checkout_HTTP_Status_Exception', $message, $code
         );
 
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $data = array(
             'code' => $code,
@@ -173,7 +173,7 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
             'Klarna_Checkout_HTTP_Status_Exception', $message, $code
         );
 
-        $curl = new Klarna_Checkout_HTTP_Curl_Stub;
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
 
         $data = array(
             'code' => $code,

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_HTTP interface
+ * File containing the Klarna_Checkout_HTTP_TransportInterface interface
  *
  * PHP version 5.2
  *
@@ -29,7 +29,7 @@
  */
 
 /**
- * Interface for a Klarna HTTP object
+ * Interface for a Klarna HTTP Transport object
  *
  * @category   Payment
  * @package    Payment_Klarna
@@ -39,7 +39,7 @@
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://integration.klarna.com/
  */
-interface Klarna_Checkout_HTTP_HTTPInterface
+interface Klarna_Checkout_HTTP_TransportInterface
 {
     /**
      * Specifies the number of seconds before the connection times out.

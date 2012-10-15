@@ -65,10 +65,10 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
     /**
      * Create a new Checkout Connector
      *
-     * @param Klarna_Checkout_HTTP_HTTPInterface $http     HTTP Implementation
-     * @param Klarna_Checkout_Digester           $digester Digest Generator
-     * @param string                             $secret   string used to sign
-     *                                                     requests
+     * @param Klarna_Checkout_HTTP_TransportInterface $http     transport
+     * @param Klarna_Checkout_Digester                $digester Digest Generator
+     * @param string                                  $secret   string used to
+     *                                                          sign requests
      */
     public function __construct(
         Klarna_Checkout_HTTP_TransportInterface $http,
