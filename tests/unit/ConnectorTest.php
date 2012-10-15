@@ -192,4 +192,15 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotNull($result, 'Response Object');
     }
+
+    /**
+     * Make sure the factory returns a instance of the expected type
+     *
+     * @return void
+     */
+    public function testFactory()
+    {
+        $connector = Klarna_Checkout_Connector::create('sharedSecret');
+        $this->assertInstanceOf('Klarna_Checkout_Connector', $connector);
+    }
 }
