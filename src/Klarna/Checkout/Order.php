@@ -62,6 +62,20 @@ class Klarna_Checkout_Order implements Klarna_Checkout_ResourceInterface
     private $_data = array();
 
     /**
+     * Create a new Order object
+     *
+     * @param array $data initial data
+     *
+     * @return void
+     */
+    public function __construct(array $data = null)
+    {
+        if ($data !== null) {
+            $this->_data = $data;
+        }
+    }
+
+    /**
      * Get the URL of the resource
      *
      * @return string
@@ -120,23 +134,17 @@ class Klarna_Checkout_Order implements Klarna_Checkout_ResourceInterface
      *
      * @param Klarna_Checkout_ConnectorInterface $connector An instance of
      *                                                      connector class
-     * @param array                              $data      Array data
      *
-     * @return Klarna_Checkout_Order data
+     * @return void
      */
-    public static function create(
-        Klarna_Checkout_ConnectorInterface $connector,
-        array $data
+    public function create(
+        Klarna_Checkout_ConnectorInterface $connector
     ) {
-        $order = new Klarna_Checkout_Order();
-        $order->_data = $data;
         $options = array(
-                "url" => self::$baseUrl
-            );
+            'url' => self::$baseUrl
+        );
 
-        $connector->apply("POST", $order, $options);
-
-        return $order;
+        $connector->apply('POST', $this, $options);
     }
 
     /**
@@ -144,15 +152,21 @@ class Klarna_Checkout_Order implements Klarna_Checkout_ResourceInterface
      *
      * @param Klarna_Checkout_ConnectorInterface $connector An instance of
      *                                                      connector class
+     * @param string                             $location  optional url
      *
      * @return void
      */
-    public function fetch(Klarna_Checkout_ConnectorInterface $connector)
-    {
+    public function fetch(
+        Klarna_Checkout_ConnectorInterface $connector,
+        $location = null
+    ) {
+        if ($location !== null) {
+            $this->setLocation($location);
+        }
         $options = array(
-                "url" => $this->_location
-            );
-        $connector->apply("GET", $this, $options);
+            'url' => $this->_location
+        );
+        $connector->apply('GET', $this, $options);
     }
 
     /**
@@ -166,9 +180,9 @@ class Klarna_Checkout_Order implements Klarna_Checkout_ResourceInterface
     public function update(Klarna_Checkout_ConnectorInterface $connector)
     {
         $options = array(
-                "url" => $this->_location
-            );
-        $connector->apply("POST", $this, $options);
+            'url' => $this->_location
+        );
+        $connector->apply('POST', $this, $options);
     }
 
     /**
