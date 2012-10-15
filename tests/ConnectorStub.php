@@ -41,6 +41,8 @@ class Klarna_Checkout_ConnectorStub implements Klarna_Checkout_ConnectorInterfac
 {
     public $applied;
 
+    public $location;
+
     /**
      * Applying the method on the specific resource
      *
@@ -61,6 +63,8 @@ class Klarna_Checkout_ConnectorStub implements Klarna_Checkout_ConnectorInterfac
             "options" => $options
         );
 
-        $resource->setLocation("http://stub");
+        if ($this->location !== null) {
+            $resource->setLocation($this->location);
+        }
     }
 }
