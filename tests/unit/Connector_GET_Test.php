@@ -68,7 +68,7 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
         $this->orderStub = new Klarna_Checkout_ResourceStub;
 
         $this->digest = $this->getMock(
-            'Klarna_Checkout_Digester', array('createDigest')
+            'Klarna_Checkout_Digest', array('create')
         );
     }
 
@@ -92,7 +92,7 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
         $expectedDigest = 'stnaeu\eu2341aoaaoae==';
 
         $this->digest->expects($this->once())
-            ->method('createDigest')
+            ->method('create')
             ->with('aboogie')
             ->will($this->returnValue($expectedDigest));
 
@@ -164,7 +164,7 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
         $curl->addResponse($data);
 
         $this->digest->expects($this->once())
-            ->method('createDigest')
+            ->method('create')
             ->with('aboogie')
             ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 
@@ -206,7 +206,7 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
         }
 
         $this->digest->expects($this->any())
-            ->method('createDigest')
+            ->method('create')
             ->with('aboogie')
             ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 

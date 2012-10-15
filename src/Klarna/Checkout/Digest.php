@@ -38,7 +38,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_Digester
+class Klarna_Checkout_Digest
 {
     /**
      * create a digest from a supplied string
@@ -47,7 +47,7 @@ class Klarna_Checkout_Digester
      *
      * @return string Base64 and SHA256 hashed string
      */
-    public function createDigest($digestString)
+    public function create($digestString)
     {
         return base64_encode(hash('sha256', $digestString, true));
     }

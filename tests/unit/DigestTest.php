@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_Digester unittest
+ * File containing the Klarna_Checkout_Digest unittest
  *
  * PHP version 5.3
  *
@@ -27,7 +27,7 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once 'Checkout/Digester.php';
+require_once 'Checkout/Digest.php';
 
 /**
  * UnitTest for the Digester class
@@ -40,7 +40,7 @@ require_once 'Checkout/Digester.php';
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_DigesterTest extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_DigestTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -52,7 +52,7 @@ class Klarna_Checkout_DigesterTest extends PHPUnit_Framework_TestCase
     {
         $expected = 'MO/6KvzsY2y+F+/SexH7Hyg16gFpsPDx5A2PtLZd0Zs=';
 
-        $digester = new Klarna_Checkout_Digester;
+        $digester = new Klarna_Checkout_Digest;
 
         $json = array(
             'eid' => 1245,
@@ -72,7 +72,7 @@ class Klarna_Checkout_DigesterTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expected,
-            $digester->createDigest(json_encode($json).'mySecret'),
+            $digester->create(json_encode($json).'mySecret'),
             'JsonEncoded Hash Digest.'
         );
     }
