@@ -27,8 +27,6 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once 'Checkout/Exception.php';
-
 /**
  * Implementation of the connector interface
  *

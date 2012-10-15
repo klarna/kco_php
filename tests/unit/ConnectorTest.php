@@ -32,6 +32,7 @@ require_once 'Checkout/ConnectorInterface.php';
 require_once 'Checkout/HTTP/HTTPInterface.php';
 require_once 'Checkout/HTTP/Request.php';
 require_once 'Checkout/HTTP/Response.php';
+require_once 'Checkout/Exception.php';
 require_once 'Checkout/Connector.php';
 require_once 'tests/ResourceStub.php';
 require_once 'tests/CurlStub.php';

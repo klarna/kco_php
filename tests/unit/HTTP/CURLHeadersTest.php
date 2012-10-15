@@ -28,7 +28,7 @@
  * @link       http://integration.klarna.com/
  */
 
-require_once 'Checkout/HTTP/Request.php';
+require_once 'Checkout/HTTP/CURLHeaders.php';
 
 /**
  * PHPUnit test case for the CURL Header parser
@@ -41,7 +41,7 @@ require_once 'Checkout/HTTP/Request.php';
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://integration.klarna.com/
  */
-class Klarna_Checkout_HTTP_CURLHeaderTest extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_HTTP_CURLHeadersTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Klarna_Checkout_HTTP_CURLHeaders

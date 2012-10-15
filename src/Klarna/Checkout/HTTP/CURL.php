@@ -28,11 +28,6 @@
  * @link       http://integration.klarna.com/
  */
 
-require_once 'HTTPInterface.php';
-require_once 'CURLHeaders.php';
-require_once 'Request.php';
-require_once 'Response.php';
-
 /**
  * Klarna HTTP implementation for cURL
  *

@@ -1,14 +1,14 @@
 <phpunit convertErrorsToExceptions="true" convertNoticesToException="true" convertWarningsToExceptions="true" verbose="true" strict="true">
     <php>
-        <includePath>../</includePath>
+        <includePath>../src/Klarna</includePath>
     </php>
     <testsuite name="Unit Test">
         <directory>unit</directory>
     </testsuite>
     <filter>
         <whitelist>
-            <directory>../Checkout</directory>
-            <exclude><directory suffix="Interface.php">../Checkout</directory></exclude>
+            <directory>../src/Klarna/Checkout</directory>
+            <exclude><directory suffix="Interface.php">../src/Klarna/Checkout</directory></exclude>
         </whitelist>
     </filter>
 </phpunit>
