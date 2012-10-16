@@ -263,4 +263,33 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
             throw $e;
         }
     }
+
+    /**
+     * Test with an infinite redirect (301) loop.
+     *
+     * @return void
+     */
+    public function testApplyGet301InfiniteLoop()
+    {
+        $this->setExpectedException(
+            'Klarna_Checkout_CircularRedirectException',
+            'Infinite redirect loop detected.'
+        );
+
+        $options = array('url' => 'localhost');
+
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
+
+        $curl->addResponse(
+            array(
+                'code' => 301,
+                'headers' => array('Location' => 'not localhost'),
+                'payload' => ""
+            )
+        );
+
+        $object = new Klarna_Checkout_Connector($curl, $this->digest, 'aboogie');
+
+        $object->apply('GET', $this->orderStub, $options);
+    }
 }
