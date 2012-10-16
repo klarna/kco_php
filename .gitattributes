@@ -2,3 +2,4 @@
 .gitignore export-ignore
 .gitmodules export-ignore
 misc export-ignore
+git_hooks export-ignore
