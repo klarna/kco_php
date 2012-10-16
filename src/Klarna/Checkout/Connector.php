@@ -113,7 +113,7 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
         switch ($method) {
         case 'GET':
         case 'POST':
-            return $this->handle($method, $resource, $options);
+            return $this->handle($method, $resource, $options, array());
         default:
             throw new InvalidArgumentException(
                 "{$method} is not a valid HTTP method"
@@ -201,32 +201,41 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
      *
      * @param Klarna_Checkout_HTTP_Response     $result   response from server
      * @param Klarna_Checkout_ResourceInterface $resource associated resource
+     * @param array                             $visited  list of visited locations
      *
      * @return Klarna_Checkout_HTTP_Response
      */
     protected function handleResponse(
         Klarna_Checkout_HTTP_Response $result,
-        Klarna_Checkout_ResourceInterface $resource
+        Klarna_Checkout_ResourceInterface $resource,
+        array $visited = array()
     ) {
+        $url = $result->getHeader('Location');
         switch ($result->getStatus()) {
         case 301:
             // Update location and fallthrough
-            $resource->setLocation($result->getHeader('Location'));
+            $resource->setLocation($url);
         case 302:
             // Don't fallthrough for other than GET
             if ($result->getRequest()->getMethod() !== 'GET') {
                 break;
             }
         case 303:
+            // Detect eternal loops
+            if (in_array($url, $visited)) {
+                throw new Klarna_Checkout_CircularRedirectException;
+            }
+            $visited[] = $url;
             // Follow redirect
             return $this->handle(
                 'GET',
                 $resource,
-                array('url' => $result->getHeader('Location'))
+                array('url' => $url),
+                $visited
             );
         case 201:
             // Update Location
-            $resource->setLocation($result->getHeader('Location'));
+            $resource->setLocation($url);
             break;
         case 200:
             // Update Data on resource
@@ -246,6 +255,7 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
      * @param string                            $method   HTTP Method
      * @param Klarna_Checkout_ResourceInterface $resource Klarna Order
      * @param array                             $options  Options
+     * @param array                             $visited  list of visited locations
      *
      * @throws Klarna_Checkout_Exception if 4xx or 5xx response code.
      * @return Result object containing status code and payload
@@ -253,7 +263,8 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
     protected function handle(
         $method,
         Klarna_Checkout_ResourceInterface $resource,
-        array $options = null
+        array $options = null,
+        array $visited = array()
     ) {
         // Define the target URL
         $url = $this->getUrl($resource, $options);
@@ -275,7 +286,7 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
         $this->verifyResponse($result);
 
         // Handle statuses appropriately.
-        return $this->handleResponse($result, $resource);
+        return $this->handleResponse($result, $resource, $visited);
     }
 
 }

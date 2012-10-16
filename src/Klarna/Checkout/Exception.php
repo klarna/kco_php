@@ -73,6 +73,7 @@ class Klarna_Checkout_HTTP_Status_Exception extends Klarna_Checkout_Exception
 {
 
 }
+
 /**
  * Response content format exception
  *
@@ -92,5 +93,27 @@ class Klarna_Checkout_FormatException extends Klarna_Checkout_Exception
     public function __construct()
     {
         parent::__construct('Bad format on response content.');
+    }
+}
+
+/**
+ * Infinite redirect loop detected exception
+ *
+ * @category  Payment
+ * @package   Klarna_Checkout
+ * @author    Rickard D. <rickard.dybeck@klarna.com>
+ * @copyright 2012 Klarna AB
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
+ * @link      http://integration.klarna.com/
+ */
+class Klarna_Checkout_CircularRedirectException extends Klarna_Checkout_Exception
+{
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct('Infinite redirect loop detected.');
     }
 }
