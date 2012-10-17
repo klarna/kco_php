@@ -105,7 +105,7 @@ class Klarna_Checkout_Order
      */
     public function getContentType()
     {
-        return "application/vnd.klarna.checkout.aggregated-order-v1+json";
+        return "application/vnd.klarna.checkout.aggregated-order-v2+json";
     }
 
     /**

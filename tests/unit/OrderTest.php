@@ -67,7 +67,7 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
     public function testContentType()
     {
         $this->assertEquals(
-            "application/vnd.klarna.checkout.aggregated-order-v1+json",
+            "application/vnd.klarna.checkout.aggregated-order-v2+json",
             $this->order->getContentType()
         );
     }
