@@ -27,6 +27,7 @@
  */
 
 require_once 'src/Klarna/Checkout.php';
+Klarna_Checkout_Order::$baseUrl = 'https://klarna.apiary.io/checkout/orders';
 
 session_start();
 
@@ -36,7 +37,7 @@ $order = null;
 if (!array_key_exists('klarna_checkout', $_SESSION)) {
     // Start new session
     $banana = array(
-        'type' => 'undefined',
+        'type' => 'physical',
         'reference' => 'BANAN01',
         'name' => 'Bananana',
         'unit_price' => 450,
@@ -45,7 +46,7 @@ if (!array_key_exists('klarna_checkout', $_SESSION)) {
     );
 
     $shipping = array(
-        'type' => 'undefined',
+        'type' => 'shipping_fee',
         'reference' => 'SHIPPING',
         'name' => 'Shipping Fee',
         'unit_price' => 450,
@@ -55,16 +56,18 @@ if (!array_key_exists('klarna_checkout', $_SESSION)) {
 
     $order = new Klarna_Checkout_Order(
         array(
-            'merchant_id' => 2,
-            'purchase_country' => 'SWE',
+            'purchase_country' => 'SE',
             'purchase_currency' => 'SEK',
             'locale' => 'sv-se',
-            'merchant_tac_uri' => 'http://localhost/terms.html',
-            'merchant_tac_title' => 'Lelles ved',
-            'merchant_checkout_uri' => 'http://localhost/checkout',
-            'merchant_callback_uri' => 'http://localhost/thankyou',
-            'merchant_push_uri' => 'http://localhost/callback',
+            'merchant' => array(
+                'id' => 2,
+                'terms_uri' => 'http://localhost/terms.html',
+                'checkout_uri' => 'http://localhost/checkout.php',
+                'confirmation_uri' =>'http://localhost/thank-you.php',
+                'push_uri' => 'http://localhost/push.php'
+            ),
             'cart' => array(
+                'total_price_including_tax' => 9000,
                 'items' => array(
                     $banana,
                     $shipping
@@ -77,10 +80,10 @@ if (!array_key_exists('klarna_checkout', $_SESSION)) {
 } else {
     // Resume session
     $order = new Klarna_Checkout_Order;
-    $order->fetch($_SESSION['klarna_checkout']);
+    $order->fetch($connector, $_SESSION['klarna_checkout']);
 }
 
-$snippet = $order['client_snippet'];
+$snippet = $order['gui']['snippet'];
 $_SESSION['klarna_checkout'] = $sessionId = $order->getLocation();
 echo "<dl><dt>Session</dt><dd>{$sessionId}</dd</dl>";
 echo "<div>{$snippet}</div>";
