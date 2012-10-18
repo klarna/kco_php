@@ -1,7 +1,10 @@
 #!/bin/bash
 
 phpmd_output=text
-phpmd_rules='codesize,design,naming,unusedcode'
+phpmd_rules='misc/phpmd.xml'
+if [ ! -e "$phpmd_rules" ]; then
+    phpmd_rules='codesize,design,naming,unusedcode'
+fi
 
 function run_phpcs {
     phpcs --report-emacs ${@}
