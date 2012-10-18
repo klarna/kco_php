@@ -31,6 +31,7 @@ define('KLARNA_CHECKOUT_DIR', dirname(__file__) . '/Checkout');
 require_once KLARNA_CHECKOUT_DIR . '/ConnectorInterface.php';
 require_once KLARNA_CHECKOUT_DIR . '/ResourceInterface.php';
 require_once KLARNA_CHECKOUT_DIR . '/Connector.php';
+require_once KLARNA_CHECKOUT_DIR . '/BasicConnector.php';
 require_once KLARNA_CHECKOUT_DIR . '/Order.php';
 require_once KLARNA_CHECKOUT_DIR . '/Digest.php';
 require_once KLARNA_CHECKOUT_DIR . '/Exception.php';

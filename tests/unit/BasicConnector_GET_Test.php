@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_Connector (GET) unittest
+ * File containing the Klarna_Checkout_BasicConnector (GET) unittest
  *
  * PHP version 5.3
  *
@@ -32,7 +32,7 @@ require_once 'Checkout/ConnectorInterface.php';
 require_once 'Checkout/HTTP/TransportInterface.php';
 require_once 'Checkout/HTTP/Request.php';
 require_once 'Checkout/HTTP/Response.php';
-require_once 'Checkout/Connector.php';
+require_once 'Checkout/BasicConnector.php';
 require_once 'tests/ResourceStub.php';
 require_once 'tests/TransportStub.php';
 
@@ -48,7 +48,7 @@ require_once 'tests/TransportStub.php';
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_BasicConnectorTest_GET extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -96,7 +96,11 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
             ->with('aboogie')
             ->will($this->returnValue($expectedDigest));
 
-        $object = new Klarna_Checkout_Connector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
         $result = $object->apply('GET', $this->orderStub);
 
         $this->assertEquals($payload, $result->getData(), 'Response payload');
@@ -127,7 +131,7 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
      */
     public function testApplyGet200InvalidJSON()
     {
-        $this->setExpectedException('Klarna_Checkout_FormatException');
+        $this->setExpectedException('Klarna_Checkout_ConnectorException');
 
         $curl = new Klarna_Checkout_HTTP_TransportStub;
 
@@ -139,7 +143,11 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
         );
         $curl->addResponse($data);
 
-        $object = new Klarna_Checkout_Connector($curl, $this->digest, 'secret');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'secret'
+        );
         $object->apply('GET', $this->orderStub);
     }
 
@@ -168,7 +176,11 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
             ->with('aboogie')
             ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 
-        $object = new Klarna_Checkout_Connector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
         $result = $object->apply('GET', $this->orderStub, $options);
 
         $request = $result->getRequest();
@@ -210,7 +222,11 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
             ->with('aboogie')
             ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 
-        $object = new Klarna_Checkout_Connector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
         $result = $object->apply('GET', $this->orderStub, $options);
 
         $request = $result->getRequest();
@@ -227,7 +243,7 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
     public function testApplyGet302to503()
     {
         $this->setExpectedException(
-            'Klarna_Checkout_HTTP_Status_Exception', 'Forbidden', 503
+            'Klarna_Checkout_ConnectorException', 'Forbidden', 503
         );
 
         $options = array('url' => 'localhost');
@@ -252,7 +268,11 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
             $curl->addResponse($response);
         }
 
-        $object = new Klarna_Checkout_Connector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
 
         $result = null;
         try {
@@ -272,7 +292,7 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
     public function testApplyGet301InfiniteLoop()
     {
         $this->setExpectedException(
-            'Klarna_Checkout_CircularRedirectException',
+            'Klarna_Checkout_ConnectorException',
             'Infinite redirect loop detected.'
         );
 
@@ -288,7 +308,11 @@ class Klarna_Checkout_ConnectorTest_GET extends PHPUnit_Framework_TestCase
             )
         );
 
-        $object = new Klarna_Checkout_Connector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
 
         $object->apply('GET', $this->orderStub, $options);
     }

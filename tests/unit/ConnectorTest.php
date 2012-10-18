@@ -27,18 +27,18 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once 'Checkout/ResourceInterface.php';
 require_once 'Checkout/ConnectorInterface.php';
 require_once 'Checkout/HTTP/TransportInterface.php';
 require_once 'Checkout/HTTP/Request.php';
 require_once 'Checkout/HTTP/Response.php';
 require_once 'Checkout/Exception.php';
+require_once 'Checkout/BasicConnector.php';
 require_once 'Checkout/Connector.php';
 require_once 'tests/ResourceStub.php';
 require_once 'tests/TransportStub.php';
 
 /**
- * General UnitTest for the Connector class
+ * General UnitTest for the Connector facade class
  *
  * @category  Payment
  * @package   Klarna_Checkout
@@ -50,149 +50,6 @@ require_once 'tests/TransportStub.php';
  */
 class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
 {
-
-    /**
-     * Stubbed Order Object
-     *
-     * @var Klarna_Checkout_ResourceInterface
-     */
-    public $orderStub;
-
-    /**
-     * Set up tests
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        $this->httpInterface = $this->getMock(
-            'Klarna_Checkout_HTTP_TransportInterface'
-        );
-
-        $this->orderStub = new Klarna_Checkout_ResourceStub;
-
-        $this->digest = $this->getMock(
-            'Klarna_Checkout_Digest', array('create')
-        );
-    }
-
-    /**
-     * Test invalid method throws an exception.
-     *
-     * @return void
-     */
-    public function testApplyInvalidMethod()
-    {
-        $this->setExpectedException('InvalidArgumentException');
-
-
-        $digest = $this->getMock('Klarna_Checkout_Digest');
-
-        $object = new Klarna_Checkout_Connector(
-            $this->httpInterface, $digest, 'aboogie'
-        );
-
-        $object->apply('FLURB', $this->orderStub);
-    }
-
-    /**
-     * Data Provider with HTTP Error Codes.
-     *
-     * @return array
-     */
-    public function responseErrorCodes()
-    {
-        return array(
-            array(400, "Bad Request"),
-            array(401, "Unauthorized"),
-            array(402, "PaymentRequired"),
-            array(403, "Forbidden"),
-            array(404, "Not Found"),
-            array(406, "HTTP Error"),
-            array(409, "HTTP Error"),
-            array(412, "HTTP Error"),
-            array(415, "HTTP Error"),
-            array(422, "HTTP Error"),
-            array(428, "HTTP Error"),
-            array(429, "HTTP Error"),
-            array(500, "Internal Server Error"),
-            array(502, "Service temporarily overloaded"),
-            array(503, "Gateway timeout")
-        );
-    }
-
-    /**
-     * Test apply with GET method throws an exception if status code is an
-     * error.
-     *
-     * @param int    $code    http error code
-     * @param string $message error message
-     *
-     * @dataProvider responseErrorCodes
-     * @return void
-     */
-    public function testApplyGetErrorCode($code, $message)
-    {
-        $this->setExpectedException(
-            'Klarna_Checkout_HTTP_Status_Exception', $message, $code
-        );
-
-        $curl = new Klarna_Checkout_HTTP_TransportStub;
-
-        $data = array(
-            'code' => $code,
-            'headers' => array(),
-            'payload' => $message
-        );
-        $curl->addResponse($data);
-
-        $this->digest->expects($this->once())
-            ->method('create')
-            ->with('aboogie')
-            ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
-
-        $object = new Klarna_Checkout_Connector($curl, $this->digest, 'aboogie');
-        $result = $object->apply('GET', $this->orderStub);
-
-        $this->assertNotNull($result, 'Response Object');
-    }
-
-    /**
-     * Test apply with POST method throws an exception if status code is an
-     * error.
-     *
-     * @param int    $code    http error code
-     * @param string $message error message
-     *
-     * @dataProvider responseErrorCodes
-     * @return void
-     */
-    public function testApplyPostErrorCode($code, $message)
-    {
-        $this->setExpectedException(
-            'Klarna_Checkout_HTTP_Status_Exception', $message, $code
-        );
-
-        $curl = new Klarna_Checkout_HTTP_TransportStub;
-
-        $data = array(
-            'code' => $code,
-            'headers' => array(),
-            'payload' => $message
-        );
-        $curl->addResponse($data);
-
-        $this->digest->expects($this->once())
-            ->method('create')
-            ->with('[]aboogie')
-            ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
-
-        $object = new Klarna_Checkout_Connector($curl, $this->digest, 'aboogie');
-        $result = $object->apply('POST', $this->orderStub);
-
-        $this->assertNotNull($result, 'Response Object');
-    }
-
     /**
      * Make sure the factory returns a instance of the expected type
      *
@@ -201,6 +58,9 @@ class Klarna_Checkout_ConnectorTest extends PHPUnit_Framework_TestCase
     public function testFactory()
     {
         $connector = Klarna_Checkout_Connector::create('sharedSecret');
-        $this->assertInstanceOf('Klarna_Checkout_Connector', $connector);
+        $this->assertInstanceOf(
+            'Klarna_Checkout_ConnectorInterface',
+            $connector
+        );
     }
 }
