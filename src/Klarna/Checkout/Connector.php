@@ -78,7 +78,6 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
         );
     }
 
-
     /**
      * Create a new Checkout Connector
      *
@@ -94,6 +93,16 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
         $this->http = $http;
         $this->digester = $digester;
         $this->_secret = $secret;
+    }
+
+    /**
+     * Create the user agent identifier to use
+     *
+     * @return Klarna_Checkout_UserAgent
+     */
+    protected function userAgent()
+    {
+        return new Klarna_Checkout_UserAgent();
     }
 
     /**
@@ -146,6 +155,7 @@ class Klarna_Checkout_Connector implements Klarna_Checkout_ConnectorInterface
         $request->setMethod($method);
 
         // Set HTTP Headers
+        $request->setHeader('User-Agent', (string)$this->userAgent());
         $request->setHeader('Authorization', "Klarna {$digest}");
         $request->setHeader('Accept', $resource->getContentType());
         if (strlen($payload) > 0) {
