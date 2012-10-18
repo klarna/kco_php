@@ -149,6 +149,7 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
     {
         $url = 'maybe-localhost';
         $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $handle->expectedURL = $url;
         $this->factory->expects($this->once())
             ->method('handle')
             ->will($this->returnValue($handle));
@@ -175,6 +176,7 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
     {
         $url = 'maybe-localhost';
         $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $handle->expectedURL = $url;
         $this->factory->expects($this->once())
             ->method('handle')
             ->will($this->returnValue($handle));
@@ -206,6 +208,7 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
             'Content-Type: text/json'
         );
         $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $handle->expectedURL = $url;
         $this->factory->expects($this->once())
             ->method('handle')
             ->will($this->returnValue($handle));
@@ -230,6 +233,7 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Klarna_Checkout_ConnectionErrorException');
         $url = 'maybe-localhost';
         $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $handle->expectedURL = $url;
         $this->factory->expects($this->once())
             ->method('handle')
             ->will($this->returnValue($handle));

@@ -47,6 +47,13 @@ class Klarna_Checkout_HTTP_CURLHandleStub
     public $options = array();
 
     /**
+     * The expected URL
+     *
+     * @var string
+     */
+    public $expectedURL;
+
+    /**
      * @var array
      */
     public $info = array(
@@ -91,6 +98,17 @@ class Klarna_Checkout_HTTP_CURLHandleStub
      */
     public function execute()
     {
+        if ($this->options[CURLOPT_URL] !== $this->expectedURL) {
+            throw new Klarna_Checkout_Exception(
+                "Unexpected url: " . $this->options[CURLOPT_URL], 998
+            );
+        }
+
+        $response = $this->response;
+        $response = is_callable($response)
+            ? $response($this)
+            : $response;
+
         foreach ($this->headers as $header) {
             call_user_func(
                 $this->options[CURLOPT_HEADERFUNCTION],
@@ -98,7 +116,7 @@ class Klarna_Checkout_HTTP_CURLHandleStub
                 $header
             );
         }
-        return $this->response;
+        return $response;
     }
 
     /**

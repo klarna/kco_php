@@ -5,6 +5,9 @@
     <testsuite name="Unit Test">
         <directory>unit</directory>
     </testsuite>
+    <testsuite name="Component Test">
+        <directory>component</directory>
+    </testsuite>
     <filter>
         <whitelist>
             <directory>../src/Klarna/Checkout</directory>
