@@ -28,6 +28,8 @@
 
 require_once 'src/Klarna/Checkout.php';
 Klarna_Checkout_Order::$baseUri = 'https://klarna.apiary.io/checkout/orders';
+Klarna_Checkout_Order::$contentType
+    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
 
 session_start();
 

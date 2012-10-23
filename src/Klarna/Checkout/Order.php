@@ -49,6 +49,13 @@ class Klarna_Checkout_Order
     public static $baseUri = null;
 
     /**
+     * Content Type to use
+     *
+     * @var string
+     */
+    public static $contentType = null;
+
+    /**
      * URI of remote resource
      *
      * @var string
@@ -105,7 +112,7 @@ class Klarna_Checkout_Order
      */
     public function getContentType()
     {
-        return "application/vnd.klarna.checkout.aggregated-order-v2+json";
+        return self::$contentType;
     }
 
     /**
