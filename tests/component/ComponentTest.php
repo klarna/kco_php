@@ -66,12 +66,12 @@ class Klarna_Checkout_Component extends PHPUnit_Framework_TestCase
 
         $factory = new Klarna_Checkout_CurlFactoryStub();
 
-        Klarna_Checkout_Order::$baseUrl = 'test1';
+        Klarna_Checkout_Order::$baseUri = 'test1';
 
         $factory->addHandle('test1', 201, array('Location: test2'));
         $factory->addHandle('test2', 200, array());
 
-        $this->connector = new Klarna_Checkout_Connector(
+        $this->connector = new Klarna_Checkout_BasicConnector(
             new Klarna_Checkout_HTTP_CURLTransport($factory),
             new Klarna_Checkout_Digest,
             'sharedSecret'
