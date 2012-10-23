@@ -27,7 +27,7 @@
  */
 
 require_once 'src/Klarna/Checkout.php';
-Klarna_Checkout_Order::$baseUrl = 'https://klarna.apiary.io/checkout/orders';
+Klarna_Checkout_Order::$baseUri = 'https://klarna.apiary.io/checkout/orders';
 
 session_start();
 

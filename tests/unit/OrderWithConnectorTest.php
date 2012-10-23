@@ -155,12 +155,12 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
     public function testCreateAlternativeEntryPoint()
     {
         $data = array("foo" => "boo");
-        $baseUrl = "https://checkout.klarna.com/beta/checkout/orders";
-        Klarna_Checkout_Order::$baseUrl = $baseUrl;
+        $baseUri = "https://checkout.klarna.com/beta/checkout/orders";
+        Klarna_Checkout_Order::$baseUri = $baseUri;
         $order = new Klarna_Checkout_Order($data);
         $order->create($this->connector);
 
-        $this->assertEquals($baseUrl, $this->connector->applied["options"]["url"]);
+        $this->assertEquals($baseUri, $this->connector->applied["options"]["url"]);
     }
 
 }
