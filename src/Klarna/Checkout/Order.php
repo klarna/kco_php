@@ -42,14 +42,14 @@ class Klarna_Checkout_Order
     implements Klarna_Checkout_ResourceInterface, ArrayAccess
 {
     /**
-     * Base URL that is used to create order resources
+     * Base URI that is used to create order resources
      *
      * @var string
      */
-    public static $baseUrl = "https://checkout.klarna.com/checkout/orders";
+    public static $baseUri = null;
 
     /**
-     * URL of remote resource
+     * URI of remote resource
      *
      * @var string
      */
@@ -142,7 +142,7 @@ class Klarna_Checkout_Order
         Klarna_Checkout_ConnectorInterface $connector
     ) {
         $options = array(
-            'url' => self::$baseUrl
+            'url' => self::$baseUri
         );
 
         $connector->apply('POST', $this, $options);
