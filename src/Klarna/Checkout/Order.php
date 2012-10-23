@@ -153,7 +153,7 @@ class Klarna_Checkout_Order
      *
      * @param Klarna_Checkout_ConnectorInterface $connector An instance of
      *                                                      connector class
-     * @param string                             $location  optional url
+     * @param string                             $location  optional uri
      *
      * @return void
      */
@@ -175,11 +175,17 @@ class Klarna_Checkout_Order
      *
      * @param Klarna_Checkout_ConnectorInterface $connector An instance of
      *                                                      connector class
+     * @param string                             $location  optional uri
      *
      * @return void
      */
-    public function update(Klarna_Checkout_ConnectorInterface $connector)
-    {
+    public function update(
+        Klarna_Checkout_ConnectorInterface $connector,
+        $location = null
+    ) {
+        if ($location !== null) {
+            $this->setLocation($location);
+        }
         $options = array(
             'url' => $this->_location
         );

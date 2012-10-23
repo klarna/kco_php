@@ -106,25 +106,25 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that fetch sets location when passed a url
+     * Test that fetch sets location when passed a uri
      *
      * @return void
      */
     public function testFetchSetLocation()
     {
-        $url = "http://klarna.com/foo/bar/16";
-        $this->order->fetch($this->connector, $url);
+        $uri = "http://klarna.com/foo/bar/16";
+        $this->order->fetch($this->connector, $uri);
 
         $this->assertEquals("GET", $this->connector->applied["method"]);
         $this->assertEquals($this->order, $this->connector->applied["resource"]);
         $this->assertArrayHasKey("url", $this->connector->applied["options"]);
         $this->assertEquals(
-            $url,
+            $uri,
             $this->connector->applied["options"]["url"],
             "url sent"
         );
         $this->assertEquals(
-            $url,
+            $uri,
             $this->order->getLocation(),
             "resource location"
         );
@@ -138,13 +138,38 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $this->order->setLocation("http://klarna.com/foo/bar/15");
-        $url = $this->order->getLocation();
+        $uri = $this->order->getLocation();
         $this->order->update($this->connector);
 
         $this->assertEquals("POST", $this->connector->applied["method"]);
         $this->assertEquals($this->order, $this->connector->applied["resource"]);
         $this->assertArrayHasKey("url", $this->connector->applied["options"]);
-        $this->assertEquals($url, $this->connector->applied["options"]["url"]);
+        $this->assertEquals($uri, $this->connector->applied["options"]["url"]);
+    }
+
+    /**
+     * Test that update sets location when passed a uri
+     *
+     * @return void
+     */
+    public function testUpdateSetLocation()
+    {
+        $uri = "http://klarna.com/foo/bar/16";
+        $this->order->update($this->connector, $uri);
+
+        $this->assertEquals("POST", $this->connector->applied["method"]);
+        $this->assertEquals($this->order, $this->connector->applied["resource"]);
+        $this->assertArrayHasKey("url", $this->connector->applied["options"]);
+        $this->assertEquals(
+            $uri,
+            $this->connector->applied["options"]["url"],
+            "url sent"
+        );
+        $this->assertEquals(
+            $uri,
+            $this->order->getLocation(),
+            "resource location"
+        );
     }
 
     /**
