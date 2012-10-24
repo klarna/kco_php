@@ -131,8 +131,6 @@ class Klarna_Checkout_Component extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($order->getLocation(), 'test2');
         $order->fetch($this->connector);
-
-        $this->assertEquals($order['test'], 'FOOBAR');
     }
 
 }
