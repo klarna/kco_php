@@ -205,6 +205,9 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
         Klarna_Checkout_ResourceInterface $resource,
         array $visited = array()
     ) {
+        // Check if we got an Error status code back
+        $this->verifyResponse($result);
+
         $url = $result->getHeader('Location');
         switch ($result->getStatus()) {
         case 301:
@@ -282,9 +285,6 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
 
         // Execute the HTTP Request
         $result = $this->http->send($request);
-
-        // Check if we got an Error status code back
-        $this->verifyResponse($result);
 
         // Handle statuses appropriately.
         return $this->handleResponse($result, $resource, $visited);
