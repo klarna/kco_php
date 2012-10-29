@@ -49,7 +49,7 @@ class Klarna_Checkout_CurlFactoryStub extends Klarna_Checkout_HTTP_CURLFactory
     /**
      * @var array
      */
-    public $data;
+    public $data = array();
 
     /**
      * Get a handle
