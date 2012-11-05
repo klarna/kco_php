@@ -27,65 +27,93 @@
  */
 
 require_once 'src/Klarna/Checkout.php';
-Klarna_Checkout_Order::$baseUri = 'https://klarna.apiary.io/checkout/orders';
-Klarna_Checkout_Order::$contentType
-    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
 
-session_start();
-
-$connector = Klarna_Checkout_Connector::create('sharedSecret');
-
-$order = null;
-if (!array_key_exists('klarna_checkout', $_SESSION)) {
-    // Start new session
-    $banana = array(
-        'type' => 'physical',
+// Array containing the cart items
+$cart = array(
+    array(
+        'quantity' => 1,
         'reference' => 'BANAN01',
         'name' => 'Bananana',
         'unit_price' => 450,
         'discount_rate' => 0,
         'tax_rate' => 2500
-    );
-
-    $shipping = array(
+    ),
+    array(
+        'quantity' => 1,
         'type' => 'shipping_fee',
         'reference' => 'SHIPPING',
         'name' => 'Shipping Fee',
         'unit_price' => 450,
         'discount_rate' => 0,
         'tax_rate' => 2500
-    );
+    )
+);
 
-    $order = new Klarna_Checkout_Order(
-        array(
-            'purchase_country' => 'SE',
-            'purchase_currency' => 'SEK',
-            'locale' => 'sv-se',
-            'merchant' => array(
-                'id' => 2,
-                'terms_uri' => 'http://localhost/terms.html',
-                'checkout_uri' => 'http://localhost/checkout.php',
-                'confirmation_uri' =>'http://localhost/thank-you.php',
-                'push_uri' => 'http://localhost/push.php'
-            ),
-            'cart' => array(
-                'total_price_including_tax' => 9000,
-                'items' => array(
-                    $banana,
-                    $shipping
-                )
-            )
-        )
-    );
-    $order->create($connector);
-    $order->fetch($connector);
-} else {
+// Merchant ID
+$eid = 2;
+
+// Shared secret
+$sharedSecret = 'sharedSecret';
+///
+
+Klarna_Checkout_Order::$baseUri = 'https://klarnacheckout.apiary.io/checkout/orders';
+Klarna_Checkout_Order::$contentType
+    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
+
+session_start();
+
+$connector = Klarna_Checkout_Connector::create($sharedSecret);
+
+$order = null;
+if (array_key_exists('klarna_checkout', $_SESSION)) {
     // Resume session
     $order = new Klarna_Checkout_Order;
-    $order->fetch($connector, $_SESSION['klarna_checkout']);
+    try {
+        $order->fetch($connector, $_SESSION['klarna_checkout']);
+
+
+        // Reset cart
+        $order['cart']['items'] = array();
+        foreach ($cart as $item) {
+            $order['cart']['items'][] = $item;
+        }
+        $order->update($connector);
+    } catch (Exception $e) {
+        // Reset session
+        $order = null;
+        unset($_SESSION['klarna_checkout']);
+    }
 }
 
-$snippet = $order['gui']['snippet'];
+if ($order == null) {
+    // Start new session
+
+    $order = new Klarna_Checkout_Order();
+    $order['purchase_country'] = 'SE';
+    $order['purchase_currency'] = 'SEK';
+    $order['locale'] = 'sv-se';
+    $order['merchant']['id'] = $eid;
+    $order['merchant']['terms_uri'] = 'http://localhost/terms.html';
+    $order['merchant']['checkout_uri'] = 'http://localhost/checkout.php';
+    $order['merchant']['confirmation_uri'] = 'http://localhost/confirmation.php';
+    // You can not recieve push notification on non publicly available uri
+    $order['merchant']['push_uri'] = 'http://localhost/push.php' .
+        '?checkout_uri={checkout.order.uri}';
+
+    foreach ($cart as $item) {
+        $order['cart']['items'][] = $item;
+    }
+
+    $order->create($connector);
+    $order->fetch($connector);
+}
+
+// Store location of checkout session
 $_SESSION['klarna_checkout'] = $sessionId = $order->getLocation();
-echo "<dl><dt>Session</dt><dd>{$sessionId}</dd</dl>";
+
+// Display checkout
+$snippet = $order['gui']['snippet'];
+// DESKTOP: Width of containing block shall be at least 750px
+// MOBILE: Width of containing block shall be 100% of browser window (No
+// padding or margin)
 echo "<div>{$snippet}</div>";

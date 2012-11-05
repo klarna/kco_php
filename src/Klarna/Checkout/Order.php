@@ -206,13 +206,10 @@ class Klarna_Checkout_Order
      *
      * @return mixed data
      */
-    public function offsetGet($key)
+    public function &offsetGet($key)
     {
         if (!is_string($key)) {
             throw new InvalidArgumentException("Key must be string");
-        }
-        if (!array_key_exists($key, $this->_data)) {
-            throw new OutOfBoundsException("{$key} doesn't exist");
         }
         return $this->_data[$key];
     }
@@ -242,7 +239,7 @@ class Klarna_Checkout_Order
      */
     public function offsetExists($key)
     {
-        return array_key_exists($this->_data, $key);
+        return array_key_exists($key, $this->_data);
     }
 
     /**

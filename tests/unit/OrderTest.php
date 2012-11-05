@@ -94,20 +94,10 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
         $this->order->setLocation($url);
 
         $this->assertEquals($url, $this->order->getLocation());
-    }
 
-    /**
-     * Test that location's type is always string
-     *
-     * @return void
-     */
-    public function testSetLocationType()
-    {
         $url = 5;
         $this->order->setLocation($url);
-
         $this->assertInternalType("string", $this->order->getLocation());
-        $this->assertEquals(strval($url), $this->order->getLocation());
     }
 
     /**
@@ -200,7 +190,18 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
     {
         $key = "test";
 
-        $this->setExpectedException("OutOfBoundsException");
-        $this->order[$key];
+        $this->assertFalse(isset($this->order[$key]));
+    }
+
+    /**
+     * Test that it's possible to set nested keys
+     *
+     * @return void
+     */
+    public function testSetNested()
+    {
+        $value = 5;
+        $this->order['spam']['egg']['bacon'] = $value;
+        $this->assertEquals($this->order['spam']['egg']['bacon'], $value);
     }
 }

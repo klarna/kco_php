@@ -39,6 +39,8 @@ $order = new Klarna_Checkout_Order;
 $order->fetch($connector, $checkoutId);
 
 if ($order['status'] == "checkout_complete") {
+    // At this point make sure the order is created in your system and send a
+    // confirmation email to the customer
     $order['status'] = 'created';
     $order['merchant_reference'] = array(
         'orderid1' => uniqid()

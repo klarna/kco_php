@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  * This file demonstrates the use of the Klarna library to complete
- * the purchase and display the thank you page snippet.
+ * the purchase and display the confirmation page snippet.
  *
  * PHP version 5.2
  *
@@ -38,13 +38,15 @@ $checkoutId = $_SESSION['klarna_checkout'];
 $order = new Klarna_Checkout_Order;
 $order->fetch($connector, $checkoutId);
 
-echo '<pre>';
-print_r($order);
-echo '</pre>';
-
-if ($order['status'] !== 'checkout_complete') {
+if ($order['status'] == 'checkout_incomplete') {
     echo "Checkout not completed, redirect to checkout.php";
     die;
 }
-echo $order['gui']['snippet'];
+
+$snippet = $order['gui']['snippet'];
+// DESKTOP: Width of containing block shall be at least 750px
+// MOBILE: Width of containing block shall be 100% of browser window (No
+// padding or margin)
+echo "<div>{$snippet}</div>";
+
 unset($_SESSION['klarna_checkout']);
