@@ -27,6 +27,8 @@
     <property name="coverage.file" location="${tmp.dir}/coverage.xml" />
     <property name="coverage.dir" location="${tmp.dir}/coverage" />
 
+    <property name="phpunit" value="phpunit" />
+
     <property name="git" value="git" />
 
     <!-- export a few properties about the system and the build !-->
@@ -136,7 +138,7 @@
         <attribute name="dir" default="IGNORED" />
 
         <sequential>
-            <exec dir="${work.dir}" executable="phpunit" failonerror="true">
+            <exec dir="${work.dir}" executable="${phpunit}" failonerror="true">
                 <arg line="--stderr -c @{conf}" />
             </exec>
         </sequential>
@@ -150,7 +152,7 @@
         <attribute name="conf" />
 
         <sequential>
-            <exec dir="${work.dir}" executable="phpunit" failonerror="true">
+            <exec dir="${work.dir}" executable="${phpunit}" failonerror="true">
                 <arg line="--stderr" />
                 <arg line="-d memory_limit=256M" />
                 <arg line="-c @{conf}" />
