@@ -16,7 +16,7 @@
  *
  * Example of a checkout page
  *
- * PHP version 5.3
+ * PHP version 5.3.4
  *
  * @category  Payment
  * @package   Klarna_Checkout

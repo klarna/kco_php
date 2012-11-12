@@ -17,7 +17,7 @@
  *
  * File containing the Klarna_Checkout_HTTP_CURLTransport class
  *
- * PHP version 5.2
+ * PHP version 5.3
  *
  * @category   Payment
  * @package    Payment_Klarna

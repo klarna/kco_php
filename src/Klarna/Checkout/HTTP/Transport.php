@@ -16,7 +16,7 @@
  *
  * File containing the Transport factory
  *
- * PHP version 5.2
+ * PHP version 5.3
  *
  * @category   Payment
  * @package    Payment_Klarna

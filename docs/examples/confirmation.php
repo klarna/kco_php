@@ -17,7 +17,7 @@
  * This file demonstrates the use of the Klarna library to complete
  * the purchase and display the confirmation page snippet.
  *
- * PHP version 5.2
+ * PHP version 5.3.4
  *
  * @category   Payment
  * @package    Payment_Klarna
