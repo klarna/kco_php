@@ -124,11 +124,16 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
     {
         $key1 = "testKey1";
         $value1 = "testValue1";
-        $this->order[$key1] = $value1;
 
         $key2 = "testKey2";
         $value2 = "testValue2";
-        $this->order[$key2] = $value2;
+
+        $this->order->parse(
+            array(
+                $key1 => $value1,
+                $key2 => $value2
+            )
+        );
 
         $marshalData = $this->order->marshal();
 
@@ -145,15 +150,17 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testSetGetValues()
+    public function testGetValues()
     {
         $key = "testKey1";
-        $this->order[$key] = "testValue1";
+        $value = "testValue1";
+        $this->order->parse(
+            array(
+                $key => $value
+            )
+        );
 
-        $value2 = "testValue2";
-        $this->order[$key] = $value2;
-
-        $this->assertEquals($value2, $this->order[$key]);
+        $this->assertEquals($value, $this->order[$key]);
     }
 
     /**
@@ -193,17 +200,5 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
         $key = "test";
 
         $this->assertFalse(isset($this->order[$key]));
-    }
-
-    /**
-     * Test that it's possible to set nested keys
-     *
-     * @return void
-     */
-    public function testSetNested()
-    {
-        $value = 5;
-        $this->order['spam']['egg']['bacon'] = $value;
-        $this->assertEquals($this->order['spam']['egg']['bacon'], $value);
     }
 }

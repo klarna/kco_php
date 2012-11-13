@@ -200,11 +200,12 @@ class Klarna_Checkout_Order
      *
      * @return mixed data
      */
-    public function &offsetGet($key)
+    public function offsetGet($key)
     {
         if (!is_string($key)) {
             throw new InvalidArgumentException("Key must be string");
         }
+
         return $this->_data[$key];
     }
 
@@ -221,7 +222,8 @@ class Klarna_Checkout_Order
         if (!is_string($key)) {
             throw new InvalidArgumentException("Key must be string");
         }
-        $this->_data[$key] = $value;
+
+        throw new RuntimeException('Use update function to change values');
     }
 
     /**
@@ -245,6 +247,6 @@ class Klarna_Checkout_Order
      */
     public function offsetUnset($key)
     {
-        unset($this->_data[$key]);
+        throw new RuntimeException('unset of fields not supported');
     }
 }
