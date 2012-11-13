@@ -56,7 +56,9 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->order = new Klarna_Checkout_Order();
+        $this->order = new Klarna_Checkout_Order(
+            $this->getMock('Klarna_Checkout_ConnectorInterface')
+        );
     }
 
     /**

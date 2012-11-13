@@ -160,17 +160,31 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
      * @return string Url to use for HTTP requests
      */
     protected function getUrl(
-        Klarna_Checkout_ResourceInterface $resource, array $options = null
+        Klarna_Checkout_ResourceInterface $resource, array $options
     ) {
-        $url = '';
-
-        if ($options !== null && array_key_exists('url', $options)) {
-            $url = $options['url'];
-        } else {
-            $url = $resource->getLocation();
+        if (array_key_exists('url', $options)) {
+            return $options['url'];
         }
 
-        return $url;
+        return $resource->getLocation();
+    }
+
+    /**
+     * Get the data to use
+     *
+     * @param Klarna_Checkout_ResourceInterface $resource resource
+     * @param array                             $options  Options
+     *
+     * @return array data to use for HTTP requests
+     */
+    protected function getData(
+        Klarna_Checkout_ResourceInterface $resource, array $options
+    ) {
+        if (array_key_exists('data', $options)) {
+            return $options['data'];
+        }
+
+        return $resource->marshal();
     }
 
     /**
@@ -270,13 +284,17 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
         array $options = null,
         array $visited = array()
     ) {
+        if ($options === null) {
+            $options = array();
+        }
+
         // Define the target URL
         $url = $this->getUrl($resource, $options);
 
         // Set a payload if it is a POST call.
         $payload = '';
         if ($method === 'POST') {
-            $payload = json_encode($resource->marshal());
+            $payload = json_encode($this->getData($resource, $options));
         }
 
         // Create a HTTP Request object

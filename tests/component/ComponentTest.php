@@ -106,7 +106,8 @@ class Klarna_Checkout_Component extends PHPUnit_Framework_TestCase
             'tax_rate' => 2500
         );
 
-        $order = new Klarna_Checkout_Order(
+        $order = new Klarna_Checkout_Order($this->connector);
+        $order->create(
             array(
                 'purchase_country' => 'SE',
                 'purchase_currency' => 'SEK',
@@ -127,10 +128,9 @@ class Klarna_Checkout_Component extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $order->create($this->connector);
 
         $this->assertEquals($order->getLocation(), 'test2');
-        $order->fetch($this->connector);
+        $order->fetch();
     }
 
 }
