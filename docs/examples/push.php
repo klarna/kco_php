@@ -32,18 +32,21 @@ require_once 'src/Klarna/Checkout.php';
 
 session_start();
 
+Klarna_Checkout_Order::$contentType
+    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
+
 $connector = Klarna_Checkout_Connector::create('sharedSecret');
 
 @$checkoutId = $_GET['checkout_uri'];
-$order = new Klarna_Checkout_Order;
-$order->fetch($connector, $checkoutId);
+$order = new Klarna_Checkout_Order($connector, $checkoutId);
+$order->fetch();
 
 if ($order['status'] == "checkout_complete") {
     // At this point make sure the order is created in your system and send a
     // confirmation email to the customer
-    $order['status'] = 'created';
-    $order['merchant_reference'] = array(
+    $update['status'] = 'created';
+    $update['merchant_reference'] = array(
         'orderid1' => uniqid()
     );
-    $order->update($connector);
+    $order->update($update);
 }

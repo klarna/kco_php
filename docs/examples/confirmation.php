@@ -32,11 +32,14 @@ require_once 'src/Klarna/Checkout.php';
 
 session_start();
 
+Klarna_Checkout_Order::$contentType
+    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
+
 $connector = Klarna_Checkout_Connector::create('sharedSecret');
 
 $checkoutId = $_SESSION['klarna_checkout'];
-$order = new Klarna_Checkout_Order;
-$order->fetch($connector, $checkoutId);
+$order = new Klarna_Checkout_Order($connector, $checkoutId);
+$order->fetch();
 
 if ($order['status'] == 'checkout_incomplete') {
     echo "Checkout not completed, redirect to checkout.php";
