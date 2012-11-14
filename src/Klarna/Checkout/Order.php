@@ -87,7 +87,7 @@ class Klarna_Checkout_Order
     public function __construct(
         Klarna_Checkout_ConnectorInterface $connector,
         $uri = null
-    ){
+    ) {
         $this->connector = $connector;
         if ($uri !== null) {
             $this->setLocation($uri);
@@ -155,7 +155,8 @@ class Klarna_Checkout_Order
      *
      * @return void
      */
-    public function create(array $data) {
+    public function create(array $data)
+    {
         $options = array(
             'url' => self::$baseUri,
             'data' => $data
@@ -169,7 +170,8 @@ class Klarna_Checkout_Order
      *
      * @return void
      */
-    public function fetch() {
+    public function fetch()
+    {
         $options = array(
             'url' => $this->_location
         );
@@ -223,7 +225,10 @@ class Klarna_Checkout_Order
             throw new InvalidArgumentException("Key must be string");
         }
 
-        throw new RuntimeException('Use update function to change values');
+        $value = print_r($value, true);
+        throw new RuntimeException(
+            "Use update function to change values. trying to set $key to $value"
+        );
     }
 
     /**
@@ -247,6 +252,8 @@ class Klarna_Checkout_Order
      */
     public function offsetUnset($key)
     {
-        throw new RuntimeException('unset of fields not supported');
+        throw new RuntimeException(
+            "unset of fields not supported. trying to unset $key"
+        );
     }
 }
