@@ -64,8 +64,8 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->order = new Klarna_Checkout_Order();
         $this->connector = new Klarna_Checkout_ConnectorStub();
+        $this->order = new Klarna_Checkout_Order($this->connector);
     }
 
     /**
@@ -78,14 +78,24 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
         $location = 'http://stub';
         $this->connector->location = $location;
         $data = array("foo" => "boo");
-        $order = new Klarna_Checkout_Order($data);
-        $order->create($this->connector);
+        $order = new Klarna_Checkout_Order($this->connector);
+        $order->create($data);
 
-        $this->assertEquals("boo", $order["foo"]);
         $this->assertEquals("POST", $this->connector->applied["method"]);
         $this->assertEquals($order, $this->connector->applied["resource"]);
         $this->assertEquals($location, $order->getLocation());
-        $this->assertArrayHasKey("url", $this->connector->applied["options"]);
+        $this->assertArrayHasKey(
+            "url",
+            $this->connector->applied["options"]
+        );
+        $this->assertArrayHasKey(
+            "data",
+            $this->connector->applied["options"]
+        );
+        $this->assertEquals(
+            $this->connector->applied['options']['data']['foo'],
+            'boo'
+        );
     }
 
     /**
@@ -97,37 +107,12 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
     {
         $this->order->setLocation("http://klarna.com/foo/bar/15");
         $url = $this->order->getLocation();
-        $this->order->fetch($this->connector);
+        $this->order->fetch();
 
         $this->assertEquals("GET", $this->connector->applied["method"]);
         $this->assertEquals($this->order, $this->connector->applied["resource"]);
         $this->assertArrayHasKey("url", $this->connector->applied["options"]);
         $this->assertEquals($url, $this->connector->applied["options"]["url"]);
-    }
-
-    /**
-     * Test that fetch sets location when passed a uri
-     *
-     * @return void
-     */
-    public function testFetchSetLocation()
-    {
-        $uri = "http://klarna.com/foo/bar/16";
-        $this->order->fetch($this->connector, $uri);
-
-        $this->assertEquals("GET", $this->connector->applied["method"]);
-        $this->assertEquals($this->order, $this->connector->applied["resource"]);
-        $this->assertArrayHasKey("url", $this->connector->applied["options"]);
-        $this->assertEquals(
-            $uri,
-            $this->connector->applied["options"]["url"],
-            "url sent"
-        );
-        $this->assertEquals(
-            $uri,
-            $this->order->getLocation(),
-            "resource location"
-        );
     }
 
     /**
@@ -139,37 +124,16 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
     {
         $this->order->setLocation("http://klarna.com/foo/bar/15");
         $uri = $this->order->getLocation();
-        $this->order->update($this->connector);
+        $this->order->update(
+            array(
+                'foo' => 'boo'
+            )
+        );
 
         $this->assertEquals("POST", $this->connector->applied["method"]);
         $this->assertEquals($this->order, $this->connector->applied["resource"]);
         $this->assertArrayHasKey("url", $this->connector->applied["options"]);
         $this->assertEquals($uri, $this->connector->applied["options"]["url"]);
-    }
-
-    /**
-     * Test that update sets location when passed a uri
-     *
-     * @return void
-     */
-    public function testUpdateSetLocation()
-    {
-        $uri = "http://klarna.com/foo/bar/16";
-        $this->order->update($this->connector, $uri);
-
-        $this->assertEquals("POST", $this->connector->applied["method"]);
-        $this->assertEquals($this->order, $this->connector->applied["resource"]);
-        $this->assertArrayHasKey("url", $this->connector->applied["options"]);
-        $this->assertEquals(
-            $uri,
-            $this->connector->applied["options"]["url"],
-            "url sent"
-        );
-        $this->assertEquals(
-            $uri,
-            $this->order->getLocation(),
-            "resource location"
-        );
     }
 
     /**
@@ -182,8 +146,8 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
         $data = array("foo" => "boo");
         $baseUri = "https://checkout.klarna.com/beta/checkout/orders";
         Klarna_Checkout_Order::$baseUri = $baseUri;
-        $order = new Klarna_Checkout_Order($data);
-        $order->create($this->connector);
+        $order = new Klarna_Checkout_Order($this->connector);
+        $order->create($data);
 
         $this->assertEquals($baseUri, $this->connector->applied["options"]["url"]);
     }

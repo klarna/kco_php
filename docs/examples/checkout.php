@@ -50,7 +50,7 @@ $cart = array(
 );
 
 // Merchant ID
-$eid = 2;
+$eid = '2';
 
 // Shared secret
 $sharedSecret = 'sharedSecret';
@@ -67,17 +67,19 @@ $connector = Klarna_Checkout_Connector::create($sharedSecret);
 $order = null;
 if (array_key_exists('klarna_checkout', $_SESSION)) {
     // Resume session
-    $order = new Klarna_Checkout_Order;
+    $order = new Klarna_Checkout_Order(
+        $connector,
+        $_SESSION['klarna_checkout']
+    );
     try {
-        $order->fetch($connector, $_SESSION['klarna_checkout']);
-
+        $order->fetch();
 
         // Reset cart
-        $order['cart']['items'] = array();
+        $update['cart']['items'] = array();
         foreach ($cart as $item) {
-            $order['cart']['items'][] = $item;
+            $update['cart']['items'][] = $item;
         }
-        $order->update($connector);
+        $order->update($update);
     } catch (Exception $e) {
         // Reset session
         $order = null;
@@ -88,24 +90,24 @@ if (array_key_exists('klarna_checkout', $_SESSION)) {
 if ($order == null) {
     // Start new session
 
-    $order = new Klarna_Checkout_Order();
-    $order['purchase_country'] = 'SE';
-    $order['purchase_currency'] = 'SEK';
-    $order['locale'] = 'sv-se';
-    $order['merchant']['id'] = $eid;
-    $order['merchant']['terms_uri'] = 'http://localhost/terms.html';
-    $order['merchant']['checkout_uri'] = 'http://localhost/checkout.php';
-    $order['merchant']['confirmation_uri'] = 'http://localhost/confirmation.php';
+    $create['purchase_country'] = 'SE';
+    $create['purchase_currency'] = 'SEK';
+    $create['locale'] = 'sv-se';
+    $create['merchant']['id'] = $eid;
+    $create['merchant']['terms_uri'] = 'http://localhost/terms.html';
+    $create['merchant']['checkout_uri'] = 'http://localhost/checkout.php';
+    $create['merchant']['confirmation_uri'] = 'http://localhost/confirmation.php';
     // You can not recieve push notification on non publicly available uri
-    $order['merchant']['push_uri'] = 'http://localhost/push.php' .
+    $create['merchant']['push_uri'] = 'http://localhost/push.php' .
         '?checkout_uri={checkout.order.uri}';
 
     foreach ($cart as $item) {
-        $order['cart']['items'][] = $item;
+        $create['cart']['items'][] = $item;
     }
 
-    $order->create($connector);
-    $order->fetch($connector);
+    $order = new Klarna_Checkout_Order($connector);
+    $order->create($create);
+    $order->fetch();
 }
 
 // Store location of checkout session
