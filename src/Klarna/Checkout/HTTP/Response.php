@@ -73,7 +73,10 @@ class Klarna_Checkout_HTTP_Response
         Klarna_Checkout_HTTP_Request $request, array $headers, $status, $data
     ) {
         $this->request = $request;
-        $this->headers = $headers;
+        $this->headers = array();
+        foreach ($headers as $key => $value) {
+            $this->headers[strtolower($key)] = $value;
+        }
         $this->status = $status;
         $this->data = $data;
     }
@@ -109,6 +112,7 @@ class Klarna_Checkout_HTTP_Response
      */
     public function getHeader($name)
     {
+        $name = strtolower($name);
         if (!array_key_exists($name, $this->headers)) {
             return null;
         }

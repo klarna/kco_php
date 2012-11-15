@@ -72,4 +72,21 @@ class Klarna_Checkout_HTTP_ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $data);
         $this->assertEquals('my data', $data);
     }
+
+    /**
+     * Make sure that getHeader works regardless of case
+     *
+     * @return void
+     */
+    public function testGetHeaderCaseInsensitive()
+    {
+        $request = new Klarna_Checkout_HTTP_Request('url');
+        $response = new Klarna_Checkout_HTTP_Response(
+            $request, array('Test' => 'value'), 203, 'my data'
+        );
+
+        $this->assertEquals('value', $response->getHeader('TEST'));
+        $this->assertEquals('value', $response->getHeader('Test'));
+        $this->assertEquals('value', $response->getHeader('test'));
+    }
 }
