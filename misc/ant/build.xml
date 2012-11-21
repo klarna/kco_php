@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="PHP Checkout" default="tests">
+<project name="kco_php" default="tests">
     <property name="work.dir" location="${user.dir}" />
     <property name="build.base" location="base.xml"/>
     <import file="${build.base}" />
@@ -41,7 +41,9 @@
         name="create-doc"
         description="Generate documentation"
     >
+        <!--
         <phpdoc dir="${src.dir}" dest="${phpdoc.dir}" />
+        !-->
     </target>
 
     <target
