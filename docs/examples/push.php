@@ -37,7 +37,7 @@ Klarna_Checkout_Order::$contentType
 
 $connector = Klarna_Checkout_Connector::create('sharedSecret');
 
-@$checkoutId = $_GET['checkout_uri'];
+@$checkoutId = $_GET['klarna_order'];
 $order = new Klarna_Checkout_Order($connector, $checkoutId);
 $order->fetch();
 

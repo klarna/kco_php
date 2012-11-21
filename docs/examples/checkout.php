@@ -31,32 +31,32 @@ require_once 'src/Klarna/Checkout.php';
 // Array containing the cart items
 $cart = array(
     array(
-        'quantity' => 1,
-        'reference' => 'BANAN01',
-        'name' => 'Bananana',
-        'unit_price' => 450,
-        'discount_rate' => 0,
+        'reference' => '123456789',
+        'name' => 'Klarna t-shirt',
+        'quantity' => 2,
+        'unit_price' => 12300,
+        'discount_rate' => 1000,
         'tax_rate' => 2500
     ),
     array(
-        'quantity' => 1,
         'type' => 'shipping_fee',
         'reference' => 'SHIPPING',
         'name' => 'Shipping Fee',
-        'unit_price' => 450,
-        'discount_rate' => 0,
+        'quantity' => 1,
+        'unit_price' => 4900,
         'tax_rate' => 2500
     )
 );
 
 // Merchant ID
-$eid = '2';
+$eid = '0';
 
 // Shared secret
 $sharedSecret = 'sharedSecret';
 ///
 
-Klarna_Checkout_Order::$baseUri = 'https://klarnacheckout.apiary.io/checkout/orders';
+Klarna_Checkout_Order::$baseUri
+    = 'https://checkout.testdrive.klarna.com/checkout/orders';
 Klarna_Checkout_Order::$contentType
     = "application/vnd.klarna.checkout.aggregated-order-v2+json";
 
@@ -94,12 +94,14 @@ if ($order == null) {
     $create['purchase_currency'] = 'SEK';
     $create['locale'] = 'sv-se';
     $create['merchant']['id'] = $eid;
-    $create['merchant']['terms_uri'] = 'http://localhost/terms.html';
-    $create['merchant']['checkout_uri'] = 'http://localhost/checkout.php';
-    $create['merchant']['confirmation_uri'] = 'http://localhost/confirmation.php';
+    $create['merchant']['terms_uri'] = 'http://example.com/terms.html';
+    $create['merchant']['checkout_uri'] = 'http://example.com/checkout.php';
+    $create['merchant']['confirmation_uri']
+        = 'http://example.com/confirmation.php' .
+        '?sid=123&klarna_order={checkout.order.uri}';
     // You can not recieve push notification on non publicly available uri
-    $create['merchant']['push_uri'] = 'http://localhost/push.php' .
-        '?checkout_uri={checkout.order.uri}';
+    $create['merchant']['push_uri'] = 'http://example.com/push.php' .
+        '?sid=123&klarna_order={checkout.order.uri}';
 
     foreach ($cart as $item) {
         $create['cart']['items'][] = $item;
