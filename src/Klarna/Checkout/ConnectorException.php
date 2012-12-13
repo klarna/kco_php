@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2012 Klarna AB
  *
@@ -15,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_Exception class
+ * File containing the Klarna_Checkout_ConnectorException class
  *
  * PHP version 5.3
  *
@@ -28,17 +27,17 @@
  */
 
 /**
- * Basic exception class
+ * Connector exception
  *
  * @category  Payment
  * @package   Klarna_Checkout
- * @author    Majid G. <majid.garmaroudi@klarna.com>
+ * @author    Rickard D. <rickard.dybeck@klarna.com>
  * @author    David K. <david.keijser@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_Exception extends Exception
+class Klarna_Checkout_ConnectorException extends Klarna_Checkout_Exception
 {
 
 }
