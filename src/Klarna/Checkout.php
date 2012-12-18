@@ -35,6 +35,8 @@ require_once KLARNA_CHECKOUT_DIR . '/BasicConnector.php';
 require_once KLARNA_CHECKOUT_DIR . '/Order.php';
 require_once KLARNA_CHECKOUT_DIR . '/Digest.php';
 require_once KLARNA_CHECKOUT_DIR . '/Exception.php';
+require_once KLARNA_CHECKOUT_DIR . '/ConnectionErrorException.php';
+require_once KLARNA_CHECKOUT_DIR . '/ConnectorException.php';
 require_once KLARNA_CHECKOUT_DIR . '/UserAgent.php';
 
 require_once KLARNA_CHECKOUT_DIR . '/HTTP/TransportInterface.php';

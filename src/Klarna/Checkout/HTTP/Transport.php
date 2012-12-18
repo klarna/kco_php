@@ -43,7 +43,7 @@ class Klarna_Checkout_HTTP_Transport
     /**
      * Create a new transport instance
      *
-     * @return Klarna_Checkout_HTTP_Transport
+     * @return Klarna_Checkout_HTTP_TransportInterface
      */
     public static function create()
     {
