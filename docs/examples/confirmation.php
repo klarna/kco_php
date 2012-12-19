@@ -27,7 +27,7 @@
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://integration.klarna.com/
  */
-
+// [[examples-confirmation]]
 require_once 'src/Klarna/Checkout.php';
 
 session_start();
@@ -53,3 +53,4 @@ $snippet = $order['gui']['snippet'];
 echo "<div>{$snippet}</div>";
 
 unset($_SESSION['klarna_checkout']);
+// [[examples-confirmation]]

@@ -25,7 +25,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-
+// [[examples-checkout]]
 require_once 'src/Klarna/Checkout.php';
 
 // Array containing the cart items
@@ -121,3 +121,4 @@ $snippet = $order['gui']['snippet'];
 // MOBILE: Width of containing block shall be 100% of browser window (No
 // padding or margin)
 echo "<div>{$snippet}</div>";
+// [[examples-checkout]]
