@@ -99,7 +99,7 @@ if ($order == null) {
     $create['merchant']['confirmation_uri']
         = 'http://example.com/confirmation.php' .
         '?sid=123&klarna_order={checkout.order.uri}';
-    // You can not recieve push notification on non publicly available uri
+    // You can not receive push notification on non publicly available uri
     $create['merchant']['push_uri'] = 'http://example.com/push.php' .
         '?sid=123&klarna_order={checkout.order.uri}';
 
