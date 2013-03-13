@@ -67,4 +67,13 @@ class Klarna_Checkout_ConnectorStub implements Klarna_Checkout_ConnectorInterfac
             $resource->setLocation($this->location);
         }
     }
+
+    /**
+     * Gets the underlying transport object
+     *
+     * @return void
+     */
+    public function getTransport()
+    {
+    }
 }

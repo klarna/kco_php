@@ -54,4 +54,11 @@ interface Klarna_Checkout_ConnectorInterface
         Klarna_Checkout_ResourceInterface $resource,
         array $options = null
     );
+
+    /**
+     * Gets the underlying transport object
+     *
+     * @return Klarna_Checkout_HTTP_TransportInterface Transport object
+     */
+    public function getTransport();
 }
