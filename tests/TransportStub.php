@@ -49,9 +49,9 @@ class Klarna_Checkout_HTTP_TransportStub
     public $response = array();
 
     /**
-     * [setResponseCode description]
+     * Set the response code
      *
-     * @param [type] $code [description]
+     * @param int $code Response code
      *
      * @return void
      */

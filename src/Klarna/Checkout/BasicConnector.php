@@ -116,6 +116,16 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
     }
 
     /**
+     * Gets the underlying transport object
+     *
+     * @return Klarna_Checkout_HTTP_TransportInterface Transport object
+     */
+    public function getTransport()
+    {
+        return $this->http;
+    }
+
+    /**
      * Set content (headers, payload) on a request
      *
      * @param Klarna_Checkout_ResourceInterface $resource Klarna Checkout Resource
@@ -307,5 +317,4 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
         // Handle statuses appropriately.
         return $this->handleResponse($result, $resource, $visited);
     }
-
 }

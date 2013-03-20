@@ -95,7 +95,10 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
      */
     public function testInit()
     {
-        $this->assertEquals(5, $this->http->getTimeout());
+        $this->assertEquals(
+            Klarna_Checkout_HTTP_CURLTransport::DEFAULT_TIMEOUT,
+            $this->http->getTimeout()
+        );
     }
 
     /**

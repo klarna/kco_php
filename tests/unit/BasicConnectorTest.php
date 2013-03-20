@@ -196,4 +196,21 @@ class Klarna_Checkout_BasicConnectorTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotNull($result, 'Response Object');
     }
+
+    /**
+     * Testing getTransport always returns instance of
+     * Klarna_Checkout_HTTP_TransportInterface
+     *
+     * @return void
+     */
+    public function testValidTransportType()
+    {
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
+        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+
+        $this->assertInstanceOf(
+            'Klarna_Checkout_HTTP_TransportInterface',
+            $object->getTransport()
+        );
+    }
 }
