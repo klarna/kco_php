@@ -27,8 +27,6 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once 'Checkout/UserAgent.php';
-
 /**
  * unittest of the UserAgent class
  *

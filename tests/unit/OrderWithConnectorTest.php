@@ -26,10 +26,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-require_once 'Checkout/ResourceInterface.php';
-require_once 'Checkout/Order.php';
-require_once 'Checkout/ConnectorInterface.php';
-require_once 'tests/ConnectorStub.php';
+
 /**
  * UnitTest for the Order class, interactions with connector
  *

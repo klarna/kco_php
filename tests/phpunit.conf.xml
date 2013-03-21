@@ -1,4 +1,4 @@
-<phpunit convertErrorsToExceptions="true" convertNoticesToException="true" convertWarningsToExceptions="true" verbose="true" strict="true">
+<phpunit convertErrorsToExceptions="true" convertNoticesToException="true" convertWarningsToExceptions="true" verbose="true" strict="true" bootstrap="bootstrap.php">
     <php>
         <includePath>../src/Klarna</includePath>
     </php>

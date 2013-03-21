@@ -28,8 +28,6 @@
  * @link       http://integration.klarna.com/
  */
 
-require_once 'Checkout/HTTP/Request.php';
-
 /**
  * PHPUnit test case for the HTTP Response object.
  *

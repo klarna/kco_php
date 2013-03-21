@@ -26,11 +26,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-require_once 'Checkout/HTTP/TransportInterface.php';
-require_once 'Checkout/HTTP/CURLTransport.php';
-require_once 'Checkout/HTTP/Transport.php';
-require_once 'Checkout/HTTP/Request.php';
-require_once 'Checkout/HTTP/CURLFactory.php';
 
 /**
  * UnitTest for the Klarna_Checkout_HTTP_Transport factory

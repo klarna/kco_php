@@ -27,16 +27,6 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once 'Checkout/ConnectorInterface.php';
-require_once 'Checkout/HTTP/TransportInterface.php';
-require_once 'Checkout/HTTP/Request.php';
-require_once 'Checkout/HTTP/Response.php';
-require_once 'Checkout/Exception.php';
-require_once 'Checkout/BasicConnector.php';
-require_once 'Checkout/Connector.php';
-require_once 'tests/ResourceStub.php';
-require_once 'tests/TransportStub.php';
-
 /**
  * General UnitTest for the Connector facade class
  *
