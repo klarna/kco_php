@@ -47,7 +47,7 @@ require_once 'tests/CURLHandleStub.php';
 class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Klarna_HTTP_CURL
+     * @var Klarna_Checkout_HTTP_CURLTransport
      */
     protected $http;
 
