@@ -32,6 +32,7 @@ To contribute, the following criteria needs to be fulfilled:
 * Pull requests should implement a boxed change
 * All code and documentation must follow the
 [PEAR coding standards](http://pear.php.net/manual/en/standards.php)
+* All classes must follow the [PSR-0 standard](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)
 * New features and bug fixes must have accompanying unit tests:
     * Positive tests
     * Negative tests
