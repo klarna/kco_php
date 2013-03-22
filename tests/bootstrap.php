@@ -26,7 +26,7 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once dirname(__file__) . '/../src/Klarna/Checkout.php';
+require_once dirname(__DIR__) . '/src/Klarna/Checkout.php';
 
 require_once 'ConnectorStub.php';
 require_once 'CURLHandleStub.php';

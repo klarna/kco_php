@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_BasicConnector (POST) unittest
+ * File containing the Klarna_Checkout_BasicConnector (GET) unittest
  *
  * PHP version 5.3
  *
@@ -28,7 +28,7 @@
  */
 
 /**
- * POST UnitTests for the Basic Connector class
+ * GET UnitTest for the Connector class
  *
  * @category  Payment
  * @package   Klarna_Checkout
@@ -38,7 +38,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://integration.klarna.com/
  */
-class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_BasicConnectorGetTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -55,10 +55,6 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->httpInterface = $this->getMock(
-            'Klarna_Checkout_HTTP_TransportInterface'
-        );
-
         $this->orderStub = new Klarna_Checkout_ResourceStub;
 
         $this->digest = $this->getMock(
@@ -67,11 +63,11 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test apply POST with a 200 code
+     * Test apply with a 200 code
      *
      * @return void
      */
-    public function testApplyPost200()
+    public function testApplyGet200()
     {
         $curl = new Klarna_Checkout_HTTP_TransportStub;
 
@@ -83,21 +79,23 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
         );
         $curl->addResponse($data);
 
-        $this->orderStub->parse(json_decode($payload, true));
-
-        $expected = 'stnaeu\eu2341aoaaoae==';
+        $expectedDigest = 'stnaeu\eu2341aoaaoae==';
 
         $this->digest->expects($this->once())
             ->method('create')
-            ->with("{$payload}aboogie")
-            ->will($this->returnValue($expected));
+            ->with('aboogie')
+            ->will($this->returnValue($expectedDigest));
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
-        $result = $object->apply('POST', $this->orderStub);
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
+        $result = $object->apply('GET', $this->orderStub);
 
         $this->assertEquals($payload, $result->getData(), 'Response payload');
         $this->assertEquals(
-            "Klarna {$expected}",
+            "Klarna {$expectedDigest}",
             $curl->request->getHeader('Authorization'),
             'Header'
         );
@@ -121,7 +119,7 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testApplyPost200InvalidJSON()
+    public function testApplyGet200InvalidJSON()
     {
         $this->setExpectedException('Klarna_Checkout_ConnectorException');
 
@@ -135,8 +133,12 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
         );
         $curl->addResponse($data);
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'secret');
-        $object->apply('POST', $this->orderStub);
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'secret'
+        );
+        $object->apply('GET', $this->orderStub);
     }
 
     /**
@@ -144,7 +146,7 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testApplyPostWithUrlInOptions()
+    public function testApplyWithUrlInOptions()
     {
         $options = array('url' => 'localhost');
 
@@ -159,17 +161,17 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
         );
         $curl->addResponse($data);
 
-        $this->orderStub->parse(json_decode($payload, true));
-
-        $expected = 'stnaeu\eu2341aoaaoae==';
-
         $this->digest->expects($this->once())
             ->method('create')
-            ->with("{$payload}aboogie")
-            ->will($this->returnValue($expected));
+            ->with('aboogie')
+            ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
-        $result = $object->apply('POST', $this->orderStub, $options);
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
+        $result = $object->apply('GET', $this->orderStub, $options);
 
         $request = $result->getRequest();
 
@@ -177,11 +179,11 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test with a redirect (303) to a OK (200)
+     * Test with a redirect (301) to a OK (200)
      *
      * @return void
      */
-    public function testApplyPost303ConvertedToGet()
+    public function testApplyGet301to200()
     {
         $options = array('url' => 'localhost');
 
@@ -196,7 +198,7 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
                 'payload' => $payload
             ),
             array(
-                'code' => 303,
+                'code' => 301,
                 'headers' => array('Location' => $redirect),
                 'payload' => $payload
             )
@@ -205,35 +207,30 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
             $curl->addResponse($response);
         }
 
-        $this->orderStub->parse(json_decode($payload, true));
-
-        $expected = 'stnaeu\eu2341aoaaoae==';
-
-        $this->digest->expects($this->at(0))
+        $this->digest->expects($this->any())
             ->method('create')
-            ->with("{$payload}aboogie")
-            ->will($this->returnValue($expected));
+            ->with('aboogie')
+            ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 
-        $this->digest->expects($this->at(1))
-            ->method('create')
-            ->with("aboogie")
-            ->will($this->returnValue($expected));
-
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
-        $result = $object->apply('POST', $this->orderStub, $options);
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
+        $result = $object->apply('GET', $this->orderStub, $options);
 
         $request = $result->getRequest();
 
-        $this->assertEquals('GET', $request->getMethod(), 'Method');
+        $this->assertEquals($redirect, $request->getUrl(), 'Url Option');
     }
 
     /**
-     * Test with a redirect (303) to a Forbidden (503) to ensure exception is
+     * Test with a redirect (302) to a Forbidden (503) to ensure exception is
      * thrown.
      *
      * @return void
      */
-    public function testApplyPost301to503()
+    public function testApplyGet302to503()
     {
         $this->setExpectedException(
             'Klarna_Checkout_ConnectorException', 'Forbidden', 503
@@ -252,108 +249,6 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
                 'payload' => $payload
             ),
             array(
-                'code' => 303,
-                'headers' => array('Location' => $redirect),
-                'payload' => ""
-            )
-        );
-        foreach ($data as $response) {
-            $curl->addResponse($response);
-        }
-
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
-
-        $result = null;
-        try {
-            $result = $object->apply('POST', $this->orderStub, $options);
-        } catch (Exception $e) {
-            $request = $curl->request;
-            $this->assertEquals($redirect, $request->getUrl(), 'Url Option');
-            throw $e;
-        }
-    }
-
-    /**
-     * Test so 201 statuscode will update the location on the resource.
-     *
-     * @return void
-     */
-    public function testApplyPost201UpdatedLocation()
-    {
-        $curl = new Klarna_Checkout_HTTP_TransportStub;
-
-        $payload = '{"flobadob":["bobcat","wookie"]}';
-        $location = 'not localhost';
-
-        $data = array(
-            'code' => 201,
-            'headers' => array('Location' => $location),
-            'payload' => $payload
-        );
-        $curl->addResponse($data);
-
-        $this->orderStub->parse(json_decode($payload, true));
-
-        $expected = 'stnaeu\eu2341aoaaoae==';
-
-        $this->digest->expects($this->once())
-            ->method('create')
-            ->with("{$payload}aboogie")
-            ->will($this->returnValue($expected));
-
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
-
-        $this->assertNull($this->orderStub->getLocation(), 'Original Location');
-
-        $result = $object->apply('POST', $this->orderStub);
-
-        $this->assertEquals($payload, $result->getData(), 'Response payload');
-        $this->assertEquals(
-            "Klarna {$expected}",
-            $curl->request->getHeader('Authorization'),
-            'Header'
-        );
-
-        $this->assertEquals(
-            $location,
-            $this->orderStub->getLocation(),
-            'Location should have beet updated'
-        );
-
-        $this->assertEquals(
-            json_decode($payload, true),
-            $this->orderStub->marshal(),
-            'The data on the resource should not be updated!'
-        );
-
-        $this->assertEquals(
-            $this->orderStub->getContentType(),
-            $curl->request->getHeader('Accept'),
-            'Accept Content Type'
-        );
-    }
-
-    /**
-     * Ensue that a 301 redirect is not followed by POST.
-     *
-     * @return void
-     */
-    public function testApplyPostDoesntFollowRedirect301()
-    {
-        $options = array('url' => 'localhost');
-
-        $curl = new Klarna_Checkout_HTTP_TransportStub;
-
-        $payload = 'Forbidden';
-        $redirect = 'not localhost';
-
-        $data = array(
-            array(
-                'code' => 503,
-                'headers' => array(),
-                'payload' => $payload
-            ),
-            array(
                 'code' => 301,
                 'headers' => array('Location' => $redirect),
                 'payload' => ""
@@ -363,15 +258,52 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
             $curl->addResponse($response);
         }
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
 
         $result = null;
         try {
-            $result = $object->apply('POST', $this->orderStub, $options);
+            $result = $object->apply('GET', $this->orderStub, $options);
         } catch (Exception $e) {
+            $request = $curl->request;
+            $this->assertEquals($redirect, $request->getUrl(), 'Url Option');
             throw $e;
         }
-        $request = $curl->request;
-        $this->assertNotEquals($redirect, $request->getUrl(), 'Url Option');
+    }
+
+    /**
+     * Test with an infinite redirect (301) loop.
+     *
+     * @return void
+     */
+    public function testApplyGet301InfiniteLoop()
+    {
+        $this->setExpectedException(
+            'Klarna_Checkout_ConnectorException',
+            'Infinite redirect loop detected.'
+        );
+
+        $options = array('url' => 'localhost');
+
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
+
+        $curl->addResponse(
+            array(
+                'code' => 301,
+                'headers' => array('Location' => 'not localhost'),
+                'payload' => ""
+            )
+        );
+
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
+
+        $object->apply('GET', $this->orderStub, $options);
     }
 }
