@@ -28,8 +28,6 @@
  * @link       http://integration.klarna.com/
  */
 
-require_once 'Checkout/HTTP/CURLHeaders.php';
-
 /**
  * PHPUnit test case for the CURL Header parser
  *

@@ -27,8 +27,6 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once 'Checkout/Digest.php';
-
 /**
  * UnitTest for the Digester class
  *

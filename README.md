@@ -47,6 +47,7 @@ please contact [integration@klarna.com](mailto:integration@klarna.com).
 * David Keijser
 * Rickard Dybeck
 * Majid Garmaroudi
+* Magnus Nordlander
 
 ## License
 The Klarna Checkout PHP library is released under

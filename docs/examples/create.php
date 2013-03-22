@@ -33,7 +33,8 @@ require_once 'src/Klarna/Checkout.php';
 $eid = '0';
 $sharedSecret = 'sharedSecret';
 
-Klarna_Checkout_Order::$baseUri = 'https://checkout.testdrive.klarna.com/checkout/orders';
+Klarna_Checkout_Order::$baseUri
+    = 'https://checkout.testdrive.klarna.com/checkout/orders';
 Klarna_Checkout_Order::$contentType
     = "application/vnd.klarna.checkout.aggregated-order-v2+json";
 
@@ -68,7 +69,8 @@ $create['merchant']['terms_uri'] = 'http://example.com/terms.php';
 $create['merchant']['checkout_uri'] = 'https://example.com/checkout.php';
 $create['merchant']['confirmation_uri']
     = 'https://example.com/thankyou.php?sid=123&klarna_order={checkout.order.uri}';
-$create['merchant']['push_uri'] = 'https://example.com/push.php?sid=123&klarna_order={checkout.order.uri}';
+$create['merchant']['push_uri']
+    = 'https://example.com/push.php?sid=123&klarna_order={checkout.order.uri}';
 
 foreach ($cart as $item) {
     $create['cart']['items'][] = $item;

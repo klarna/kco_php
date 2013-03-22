@@ -43,9 +43,9 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
 {
 
     /**
-     * Klarna_Checkout_HTTP_HTTPInterface Implementation
+     * Klarna_Checkout_HTTP_TransportInterface Implementation
      *
-     * @var Klarna_Checkout_HttpInterface
+     * @var Klarna_Checkout_HTTP_TransportInterface
      */
     protected $http;
 

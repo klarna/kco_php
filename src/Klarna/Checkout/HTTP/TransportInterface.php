@@ -62,11 +62,11 @@ interface Klarna_Checkout_HTTP_TransportInterface
     /**
      * Performs a HTTP request.
      *
-     * @param Klarna_HTTP_Request $request the HTTP request to send.
+     * @param Klarna_Checkout_HTTP_Request $request the HTTP request to send.
      *
-     * @throws Klarna_ConnectionErrorException Thrown for unspecified network
-     *                                         or hardware issues.
-     * @return Klarna_HTTP_Response
+     * @throws Klarna_Checkout_ConnectionErrorException Thrown for unspecified
+     *                                                  network or hardware issues.
+     * @return Klarna_Checkout_HTTP_Response
      */
     public function send(Klarna_Checkout_HTTP_Request $request);
 
@@ -77,7 +77,7 @@ interface Klarna_Checkout_HTTP_TransportInterface
      *
      * @throws InvalidArgumentException If the specified argument
      *                                  is not of type string.
-     * @return Klarna_HTTP_Request
+     * @return Klarna_Checkout_HTTP_Request
      */
     public function createRequest($url);
 }

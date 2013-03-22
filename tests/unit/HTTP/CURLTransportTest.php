@@ -27,12 +27,6 @@
  * @link       http://integration.klarna.com/
  */
 
-require_once 'Checkout/HTTP/TransportInterface.php';
-require_once 'Checkout/HTTP/CURLTransport.php';
-require_once 'Checkout/HTTP/Request.php';
-require_once 'Checkout/HTTP/CURLFactory.php';
-require_once 'tests/CURLHandleStub.php';
-
 /**
  * PHPUnit test case for the HTTP CURL wrapper.
  *
@@ -47,7 +41,7 @@ require_once 'tests/CURLHandleStub.php';
 class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Klarna_HTTP_CURL
+     * @var Klarna_Checkout_HTTP_CURLTransport
      */
     protected $http;
 

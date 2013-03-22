@@ -27,16 +27,6 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once 'Checkout/ResourceInterface.php';
-require_once 'Checkout/ConnectorInterface.php';
-require_once 'Checkout/HTTP/TransportInterface.php';
-require_once 'Checkout/HTTP/Request.php';
-require_once 'Checkout/HTTP/Response.php';
-require_once 'Checkout/Exception.php';
-require_once 'Checkout/BasicConnector.php';
-require_once 'tests/ResourceStub.php';
-require_once 'tests/TransportStub.php';
-
 /**
  * General UnitTest for the Basic Connector class
  *
@@ -151,7 +141,11 @@ class Klarna_Checkout_BasicConnectorTest extends PHPUnit_Framework_TestCase
             ->with('aboogie')
             ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
         $result = $object->apply('GET', $this->orderStub);
 
         $this->assertNotNull($result, 'Response Object');
@@ -206,7 +200,11 @@ class Klarna_Checkout_BasicConnectorTest extends PHPUnit_Framework_TestCase
     public function testValidTransportType()
     {
         $curl = new Klarna_Checkout_HTTP_TransportStub;
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
 
         $this->assertInstanceOf(
             'Klarna_Checkout_HTTP_TransportInterface',

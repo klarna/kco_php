@@ -27,10 +27,6 @@
  * @link       http://integration.klarna.com/
  */
 
-require_once 'Checkout/HTTP/CURLHandleInterface.php';
-require_once 'Checkout/HTTP/CURLFactory.php';
-require_once 'Checkout/HTTP/CURLHandle.php';
-
 /**
  * PHPUnit test case for the HTTP CURL wrapper.
  *
