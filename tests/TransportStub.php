@@ -125,8 +125,8 @@ class Klarna_Checkout_HTTP_TransportStub
      *
      * @param Klarna_Checkout_HTTP_Request $request the HTTP request to send.
      *
-     * @throws Klarna_Checkout_ConnectionErrorException Thrown for unspecified network
-     *                                                  or hardware issues.
+     * @throws Klarna_Checkout_ConnectionErrorException Thrown for unspecified
+     *                                                  network or hardware issues.
      * @return Klarna_Checkout_HTTP_Response
      */
     public function send(Klarna_Checkout_HTTP_Request $request)

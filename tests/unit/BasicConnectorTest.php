@@ -141,7 +141,11 @@ class Klarna_Checkout_BasicConnectorTest extends PHPUnit_Framework_TestCase
             ->with('aboogie')
             ->will($this->returnValue('stnaeu\eu2341aoaaoae=='));
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
         $result = $object->apply('GET', $this->orderStub);
 
         $this->assertNotNull($result, 'Response Object');
@@ -196,7 +200,11 @@ class Klarna_Checkout_BasicConnectorTest extends PHPUnit_Framework_TestCase
     public function testValidTransportType()
     {
         $curl = new Klarna_Checkout_HTTP_TransportStub;
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
 
         $this->assertInstanceOf(
             'Klarna_Checkout_HTTP_TransportInterface',

@@ -37,7 +37,7 @@
   * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
   * @link      http://integration.klarna.com/
   */
- class Klarna_Checkout_ConnectionErrorException extends Klarna_Checkout_Exception
- {
+class Klarna_Checkout_ConnectionErrorException extends Klarna_Checkout_Exception
+{
 
- }
+}

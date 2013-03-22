@@ -62,7 +62,6 @@ class Klarna_Checkout_HTTP_TransportTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $transport = Klarna_Checkout_HTTP_Transport::create();
         $this->assertInstanceOf(
             'Klarna_Checkout_HTTP_TransportInterface',
             $this->transport
