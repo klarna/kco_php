@@ -161,9 +161,13 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
             $handle->options[CURLOPT_POST]
         );
         $this->assertTrue($handle->options[CURLOPT_RETURNTRANSFER]);
-        $this->assertEquals(
+        $this->assertSame(
             $this->http->getTimeout(),
-            $handle->options[CURLOPT_RETURNTRANSFER]
+            $handle->options[CURLOPT_CONNECTTIMEOUT]
+        );
+        $this->assertSame(
+            $this->http->getTimeout(),
+            $handle->options[CURLOPT_TIMEOUT]
         );
     }
 
@@ -187,9 +191,13 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
             array_key_exists(CURLOPT_POST, $handle->options) &&
             $handle->options[CURLOPT_POST]
         );
-        $this->assertEquals(
+        $this->assertSame(
             $this->http->getTimeout(),
-            $handle->options[CURLOPT_RETURNTRANSFER]
+            $handle->options[CURLOPT_CONNECTTIMEOUT]
+        );
+        $this->assertSame(
+            $this->http->getTimeout(),
+            $handle->options[CURLOPT_TIMEOUT]
         );
     }
 
