@@ -128,6 +128,7 @@ class Klarna_Checkout_HTTP_CURLTransport
 
         $curl->setOption(CURLOPT_RETURNTRANSFER, true);
         $curl->setOption(CURLOPT_CONNECTTIMEOUT, $this->timeout);
+        $curl->setOption(CURLOPT_TIMEOUT, $this->timeout);
 
         $curlHeaders = new Klarna_Checkout_HTTP_CURLHeaders();
         $curl->setOption(

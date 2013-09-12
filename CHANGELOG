@@ -2,6 +2,13 @@
 Klarna Checkout PHP library
 ===========================
 
+v1.1.1
+----------------
+Date: 2013-03-15
+
+    Christer G. <support@klarna.com>
+        Adding CURLOPT_TIMEOUT with the same timout as CURLOPT_CONNECTTIMEOUT
+
 v1.1.0
 ----------------
 Date: 2013-03-15
