@@ -1,7 +1,4 @@
-<phpunit convertErrorsToExceptions="true" convertNoticesToException="true" convertWarningsToExceptions="true" verbose="true" strict="true" bootstrap="bootstrap.php">
-    <php>
-        <includePath>src/Klarna</includePath>
-    </php>
+<phpunit convertErrorsToExceptions="true" convertNoticesToException="true" convertWarningsToExceptions="true" verbose="true" strict="true" bootstrap="tests/bootstrap.php">
     <testsuite name="Unit Test">
         <directory>tests/unit</directory>
     </testsuite>
