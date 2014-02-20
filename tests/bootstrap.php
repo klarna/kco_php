@@ -26,9 +26,10 @@
  * @link      http://integration.klarna.com/
  */
 
-require_once dirname(__DIR__) . '/src/Klarna/Checkout.php';
+require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
 require_once 'ConnectorStub.php';
 require_once 'CURLHandleStub.php';
+require_once 'CurlFactoryStub.php';
 require_once 'ResourceStub.php';
 require_once 'TransportStub.php';

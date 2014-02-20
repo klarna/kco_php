@@ -1,0 +1,14 @@
+<phpunit convertErrorsToExceptions="true" convertNoticesToException="true" convertWarningsToExceptions="true" verbose="true" strict="true" bootstrap="tests/bootstrap.php">
+    <testsuite name="Unit Test">
+        <directory>tests/unit</directory>
+    </testsuite>
+    <testsuite name="Component Test">
+        <directory>tests/component</directory>
+    </testsuite>
+    <filter>
+        <whitelist>
+            <directory>src/Klarna/Checkout</directory>
+            <exclude><directory suffix="Interface.php">src/Klarna/Checkout</directory></exclude>
+        </whitelist>
+    </filter>
+</phpunit>
