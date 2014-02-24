@@ -1,7 +1,7 @@
 {
     "name": "klarna/checkout",
     "description": "Wrapper for the Klarna Checkout API",
-    "homepage": "http://integration.klarna.com",
+    "homepage": "http://developers.klarna.com",
     "license": "Apache-2.0",
     "type": "library",
     "require": {
