@@ -26,7 +26,7 @@
  * @link      http://integration.klarna.com/
  */
 
-define('KLARNA_CHECKOUT_DIR', dirname(__file__) . '/Checkout');
+define('KLARNA_CHECKOUT_DIR', dirname(__FILE__) . '/Checkout');
 
 require_once KLARNA_CHECKOUT_DIR . '/ConnectorInterface.php';
 require_once KLARNA_CHECKOUT_DIR . '/ResourceInterface.php';
