@@ -20,7 +20,7 @@ payments worldwide and change the way the world shops online.
 
 ## Documentation
 Documentation and more examples can be found at
-[docs.klarna.com](https://docs.klarna.com).
+[developers.klarna.com](https://developers.klarna.com).
 
 ## How to contribute
 At Klarna, we strive toward achieving the highest possible quality for our
