@@ -23,12 +23,13 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2013 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 
-require_once dirname(__DIR__) . '/src/Klarna/Checkout.php';
+require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
 require_once 'ConnectorStub.php';
 require_once 'CURLHandleStub.php';
+require_once 'CurlFactoryStub.php';
 require_once 'ResourceStub.php';
 require_once 'TransportStub.php';

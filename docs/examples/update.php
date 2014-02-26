@@ -24,7 +24,7 @@
  * @author    Rickard Dybeck <rickard.dybeck@klarna.com>
  * @copyright 2013 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 
 // [[examples-update]]
@@ -43,18 +43,18 @@ $order = new Klarna_Checkout_Order($connector, $orderUri);
 // Array containing the cart items
 $cart = array(
     array(
-        'reference' => '123456789',   
-        'name' => 'Klarna t-shirt',         
+        'reference' => '123456789',
+        'name' => 'Klarna t-shirt',
         'quantity' => 4,
         'unit_price' => 12300,
         'discount_rate' => 1000,
         'tax_rate' => 2500
     ),
     array(
-        'type' => 'shipping_fee',    
+        'type' => 'shipping_fee',
         'reference' => 'SHIPPING',
         'name' => 'Shipping Fee',
-        'quantity' => 1,        
+        'quantity' => 1,
         'unit_price' => 4900,
         'tax_rate' => 2500
     )

@@ -26,9 +26,12 @@
     <property name="checkstyle.file" location="${tmp.dir}/checkstyle.xml" />
     <property name="coverage.file" location="${tmp.dir}/coverage.xml" />
     <property name="coverage.dir" location="${tmp.dir}/coverage" />
+    <property name="autoload.file" location="${work.dir}/vendor/autoload.php" />
 
-    <property name="phpunit" value="phpunit" />
-
+    <property name="phpunit" value="vendor/bin/phpunit" />
+    <property name="phpcs" value="vendor/bin/phpcs" />
+    <property name="phpmd" value="vendor/bin/phpmd" />
+    <property name="phpdoc" value="phpdoc" />
     <property name="git" value="git" />
 
     <!-- export a few properties about the system and the build !-->
@@ -47,23 +50,24 @@
         <arg value="-o" />
     </exec>
 
+    <available file="${autoload.file}" property="vendors-installed" />
+
     <!-- acts as the default target to avoid building base build !-->
     <target name="die" description="Abort the build">
         <fail>build aborted</fail>
     </target>
 
-    <target name="-init" description="Setup build environment">
+    <target name="-vendors" unless="vendors-installed">
+        <fail message="You must run composer install first." />
+    </target>
+
+    <target name="-init" depends="-vendors" description="Setup build environment">
         <mkdir dir="${tmp.dir}" />
         <mkdir dir="${archive.dir}" />
     </target>
 
-    <target name="-enable-coverage">
-        <property name="coverage" value="true" />
-    </target>
-
-    <target name="coverage" depends="-enable-coverage, unittest" />
     <target name="tests" depends="-init, check, unittest" />
-    <target name="unittest" depends="-init, -pre-unittest, -unittest-nocov, -unittest-cov"/>
+    <target name="unittest" depends="-init, -pre-unittest, -unittest" />
 
     <target name="archive" depends="-pre-archive">
         <exec dir="${work.dir}" executable="${git}">
@@ -107,7 +111,7 @@
     <!-- STUBS !-->
     <target
         name="-pre-unittest"
-        description="hook to run tasks before unittests" />
+        description="hook to run tasks before unit tests" />
     <target
         name="-pre-archive"
         description="hook to run tasks before archiving" />
@@ -124,41 +128,18 @@
         name="fetch-resources"
         description="Fetch required remote resources" />
     <target
-        name="-unittest-nocov"
-        description="plain run of unittests"
-        unless="coverage" />
-    <target
-        name="-unittest-cov"
-        description="run unittest and output coverage data"
-        if="coverage" />
+        name="-unittest"
+        description="run unit tests" />
+
 
     <!-- TASKS !-->
     <macrodef name="phpunit">
-        <attribute name="conf" default="phpunit.xml"/>
+        <attribute name="conf" default="phpunit.xml.dist" />
         <attribute name="dir" default="IGNORED" />
 
         <sequential>
             <exec dir="${work.dir}" executable="${phpunit}" failonerror="true">
                 <arg line="--stderr -c @{conf}" />
-            </exec>
-        </sequential>
-    </macrodef>
-
-    <macrodef name="coverage">
-        <attribute name="dir" default="." />
-        <attribute name="clover" />
-        <attribute name="html" />
-        <attribute name="log" />
-        <attribute name="conf" />
-
-        <sequential>
-            <exec dir="${work.dir}" executable="${phpunit}" failonerror="true">
-                <arg line="--stderr" />
-                <arg line="-d memory_limit=256M" />
-                <arg line="-c @{conf}" />
-                <arg line="--coverage-clover @{clover}" />
-                <arg line="--coverage-html @{html}" />
-                <arg line="--log-junit @{log}" />
             </exec>
         </sequential>
     </macrodef>
@@ -175,7 +156,7 @@
                 <targets/>
             </fileset>
             <pathconvert pathsep="," property="phpmd.files" refid="phpmd.set"/>
-            <exec dir="${work.dir}" executable="phpmd" failonerror="false">
+            <exec dir="${work.dir}" executable="${phpmd}" failonerror="false">
                 <arg line="${phpmd.files}" />
                 <arg line="@{format}" />
                 <arg line="@{rules}" />
@@ -190,7 +171,7 @@
         <attribute name="dest" default="${docs.dir}/phpdoc" />
 
         <sequential>
-            <exec dir="${work.dir}" executable="phpdoc">
+            <exec dir="${work.dir}" executable="${phpdoc}">
                 <arg value="-d" />
                 <arg value="@{dir}" />
                 <arg value="-t" />
@@ -206,7 +187,7 @@
         <element name="targets" implicit="true" />
 
         <sequential>
-            <apply parallel="true" dir="${work.dir}" executable="phpcs">
+            <apply parallel="true" dir="${work.dir}" executable="${phpcs}">
                 <arg line="--report=checkstyle" />
                 <arg line="--report-file=@{dest}" />
                 <arg line="--standard=@{standard}" />
