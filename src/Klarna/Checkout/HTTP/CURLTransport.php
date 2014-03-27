@@ -57,6 +57,13 @@ class Klarna_Checkout_HTTP_CURLTransport
     protected $timeout;
 
     /**
+     * cURL Options
+     *
+     * @var array
+     */
+    protected $options;
+
+    /**
      * Initializes a new instance of the HTTP cURL class.
      *
      * @param Klarna_Checkout_HTTP_CURLFactory $curl factory to for curl handles
@@ -65,6 +72,20 @@ class Klarna_Checkout_HTTP_CURLTransport
     {
         $this->curl = $curl;
         $this->timeout = self::DEFAULT_TIMEOUT;
+        $this->options = array();
+    }
+
+    /**
+     * Set specific cURL options.
+     *
+     * @param int   $option cURL option constant
+     * @param mixed $value  cURL option value
+     *
+     * @return void
+     */
+    public function setOption($option, $value)
+    {
+        $this->options[$option] = $value;
     }
 
     /**
@@ -136,22 +157,28 @@ class Klarna_Checkout_HTTP_CURLTransport
             array(&$curlHeaders, 'processHeader')
         );
 
-        // TODO remove me when real cert is in place
-        $curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
+        $curl->setOption(CURLOPT_SSL_VERIFYHOST, 2);
+        $curl->setOption(CURLOPT_SSL_VERIFYPEER, true);
+
+        // Override specific set options
+        foreach ($this->options as $option => $value) {
+            $curl->setOption($option, $value);
+        }
 
         $payload = $curl->execute();
         $info = $curl->getInfo();
+        $error = $curl->getError();
 
         $curl->close();
 
         /*
-         * A failure occured if:
+         * A failure occurred if:
          * payload is false (e.g. HTTP timeout?).
          * info is false, then it has no HTTP status code.
          */
         if ($payload === false || $info === false) {
             throw new Klarna_Checkout_ConnectionErrorException(
-                "Connection to '{$url}' failed."
+                "Connection to '{$url}' failed: {$error}"
             );
         }
 

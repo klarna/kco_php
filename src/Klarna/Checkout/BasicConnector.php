@@ -309,7 +309,6 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
 
         // Create a HTTP Request object
         $request = $this->createRequest($resource, $method, $payload, $url);
-        // $this->_setContent($request, $payload, $method);
 
         // Execute the HTTP Request
         $result = $this->http->send($request);

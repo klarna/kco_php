@@ -65,6 +65,13 @@ interface Klarna_Checkout_HTTP_CURLHandleInterface
     public function getInfo();
 
     /**
+     * Get error message regarding this transfer
+     *
+     * @return string Error message
+     */
+    public function getError();
+
+    /**
      * Close the cURL session
      *
      * @return void
