@@ -246,4 +246,62 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
         $handle->response = false;
         $this->http->send($request);
     }
+
+    /**
+     * Ensure that the error message from the cURL handle is picked up
+     *
+     * @return void
+     */
+    public function testExceptionMessageFromCURL()
+    {
+        $error = 'CURL_ERROR';
+
+        $this->setExpectedException(
+            'Klarna_Checkout_ConnectionErrorException', $error
+        );
+
+        $url = 'maybe-localhost';
+        $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $handle->error = $error;
+        $handle->expectedURL = $url;
+        $this->factory->expects($this->once())
+            ->method('handle')
+            ->will($this->returnValue($handle));
+        $request = $this->http->createRequest($url);
+        $handle->response = false;
+
+        $this->http->send($request);
+    }
+
+    /**
+     * Ensure that settings specific cURL options is possible
+     *
+     * @return void
+     */
+    public function testSetOption()
+    {
+        $url = 'maybe-localhost';
+        $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $handle->expectedURL = $url;
+        $this->factory->expects($this->once())
+            ->method('handle')
+            ->will($this->returnValue($handle));
+        $request = $this->http->createRequest($url);
+        $request->setMethod('POST');
+
+        $this->http->setOption(CURLOPT_VERBOSE, true);
+        $this->http->setOption(CURLOPT_SSL_VERIFYPEER, false);
+
+        $this->http->send($request);
+
+        $this->assertTrue(
+            $handle->options[CURLOPT_VERBOSE],
+            'Verbosity should be enabled'
+        );
+
+        $this->assertFalse(
+            $handle->options[CURLOPT_SSL_VERIFYPEER],
+            'SSL verify peer should be disabled'
+        );
+    }
 }

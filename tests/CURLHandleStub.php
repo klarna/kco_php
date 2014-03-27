@@ -62,6 +62,11 @@ class Klarna_Checkout_HTTP_CURLHandleStub
     );
 
     /**
+     * @var string
+     */
+    public $error = 'Error message';
+
+    /**
      * Response to return
      *
      * @var mixed
@@ -127,6 +132,16 @@ class Klarna_Checkout_HTTP_CURLHandleStub
     public function getInfo()
     {
         return $this->info;
+    }
+
+    /**
+     * Get error message regarding this transfer
+     *
+     * @return string Error message
+     */
+    public function getError()
+    {
+        return $this->error;
     }
 
     /**

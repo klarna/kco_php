@@ -94,6 +94,16 @@ class Klarna_Checkout_HTTP_CURLHandle
     }
 
     /**
+     * Get error message regarding this transfer
+     *
+     * @return string Error message
+     */
+    public function getError()
+    {
+        return curl_error($this->_handle);
+    }
+
+    /**
      * Close the cURL session
      *
      * @return void
