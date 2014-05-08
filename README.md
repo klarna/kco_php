@@ -1,4 +1,6 @@
 ## Klarna Checkout PHP library
+[![Build Status](https://travis-ci.org/klarna/kco_php.svg?branch=v1.2)](https://travis-ci.org/klarna/kco_php) [![Coverage Status](https://coveralls.io/repos/klarna/kco_php/badge.png?branch=v1.2)](https://coveralls.io/r/klarna/kco_php?branch=v1.2)
+
 Klarna Checkout is a revolutionary new payment solution that is changing the way
 people shop online. First, consumers verify their purchase with a minimal
 amount of information through intelligent identification, securing your order
