@@ -25,10 +25,19 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
-// [[examples-checkout]]
+
 require_once 'src/Klarna/Checkout.php';
 
-// Array containing the cart items
+session_start();
+
+Klarna_Checkout_Order::$baseUri
+    = 'https://checkout.testdrive.klarna.com/checkout/orders';
+Klarna_Checkout_Order::$contentType
+    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
+
+$order = null;
+$eid = '0';
+$sharedSecret = 'sharedSecret';
 $cart = array(
     array(
         'reference' => '123456789',
@@ -48,23 +57,8 @@ $cart = array(
     )
 );
 
-// Merchant ID
-$eid = '0';
-
-// Shared secret
-$sharedSecret = 'sharedSecret';
-///
-
-Klarna_Checkout_Order::$baseUri
-    = 'https://checkout.testdrive.klarna.com/checkout/orders';
-Klarna_Checkout_Order::$contentType
-    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
-
-session_start();
-
 $connector = Klarna_Checkout_Connector::create($sharedSecret);
 
-$order = null;
 if (array_key_exists('klarna_checkout', $_SESSION)) {
     // Resume session
     $order = new Klarna_Checkout_Order(
@@ -89,7 +83,6 @@ if (array_key_exists('klarna_checkout', $_SESSION)) {
 
 if ($order == null) {
     // Start new session
-
     $create['purchase_country'] = 'SE';
     $create['purchase_currency'] = 'SEK';
     $create['locale'] = 'sv-se';
@@ -121,4 +114,3 @@ $snippet = $order['gui']['snippet'];
 // MOBILE: Width of containing block shall be 100% of browser window (No
 // padding or margin)
 echo "<div>{$snippet}</div>";
-// [[examples-checkout]]

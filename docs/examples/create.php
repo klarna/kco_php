@@ -27,21 +27,15 @@
  * @link      http://developers.klarna.com/
  */
 
-// [[examples-create]]
 require_once 'src/Klarna/Checkout.php';
-
-$eid = '0';
-$sharedSecret = 'sharedSecret';
 
 Klarna_Checkout_Order::$baseUri
     = 'https://checkout.testdrive.klarna.com/checkout/orders';
 Klarna_Checkout_Order::$contentType
     = "application/vnd.klarna.checkout.aggregated-order-v2+json";
 
-$connector = Klarna_Checkout_Connector::create($sharedSecret);
-$order = new Klarna_Checkout_Order($connector);
-
-// Array containing the cart items
+$eid = '0';
+$sharedSecret = 'sharedSecret';
 $cart = array(
     array(
         'reference' => '123456789',
@@ -61,6 +55,9 @@ $cart = array(
     )
 );
 
+$connector = Klarna_Checkout_Connector::create($sharedSecret);
+$order = new Klarna_Checkout_Order($connector);
+
 $create['purchase_country'] = 'SE';
 $create['purchase_currency'] = 'SEK';
 $create['locale'] = 'sv-se';
@@ -77,4 +74,3 @@ foreach ($cart as $item) {
 }
 
 $order->create($create);
-// [[examples-create]]

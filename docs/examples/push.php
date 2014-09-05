@@ -27,7 +27,7 @@
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://developers.klarna.com/
  */
-// [[examples-push]]
+
 require_once 'src/Klarna/Checkout.php';
 
 session_start();
@@ -35,10 +35,12 @@ session_start();
 Klarna_Checkout_Order::$contentType
     = "application/vnd.klarna.checkout.aggregated-order-v2+json";
 
-$connector = Klarna_Checkout_Connector::create('sharedSecret');
-
+$sharedSecret = 'sharedSecret';
 @$checkoutId = $_GET['klarna_order'];
+
+$connector = Klarna_Checkout_Connector::create($sharedSecret);
 $order = new Klarna_Checkout_Order($connector, $checkoutId);
+
 $order->fetch();
 
 if ($order['status'] == "checkout_complete") {
@@ -50,4 +52,3 @@ if ($order['status'] == "checkout_complete") {
     );
     $order->update($update);
 }
-// [[examples-push]]
