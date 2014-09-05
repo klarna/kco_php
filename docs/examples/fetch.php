@@ -27,18 +27,15 @@
  * @link      http://developers.klarna.com/
  */
 
-// [[examples-fetch]]
 require_once 'src/Klarna/Checkout.php';
-
-$sharedSecret = 'sharedSecret';
 
 Klarna_Checkout_Order::$contentType
     = 'application/vnd.klarna.checkout.aggregated-order-v2+json';
 
+$sharedSecret = 'sharedSecret';
 $orderUri = 'https://checkout.testdrive.klarna.com/checkout/orders/ABC123';
 
 $connector = Klarna_Checkout_Connector::create($sharedSecret);
 $order = new Klarna_Checkout_Order($connector, $orderUri);
 
 $order->fetch();
-// [[examples-fetch]]
