@@ -95,6 +95,7 @@ if ($order == null) {
     // You can not receive push notification on non publicly available uri
     $create['merchant']['push_uri'] = 'http://example.com/push.php' .
         '?sid=123&klarna_order={checkout.order.uri}';
+    $create['cart'] = array();
 
     foreach ($cart as $item) {
         $create['cart']['items'][] = $item;
