@@ -68,6 +68,7 @@ $create['merchant']['confirmation_uri']
     = 'https://example.com/thankyou.php?sid=123&klarna_order={checkout.order.uri}';
 $create['merchant']['push_uri']
     = 'https://example.com/push.php?sid=123&klarna_order={checkout.order.uri}';
+$create['cart'] = array();
 
 foreach ($cart as $item) {
     $create['cart']['items'][] = $item;
