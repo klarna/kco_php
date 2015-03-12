@@ -77,6 +77,16 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
     }
 
     /**
+     * Return accept header of the resource
+     *
+     * @return string Accept header
+     */
+    public function getAcceptHeader()
+    {
+        return 'klarna-stubbed-order+json';
+    }
+
+    /**
      * Replare resource data
      *
      * @param array $data data
