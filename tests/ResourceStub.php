@@ -42,6 +42,7 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
 {
 
     public $location;
+    public $acceptHeader;
     public $data = array();
 
     /**
@@ -74,6 +75,16 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
     public function getContentType()
     {
         return 'klarna-stubbed-order+json';
+    }
+
+    /**
+     * Return accept header of the resource
+     *
+     * @return string Accept header
+     */
+    public function getAcceptHeader()
+    {
+        return $this->acceptHeader;
     }
 
     /**
