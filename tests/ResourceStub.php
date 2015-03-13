@@ -83,7 +83,7 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
      */
     public function getAcceptHeader()
     {
-        return 'klarna-stubbed-order+json';
+        return 'accept-header-klarna-stubbed-order+json';
     }
 
     /**
