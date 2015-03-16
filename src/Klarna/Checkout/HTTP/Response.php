@@ -25,7 +25,7 @@
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 
 /**
@@ -37,7 +37,7 @@
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 class Klarna_Checkout_HTTP_Response
 {
@@ -47,7 +47,7 @@ class Klarna_Checkout_HTTP_Response
     protected $status;
 
     /**
-     * @var Klarna_HTTP_Request
+     * @var Klarna_Checkout_HTTP_Request
      */
     protected $request;
 
@@ -64,10 +64,10 @@ class Klarna_Checkout_HTTP_Response
     /**
      * Initializes a new instance of the HTTP response class.
      *
-     * @param Klarna_HTTP_Request $request the origin request.
-     * @param array               $headers the response HTTP headers.
-     * @param int                 $status  the HTTP status code.
-     * @param string              $data    the response payload.
+     * @param Klarna_Checkout_HTTP_Request $request the origin request.
+     * @param array                        $headers the response HTTP headers.
+     * @param int                          $status  the HTTP status code.
+     * @param string                       $data    the response payload.
      */
     public function __construct(
         Klarna_Checkout_HTTP_Request $request, array $headers, $status, $data
@@ -94,7 +94,7 @@ class Klarna_Checkout_HTTP_Response
     /**
      * Gets the HTTP request this response originated from.
      *
-     * @return Klarna_HTTP_Request
+     * @return Klarna_Checkout_HTTP_Request
      */
     public function getRequest()
     {

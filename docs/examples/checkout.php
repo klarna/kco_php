@@ -23,12 +23,21 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 
 require_once 'src/Klarna/Checkout.php';
 
-// Array containing the cart items
+session_start();
+
+Klarna_Checkout_Order::$baseUri
+    = 'https://checkout.testdrive.klarna.com/checkout/orders';
+Klarna_Checkout_Order::$contentType
+    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
+
+$order = null;
+$eid = '0';
+$sharedSecret = 'sharedSecret';
 $cart = array(
     array(
         'reference' => '123456789',
@@ -48,23 +57,8 @@ $cart = array(
     )
 );
 
-// Merchant ID
-$eid = '0';
-
-// Shared secret
-$sharedSecret = 'sharedSecret';
-///
-
-Klarna_Checkout_Order::$baseUri
-    = 'https://checkout.testdrive.klarna.com/checkout/orders';
-Klarna_Checkout_Order::$contentType
-    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
-
-session_start();
-
 $connector = Klarna_Checkout_Connector::create($sharedSecret);
 
-$order = null;
 if (array_key_exists('klarna_checkout', $_SESSION)) {
     // Resume session
     $order = new Klarna_Checkout_Order(
@@ -89,7 +83,6 @@ if (array_key_exists('klarna_checkout', $_SESSION)) {
 
 if ($order == null) {
     // Start new session
-
     $create['purchase_country'] = 'SE';
     $create['purchase_currency'] = 'SEK';
     $create['locale'] = 'sv-se';
@@ -99,9 +92,10 @@ if ($order == null) {
     $create['merchant']['confirmation_uri']
         = 'http://example.com/confirmation.php' .
         '?sid=123&klarna_order={checkout.order.uri}';
-    // You can not recieve push notification on non publicly available uri
+    // You can not receive push notification on non publicly available uri
     $create['merchant']['push_uri'] = 'http://example.com/push.php' .
         '?sid=123&klarna_order={checkout.order.uri}';
+    $create['cart'] = array();
 
     foreach ($cart as $item) {
         $create['cart']['items'][] = $item;

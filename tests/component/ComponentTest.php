@@ -24,19 +24,8 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
-
-require_once 'Checkout/ResourceInterface.php';
-require_once 'Checkout/ConnectorInterface.php';
-require_once 'Checkout/HTTP/TransportInterface.php';
-require_once 'Checkout/HTTP/Request.php';
-require_once 'Checkout/HTTP/Response.php';
-require_once 'Checkout/Connector.php';
-require_once 'tests/ResourceStub.php';
-require_once 'tests/TransportStub.php';
-require_once 'tests/CurlFactoryStub.php';
-
 
 /**
  * Component Tests for the Klarna Checkout
@@ -47,7 +36,7 @@ require_once 'tests/CurlFactoryStub.php';
  * @author    Christer G. <christer.gustavsson@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 class Klarna_Checkout_Component extends PHPUnit_Framework_TestCase
 {

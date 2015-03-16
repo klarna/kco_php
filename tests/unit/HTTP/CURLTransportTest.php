@@ -24,14 +24,8 @@
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
-
-require_once 'Checkout/HTTP/TransportInterface.php';
-require_once 'Checkout/HTTP/CURLTransport.php';
-require_once 'Checkout/HTTP/Request.php';
-require_once 'Checkout/HTTP/CURLFactory.php';
-require_once 'tests/CURLHandleStub.php';
 
 /**
  * PHPUnit test case for the HTTP CURL wrapper.
@@ -42,12 +36,12 @@ require_once 'tests/CURLHandleStub.php';
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Klarna_HTTP_CURL
+     * @var Klarna_Checkout_HTTP_CURLTransport
      */
     protected $http;
 
@@ -95,7 +89,10 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
      */
     public function testInit()
     {
-        $this->assertEquals(5, $this->http->getTimeout());
+        $this->assertEquals(
+            Klarna_Checkout_HTTP_CURLTransport::DEFAULT_TIMEOUT,
+            $this->http->getTimeout()
+        );
     }
 
     /**
@@ -161,9 +158,13 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
             $handle->options[CURLOPT_POST]
         );
         $this->assertTrue($handle->options[CURLOPT_RETURNTRANSFER]);
-        $this->assertEquals(
+        $this->assertSame(
             $this->http->getTimeout(),
-            $handle->options[CURLOPT_RETURNTRANSFER]
+            $handle->options[CURLOPT_CONNECTTIMEOUT]
+        );
+        $this->assertSame(
+            $this->http->getTimeout(),
+            $handle->options[CURLOPT_TIMEOUT]
         );
     }
 
@@ -187,9 +188,13 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
             array_key_exists(CURLOPT_POST, $handle->options) &&
             $handle->options[CURLOPT_POST]
         );
-        $this->assertEquals(
+        $this->assertSame(
             $this->http->getTimeout(),
-            $handle->options[CURLOPT_RETURNTRANSFER]
+            $handle->options[CURLOPT_CONNECTTIMEOUT]
+        );
+        $this->assertSame(
+            $this->http->getTimeout(),
+            $handle->options[CURLOPT_TIMEOUT]
         );
     }
 
@@ -240,5 +245,63 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
         $request = $this->http->createRequest($url);
         $handle->response = false;
         $this->http->send($request);
+    }
+
+    /**
+     * Ensure that the error message from the cURL handle is picked up
+     *
+     * @return void
+     */
+    public function testExceptionMessageFromCURL()
+    {
+        $error = 'CURL_ERROR';
+
+        $this->setExpectedException(
+            'Klarna_Checkout_ConnectionErrorException', $error
+        );
+
+        $url = 'maybe-localhost';
+        $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $handle->error = $error;
+        $handle->expectedURL = $url;
+        $this->factory->expects($this->once())
+            ->method('handle')
+            ->will($this->returnValue($handle));
+        $request = $this->http->createRequest($url);
+        $handle->response = false;
+
+        $this->http->send($request);
+    }
+
+    /**
+     * Ensure that settings specific cURL options is possible
+     *
+     * @return void
+     */
+    public function testSetOption()
+    {
+        $url = 'maybe-localhost';
+        $handle = new Klarna_Checkout_HTTP_CURLHandleStub;
+        $handle->expectedURL = $url;
+        $this->factory->expects($this->once())
+            ->method('handle')
+            ->will($this->returnValue($handle));
+        $request = $this->http->createRequest($url);
+        $request->setMethod('POST');
+
+        $this->http->setOption(CURLOPT_VERBOSE, true);
+        $this->http->setOption(CURLOPT_SSL_VERIFYPEER, false);
+
+        $this->http->send($request);
+
+        $this->assertTrue(
+            $handle->options[CURLOPT_VERBOSE],
+            'Verbosity should be enabled'
+        );
+
+        $this->assertFalse(
+            $handle->options[CURLOPT_SSL_VERIFYPEER],
+            'SSL verify peer should be disabled'
+        );
     }
 }

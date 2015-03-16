@@ -24,7 +24,7 @@
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 
 /**
@@ -36,7 +36,7 @@
  * @author     David K. <david.keijser@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 interface Klarna_Checkout_HTTP_CURLHandleInterface
 {
@@ -63,6 +63,13 @@ interface Klarna_Checkout_HTTP_CURLHandleInterface
      * @return array
      */
     public function getInfo();
+
+    /**
+     * Get error message regarding this transfer
+     *
+     * @return string Error message
+     */
+    public function getError();
 
     /**
      * Close the cURL session

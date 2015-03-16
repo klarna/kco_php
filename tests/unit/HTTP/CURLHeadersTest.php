@@ -25,10 +25,8 @@
  * @author     David K. <david.keijser@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
-
-require_once 'Checkout/HTTP/CURLHeaders.php';
 
 /**
  * PHPUnit test case for the CURL Header parser
@@ -39,7 +37,7 @@ require_once 'Checkout/HTTP/CURLHeaders.php';
  * @author     David K. <david.keijser@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 class Klarna_Checkout_HTTP_CURLHeadersTest extends PHPUnit_Framework_TestCase
 {

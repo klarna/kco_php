@@ -24,13 +24,8 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
-require_once 'Checkout/HTTP/TransportInterface.php';
-require_once 'Checkout/HTTP/CURLTransport.php';
-require_once 'Checkout/HTTP/Transport.php';
-require_once 'Checkout/HTTP/Request.php';
-require_once 'Checkout/HTTP/CURLFactory.php';
 
 /**
  * UnitTest for the Klarna_Checkout_HTTP_Transport factory
@@ -40,10 +35,26 @@ require_once 'Checkout/HTTP/CURLFactory.php';
  * @author    David K. <david.keijser@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 class Klarna_Checkout_HTTP_TransportTest extends PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var Klarna_checkout_HTTP_Transport
+     */
+    protected $transport;
+
+    /**
+     * Set up for tests
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        $this->transport = Klarna_checkout_HTTP_Transport::create();
+    }
+
     /**
      * Make sure the returned object implements the transport interface
      *
@@ -51,10 +62,20 @@ class Klarna_Checkout_HTTP_TransportTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $transport = Klarna_checkout_HTTP_Transport::create();
         $this->assertInstanceOf(
             'Klarna_Checkout_HTTP_TransportInterface',
-            $transport
+            $this->transport
         );
+    }
+
+    /**
+     * Testing get/set timout
+     *
+     * @return void
+     */
+    public function testTimeoutOnConnector()
+    {
+        $this->transport->setTimeout(120);
+        $this->assertEquals(120, $this->transport->getTimeout());
     }
 }

@@ -24,12 +24,9 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
-require_once 'Checkout/ResourceInterface.php';
-require_once 'Checkout/Order.php';
-require_once 'Checkout/ConnectorInterface.php';
-require_once 'tests/ConnectorStub.php';
+
 /**
  * UnitTest for the Order class, interactions with connector
  *
@@ -39,7 +36,7 @@ require_once 'tests/ConnectorStub.php';
  * @author    David K. <david.keijser@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
 {

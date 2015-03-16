@@ -25,7 +25,7 @@
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 
 /**
@@ -37,7 +37,7 @@
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 class Klarna_Checkout_HTTP_TransportStub
     implements Klarna_Checkout_HTTP_TransportInterface
@@ -49,9 +49,9 @@ class Klarna_Checkout_HTTP_TransportStub
     public $response = array();
 
     /**
-     * [setResponseCode description]
+     * Set the response code
      *
-     * @param [type] $code [description]
+     * @param int $code Response code
      *
      * @return void
      */
@@ -123,11 +123,11 @@ class Klarna_Checkout_HTTP_TransportStub
     /**
      * Performs a HTTP request.
      *
-     * @param Klarna_HTTP_Request $request the HTTP request to send.
+     * @param Klarna_Checkout_HTTP_Request $request the HTTP request to send.
      *
-     * @throws Klarna_ConnectionErrorException Thrown for unspecified network
-     *                                         or hardware issues.
-     * @return Klarna_HTTP_Response
+     * @throws Klarna_Checkout_ConnectionErrorException Thrown for unspecified
+     *                                                  network or hardware issues.
+     * @return Klarna_Checkout_HTTP_Response
      */
     public function send(Klarna_Checkout_HTTP_Request $request)
     {
@@ -149,7 +149,7 @@ class Klarna_Checkout_HTTP_TransportStub
      *
      * @throws InvalidArgumentException If the specified argument
      *                                  is not of type string.
-     * @return Klarna_HTTP_Request
+     * @return Klarna_Checkout_HTTP_Request
      */
     public function createRequest($url)
     {

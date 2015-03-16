@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2013 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_Exception class
+ * Bootstrap file to include test stubs
  *
  * PHP version 5.3
  *
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    Klarna <support@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2013 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
 
-/**
- * Basic exception class
- *
- * @category  Payment
- * @package   Klarna_Checkout
- * @author    Majid G. <majid.garmaroudi@klarna.com>
- * @author    David K. <david.keijser@klarna.com>
- * @copyright 2012 Klarna AB
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://developers.klarna.com/
- */
-class Klarna_Checkout_Exception extends Exception
-{
+require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
-}
+require_once 'ConnectorStub.php';
+require_once 'CURLHandleStub.php';
+require_once 'CurlFactoryStub.php';
+require_once 'ResourceStub.php';
+require_once 'TransportStub.php';

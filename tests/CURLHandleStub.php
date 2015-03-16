@@ -23,7 +23,7 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 
 /**
@@ -34,7 +34,7 @@
  * @author    David K. <david.keijser@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 class Klarna_Checkout_HTTP_CURLHandleStub
     implements Klarna_Checkout_HTTP_CURLHandleInterface
@@ -60,6 +60,11 @@ class Klarna_Checkout_HTTP_CURLHandleStub
         'http_code' => 200,
         'content_type' => 'text/json'
     );
+
+    /**
+     * @var string
+     */
+    public $error = 'Error message';
 
     /**
      * Response to return
@@ -127,6 +132,16 @@ class Klarna_Checkout_HTTP_CURLHandleStub
     public function getInfo()
     {
         return $this->info;
+    }
+
+    /**
+     * Get error message regarding this transfer
+     *
+     * @return string Error message
+     */
+    public function getError()
+    {
+        return $this->error;
     }
 
     /**

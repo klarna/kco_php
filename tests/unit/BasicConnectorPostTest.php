@@ -24,17 +24,8 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
-
-require_once 'Checkout/ResourceInterface.php';
-require_once 'Checkout/ConnectorInterface.php';
-require_once 'Checkout/HTTP/TransportInterface.php';
-require_once 'Checkout/HTTP/Request.php';
-require_once 'Checkout/HTTP/Response.php';
-require_once 'Checkout/BasicConnector.php';
-require_once 'tests/ResourceStub.php';
-require_once 'tests/TransportStub.php';
 
 /**
  * POST UnitTests for the Basic Connector class
@@ -45,9 +36,9 @@ require_once 'tests/TransportStub.php';
  * @author    Christer G. <christer.gustavsson@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
-class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_BasicConnectorPostTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -101,7 +92,11 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
             ->with("{$payload}aboogie")
             ->will($this->returnValue($expected));
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
         $result = $object->apply('POST', $this->orderStub);
 
         $this->assertEquals($payload, $result->getData(), 'Response payload');
@@ -144,7 +139,11 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
         );
         $curl->addResponse($data);
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'secret');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'secret'
+        );
         $object->apply('POST', $this->orderStub);
     }
 
@@ -177,7 +176,11 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
             ->with("{$payload}aboogie")
             ->will($this->returnValue($expected));
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
         $result = $object->apply('POST', $this->orderStub, $options);
 
         $request = $result->getRequest();
@@ -228,7 +231,11 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
             ->with("aboogie")
             ->will($this->returnValue($expected));
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
         $result = $object->apply('POST', $this->orderStub, $options);
 
         $request = $result->getRequest();
@@ -270,7 +277,11 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
             $curl->addResponse($response);
         }
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
 
         $result = null;
         try {
@@ -310,7 +321,11 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
             ->with("{$payload}aboogie")
             ->will($this->returnValue($expected));
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
 
         $this->assertNull($this->orderStub->getLocation(), 'Original Location');
 
@@ -372,7 +387,11 @@ class Klarna_Checkout_BasicConnectorTest_POST extends PHPUnit_Framework_TestCase
             $curl->addResponse($response);
         }
 
-        $object = new Klarna_Checkout_BasicConnector($curl, $this->digest, 'aboogie');
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
 
         $result = null;
         try {

@@ -25,10 +25,8 @@
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
-
-require_once 'Checkout/HTTP/Request.php';
 
 /**
  * PHPUnit test case for the HTTP Response object.
@@ -39,12 +37,12 @@ require_once 'Checkout/HTTP/Request.php';
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 class Klarna_Checkout_HTTP_RequestTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Klarna_HTTP_Request
+     * @var Klarna_Checkout_HTTP_Request
      */
     protected $request;
 

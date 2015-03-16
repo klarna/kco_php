@@ -1,11 +1,17 @@
 {
     "name": "klarna/checkout",
     "description": "Wrapper for the Klarna Checkout API",
-    "homepage": "http://integration.klarna.com",
+    "homepage": "http://developers.klarna.com",
     "license": "Apache-2.0",
     "type": "library",
     "require": {
         "php": ">=5.2.16"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.7",
+        "phpmd/phpmd": "~1.5",
+        "squizlabs/php_codesniffer": "~1.5",
+        "satooshi/php-coveralls": "~0.6"
     },
     "autoload": {
         "psr-0": {

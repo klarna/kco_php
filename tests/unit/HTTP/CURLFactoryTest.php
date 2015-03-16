@@ -24,12 +24,8 @@
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
-
-require_once 'Checkout/HTTP/CURLHandleInterface.php';
-require_once 'Checkout/HTTP/CURLFactory.php';
-require_once 'Checkout/HTTP/CURLHandle.php';
 
 /**
  * PHPUnit test case for the HTTP CURL wrapper.
@@ -40,7 +36,7 @@ require_once 'Checkout/HTTP/CURLHandle.php';
  * @author     Klarna <support@klarna.com>
  * @copyright  2012 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link       http://integration.klarna.com/
+ * @link       http://developers.klarna.com/
  */
 class CURLFactoryTest extends PHPUnit_Framework_TestCase
 {

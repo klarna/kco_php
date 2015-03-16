@@ -3,15 +3,15 @@
     <property name="work.dir" location="${user.dir}" />
     <property name="build.base" location="base.xml"/>
     <import file="${build.base}" />
-    <property name="phpunit.conf" location="${tests.dir}/phpunit.conf.xml" />
+    <property name="phpunit.conf" location="${work.dir}/phpunit.xml.dist" />
     <property name="checkstyle.standard" value="PEAR" />
     <property name="phpmd.file" value="${tmp.dir}/phpmd.xml" />
     <property name="phpdoc.dir" location="${docs.dir}/phpdoc" />
 
     <patternset id="source">
         <include name="**/*.php" />
-        <exclude name="${tests.dir}" />
-        <exclude name="${tmp.dir}" />
+        <exclude name="vendor/" />
+        <exclude name="data/tmp/" />
     </patternset>
 
     <target
@@ -27,13 +27,13 @@
             >
                 <patternset refid="source" />
             </phpmd>
+
             <checkstyle
                 standard="${checkstyle.standard}"
                 dest="${checkstyle.file}"
             >
                 <patternset refid="source" />
             </checkstyle>
-
         </parallel>
     </target>
 
@@ -47,23 +47,12 @@
     </target>
 
     <target
-        name="-unittest-nocov"
-        description="plain run of unittests"
-        unless="coverage"
+        name="-unittest"
+        description="run unit tests"
     >
-        <phpunit conf="${phpunit.conf}" dir="${tests.dir}" />
+        <phpunit />
     </target>
 
-    <target
-        name="-unittest-cov"
-        description="run unittest and output coverage data"
-        if="coverage"
-    >
-        <coverage
-            clover="${coverage.file}"
-            html="${coverage.dir}"
-            dir="${work.dir}"
-            conf="${phpunit.conf}"
-            log="${tests.juint}" />
-    </target>
+    <!-- Keep as a working alias for unittest -->
+    <target name="coverage" depends="unittest" />
 </project>

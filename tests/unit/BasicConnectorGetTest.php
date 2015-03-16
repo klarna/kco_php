@@ -24,18 +24,8 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
-
-require_once 'Checkout/ResourceInterface.php';
-require_once 'Checkout/ConnectorInterface.php';
-require_once 'Checkout/HTTP/TransportInterface.php';
-require_once 'Checkout/HTTP/Request.php';
-require_once 'Checkout/HTTP/Response.php';
-require_once 'Checkout/BasicConnector.php';
-require_once 'tests/ResourceStub.php';
-require_once 'tests/TransportStub.php';
-
 
 /**
  * GET UnitTest for the Connector class
@@ -46,9 +36,9 @@ require_once 'tests/TransportStub.php';
  * @author    Christer G. <christer.gustavsson@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
-class Klarna_Checkout_BasicConnectorTest_GET extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_BasicConnectorGetTest extends PHPUnit_Framework_TestCase
 {
 
     /**

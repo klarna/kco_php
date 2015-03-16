@@ -24,7 +24,7 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 
 /**
@@ -36,7 +36,7 @@
  * @author    David K. <david.keijser@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 interface Klarna_Checkout_ConnectorInterface
 {
@@ -54,4 +54,11 @@ interface Klarna_Checkout_ConnectorInterface
         Klarna_Checkout_ResourceInterface $resource,
         array $options = null
     );
+
+    /**
+     * Gets the underlying transport object
+     *
+     * @return Klarna_Checkout_HTTP_TransportInterface Transport object
+     */
+    public function getTransport();
 }

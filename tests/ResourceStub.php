@@ -24,7 +24,7 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 
 /**
@@ -36,7 +36,7 @@
  * @author    Christer G. <christer.gustavsson@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
 {
@@ -74,6 +74,16 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
     public function getContentType()
     {
         return 'klarna-stubbed-order+json';
+    }
+
+    /**
+     * Return accept header of the resource
+     *
+     * @return string Accept header
+     */
+    public function getAcceptHeader()
+    {
+        return 'accept-header-klarna-stubbed-order+json';
     }
 
     /**

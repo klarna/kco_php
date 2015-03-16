@@ -24,7 +24,7 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 
 /**
@@ -37,15 +37,15 @@
  * @author    David K. <david.keijser@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterface
 {
 
     /**
-     * Klarna_Checkout_HTTP_HTTPInterface Implementation
+     * Klarna_Checkout_HTTP_TransportInterface Implementation
      *
-     * @var Klarna_Checkout_HttpInterface
+     * @var Klarna_Checkout_HTTP_TransportInterface
      */
     protected $http;
 
@@ -116,6 +116,16 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
     }
 
     /**
+     * Gets the underlying transport object
+     *
+     * @return Klarna_Checkout_HTTP_TransportInterface Transport object
+     */
+    public function getTransport()
+    {
+        return $this->http;
+    }
+
+    /**
      * Set content (headers, payload) on a request
      *
      * @param Klarna_Checkout_ResourceInterface $resource Klarna Checkout Resource
@@ -142,7 +152,7 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
         // Set HTTP Headers
         $request->setHeader('User-Agent', (string)$this->userAgent());
         $request->setHeader('Authorization', "Klarna {$digest}");
-        $request->setHeader('Accept', $resource->getContentType());
+        $request->setHeader('Accept', $resource->getAcceptHeader() ?: $resource->getContentType());
         if (strlen($payload) > 0) {
             $request->setHeader('Content-Type', $resource->getContentType());
             $request->setData($payload);
@@ -299,7 +309,6 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
 
         // Create a HTTP Request object
         $request = $this->createRequest($resource, $method, $payload, $url);
-        // $this->_setContent($request, $payload, $method);
 
         // Execute the HTTP Request
         $result = $this->http->send($request);
@@ -307,5 +316,4 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
         // Handle statuses appropriately.
         return $this->handleResponse($result, $resource, $visited);
     }
-
 }

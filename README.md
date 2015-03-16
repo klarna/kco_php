@@ -1,4 +1,6 @@
 ## Klarna Checkout PHP library
+[![Build Status](https://travis-ci.org/klarna/kco_php.svg?branch=v1.2)](https://travis-ci.org/klarna/kco_php) [![Coverage Status](https://coveralls.io/repos/klarna/kco_php/badge.png?branch=v1.2)](https://coveralls.io/r/klarna/kco_php?branch=v1.2)
+
 Klarna Checkout is a revolutionary new payment solution that is changing the way
 people shop online. First, consumers verify their purchase with a minimal
 amount of information through intelligent identification, securing your order
@@ -20,7 +22,7 @@ payments worldwide and change the way the world shops online.
 
 ## Documentation
 Documentation and more examples can be found at
-[docs.klarna.com](https://docs.klarna.com).
+[developers.klarna.com](https://developers.klarna.com).
 
 ## How to contribute
 At Klarna, we strive toward achieving the highest possible quality for our
@@ -32,6 +34,7 @@ To contribute, the following criteria needs to be fulfilled:
 * Pull requests should implement a boxed change
 * All code and documentation must follow the
 [PEAR coding standards](http://pear.php.net/manual/en/standards.php)
+* All classes must follow the [PSR-0 standard](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)
 * New features and bug fixes must have accompanying unit tests:
     * Positive tests
     * Negative tests
@@ -47,6 +50,10 @@ please contact [integration@klarna.com](mailto:integration@klarna.com).
 * David Keijser
 * Rickard Dybeck
 * Majid Garmaroudi
+* Magnus Nordlander
+* Christer Gustavsson
+* Fredrik Liljegren
+* Jan Kohlhof
 
 ## License
 The Klarna Checkout PHP library is released under

@@ -24,7 +24,7 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 
 /**
@@ -36,7 +36,7 @@
  * @author    David K. <david.keijser@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 class Klarna_Checkout_Order
     implements Klarna_Checkout_ResourceInterface, ArrayAccess
@@ -54,6 +54,13 @@ class Klarna_Checkout_Order
      * @var string
      */
     public static $contentType = null;
+
+    /**
+     * Accept header to use
+     *
+     * @var string
+     */
+    public static $acceptHeader = null;
 
     /**
      * URI of remote resource
@@ -124,6 +131,16 @@ class Klarna_Checkout_Order
     public function getContentType()
     {
         return self::$contentType;
+    }
+
+    /**
+     * Return accept header of the resource
+     *
+     * @return string Accept header
+     */
+    public function getAcceptHeader()
+    {
+        return self::$acceptHeader;
     }
 
     /**

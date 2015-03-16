@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2013 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_Exception class
+ * Example of a fetch call.
  *
- * PHP version 5.3
+ * PHP version 5.3.4
  *
  * @category  Payment
  * @package   Klarna_Checkout
- * @author    Klarna <support@klarna.com>
- * @copyright 2012 Klarna AB
+ * @author    David Keijser <david.keijser@klarna.com>
+ * @author    Rickard Dybeck <rickard.dybeck@klarna.com>
+ * @copyright 2013 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
 
-/**
- * Basic exception class
- *
- * @category  Payment
- * @package   Klarna_Checkout
- * @author    Majid G. <majid.garmaroudi@klarna.com>
- * @author    David K. <david.keijser@klarna.com>
- * @copyright 2012 Klarna AB
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://developers.klarna.com/
- */
-class Klarna_Checkout_Exception extends Exception
-{
+require_once 'src/Klarna/Checkout.php';
 
-}
+Klarna_Checkout_Order::$contentType
+    = 'application/vnd.klarna.checkout.aggregated-order-v2+json';
+
+$sharedSecret = 'sharedSecret';
+$orderUri = 'https://checkout.testdrive.klarna.com/checkout/orders/ABC123';
+
+$connector = Klarna_Checkout_Connector::create($sharedSecret);
+$order = new Klarna_Checkout_Order($connector, $orderUri);
+
+$order->fetch();

@@ -24,7 +24,7 @@
  * @author    Klarna <support@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 
 /**
@@ -36,7 +36,7 @@
  * @author    David K. <david.keijser@klarna.com>
  * @copyright 2012 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
- * @link      http://integration.klarna.com/
+ * @link      http://developers.klarna.com/
  */
 interface Klarna_Checkout_ResourceInterface
 {
@@ -62,6 +62,13 @@ interface Klarna_Checkout_ResourceInterface
      * @return string Content type
      */
     public function getContentType();
+
+    /**
+     * Return accept header of the resource
+     *
+     * @return string Accept header
+     */
+    public function getAcceptHeader();
 
     /**
      * Update resource with the new data
