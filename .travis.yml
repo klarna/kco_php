@@ -20,7 +20,9 @@ cache:
     - vendor
 
 before_script:
+  - phpenv global 5.3
   - composer install --dev --no-interaction
+  - phpenv global "$TRAVIS_PHP_VERSION"
 
 script:
   - ant -f misc/ant/build.xml tests
