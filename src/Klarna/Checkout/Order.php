@@ -56,6 +56,13 @@ class Klarna_Checkout_Order
     public static $contentType = null;
 
     /**
+     * Accept header to use
+     *
+     * @var string
+     */
+    public static $accept = null;
+
+    /**
      * URI of remote resource
      *
      * @var string
@@ -124,6 +131,16 @@ class Klarna_Checkout_Order
     public function getContentType()
     {
         return self::$contentType;
+    }
+
+    /**
+     * Return accept header of the resource
+     *
+     * @return string Accept header
+     */
+    public function getAccept()
+    {
+        return self::$accept;
     }
 
     /**

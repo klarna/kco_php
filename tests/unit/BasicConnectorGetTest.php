@@ -114,6 +114,45 @@ class Klarna_Checkout_BasicConnectorGetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test apply with a 200 code with a custom accept header
+     *
+     * @return void
+     */
+    public function testApplyGet200WithAccept()
+    {
+        $curl = new Klarna_Checkout_HTTP_TransportStub;
+
+        $payload = '{"flobadob":["bobcat","wookie"]}';
+        $data = array(
+            'code' => 200,
+            'headers' => array(),
+            'payload' => $payload
+        );
+        $curl->addResponse($data);
+
+        $expectedDigest = 'stnaeu\eu2341aoaaoae==';
+
+        $this->digest->expects($this->once())
+            ->method('create')
+            ->with('aboogie')
+            ->will($this->returnValue($expectedDigest));
+
+        $object = new Klarna_Checkout_BasicConnector(
+            $curl,
+            $this->digest,
+            'aboogie'
+        );
+        $this->orderStub->accept = 'zoidberg';
+        $result = $object->apply('GET', $this->orderStub);
+
+        $this->assertEquals(
+            'zoidberg',
+            $curl->request->getHeader('Accept'),
+            'Accept Content Type'
+        );
+    }
+
+    /**
      * Test so apply with a 200 code but an invalid json response throws an
      * exception.
      *

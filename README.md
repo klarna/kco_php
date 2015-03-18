@@ -54,6 +54,7 @@ please contact [integration@klarna.com](mailto:integration@klarna.com).
 * Christer Gustavsson
 * Fredrik Liljegren
 * Jan Kohlhof
+* Maksim Kotlyar
 
 ## License
 The Klarna Checkout PHP library is released under
