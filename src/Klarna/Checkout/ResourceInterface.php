@@ -68,7 +68,7 @@ interface Klarna_Checkout_ResourceInterface
      *
      * @return string Accept header
      */
-    public function getAcceptHeader();
+    public function getAccept();
 
     /**
      * Update resource with the new data

@@ -42,7 +42,7 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
 {
 
     public $location;
-    public $acceptHeader;
+    public $accept;
     public $data = array();
 
     /**
@@ -82,9 +82,9 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
      *
      * @return string Accept header
      */
-    public function getAcceptHeader()
+    public function getAccept()
     {
-        return $this->acceptHeader;
+        return $this->accept;
     }
 
     /**

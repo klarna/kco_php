@@ -60,7 +60,7 @@ class Klarna_Checkout_Order
      *
      * @var string
      */
-    public static $acceptHeader = null;
+    public static $accept = null;
 
     /**
      * URI of remote resource
@@ -138,9 +138,9 @@ class Klarna_Checkout_Order
      *
      * @return string Accept header
      */
-    public function getAcceptHeader()
+    public function getAccept()
     {
-        return self::$acceptHeader;
+        return self::$accept;
     }
 
     /**

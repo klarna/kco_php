@@ -150,7 +150,7 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
         $request->setMethod($method);
 
         // Set HTTP Headers
-        $accept = $resource->getAcceptHeader();
+        $accept = $resource->getAccept();
         $contentType = $resource->getContentType();
         $request->setHeader('User-Agent', (string)$this->userAgent());
         $request->setHeader('Authorization', "Klarna {$digest}");
