@@ -64,6 +64,13 @@ interface Klarna_Checkout_ResourceInterface
     public function getContentType();
 
     /**
+     * Return accept header of the resource
+     *
+     * @return string Accept header
+     */
+    public function getAccept();
+
+    /**
      * Update resource with the new data
      *
      * @param array $data data
