@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Simple benchmark utility
+ * File containing the Klarna_Checkout_Order unittest
  *
  * PHP version 5.3
  *
@@ -26,63 +26,56 @@
  * @link      http://developers.klarna.com/
  */
 
-require_once 'src/Klarna/Checkout.php';
-require_once 'tests/CURLHandleStub.php';
-
 /**
- * Factory that returns stubbed instance of the CURlHandle wrapper
+ * UnitTest for the Order class, basic functionality
  *
  * @category  Payment
  * @package   Klarna_Checkout
+ * @author    Majid G. <majid.garmaroudi@klarna.com>
  * @author    David K. <david.keijser@klarna.com>
  * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
-class CURLStubFactory extends Klarna_Checkout_HTTP_CURLFactory
+class Klarna_Checkout_RecurringOrderStatusTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Create a new cURL handle
+     * Order Instance
      *
-     * @return Klarna_Checkout_HTTP_CURLHandleStub
+     * @var Klarna_Checkout_RecurringStatus
      */
-    public function handle()
+    protected $orderStatus;
+
+    protected $recurringToken = "123ABC";
+
+    /**
+     * Setup function
+     *
+     * @return void
+     */
+    public function setUp()
     {
-        $stub = new Klarna_Checkout_HTTP_CURLHandleStub;
-        $stub->info['http_code'] = 201;
-        return $stub;
+        $mock = $this->getMockBuilder('Klarna_Checkout_ConnectorInterface')
+            ->getMock();
+        $mock->method('getDomain')
+            ->willReturn('https://checkout.klarna.com');
+
+        $this->orderStatus = new Klarna_Checkout_RecurringStatus(
+            $mock,
+            $this->recurringToken
+        );
+    }
+
+    /**
+     * Test that location is initialized as null
+     *
+     * @return void
+     */
+    public function testGetLocation()
+    {
+        $this->assertEquals(
+            "https://checkout.klarna.com/checkout/recurring/{$this->recurringToken}",
+            $this->orderStatus->getLocation()
+        );
     }
 }
-
-$resource = new Klarna_Checkout_Order(
-    array(
-        'foo' => 'Foo',
-        'bar' => 'bar'
-    )
-);
-
-$connector = new Klarna_Checkout_Connector(
-    new Klarna_Checkout_HTTP_CURLTransport(
-        new CURLStubFactory
-    ),
-    new Klarna_Checkout_Digest,
-    'sharedSecret'
-);
-
-$count = 20000;
-$start = microtime(true);
-for ($i = 0; $i < $count; $i++) {
-    $resource->create($connector);
-    $resource->fetch($connector);
-    $resource->update($connector);
-}
-$end = microtime(true);
-
-echo json_encode(
-    array(
-        'start' => $start,
-        'end' => $end,
-        'duration' => $end - $start,
-        'count' => $count
-    )
-);

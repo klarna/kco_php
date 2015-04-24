@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_Digester class
+ * File containing the Klarna_Checkout_ConnectorException class
  *
  * PHP version 5.3
  *
@@ -27,27 +27,49 @@
  */
 
 /**
- * Class to handle the digesting of hash string
+ * Api Error exception
  *
  * @category  Payment
  * @package   Klarna_Checkout
- * @author    Rickard D. <rickard.dybeck@klarna.com>
- * @author    Christer G. <christer.gustavsson@klarna.com>
+ * @author    Matthias Feist <matthias.feist@klarna.com>
  * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
-class Klarna_Checkout_Digest
+class Klarna_Checkout_ApiErrorException extends Klarna_Checkout_Exception
 {
     /**
-     * Create a digest from a supplied string
-     *
-     * @param string $digestString string to hash
-     *
-     * @return string Base64 and SHA256 hashed string
+     * Payload of the error
+     * 
+     * @var array
      */
-    public function create($digestString)
+    protected $payload = array();
+    
+    /**
+     * Custom contructor
+     *
+     * @param string    $message  Error message
+     * @param int       $code     Error code
+     * @param Array     $payload  Payload
+     * @param Exception $previous Previous Exception
+     */
+    public function __construct(
+        $message,
+        $code,
+        Array $payload = array(),
+        Exception $previous = null
+    ) {
+        parent::__construct($message, $code, $previous);
+        $this->payload = $payload;
+    }
+
+    /**
+     * Gets the payload
+     *
+     * @return array
+     */
+    public function getPayload()
     {
-        return base64_encode(hash('sha256', $digestString, true));
+        return $this->payload;
     }
 }

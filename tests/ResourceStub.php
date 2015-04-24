@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2015 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +21,7 @@
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    Klarna <support@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -34,7 +33,7 @@
  * @package   Klarna_Checkout
  * @author    Rickard D. <rickard.dybeck@klarna.com>
  * @author    Christer G. <christer.gustavsson@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -85,6 +84,26 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
     public function getAccept()
     {
         return $this->accept;
+    }
+
+    /**
+     * Set the content type
+     *
+     * @param string $contentType Content type
+     */
+    public function setContentType($contentType)
+    {
+        // nothing to do in this stub
+    }
+
+    /**
+     * Set the accept type
+     *
+     * @param string $accept Accept type
+     */
+    public function setAccept($accept)
+    {
+        $this->accept = $accept;
     }
 
     /**

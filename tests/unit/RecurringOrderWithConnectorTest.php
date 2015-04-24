@@ -27,25 +27,24 @@
  */
 
 /**
- * UnitTest for the Order class, interactions with connector
+ * UnitTest for the RecurringOrder class, interactions with connector
  *
  * @category  Payment
  * @package   Klarna_Checkout
- * @author    Majid G. <majid.garmaroudi@klarna.com>
- * @author    David K. <david.keijser@klarna.com>
  * @author    Matthias Feist <matthias.feist@klarna.com>
  * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
-class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
+class Klarna_Checkout_RecurringOrderWithConnectorTest
+    extends PHPUnit_Framework_TestCase
 {
     /**
      * Order Instance
      *
-     * @var Klarna_Checkout_Order
+     * @var Klarna_Checkout_RecurringOrder
      */
-    protected $order;
+    protected $recurringOrder;
 
     /**
      * Connector Instance
@@ -55,6 +54,13 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
     protected $connector;
 
     /**
+     * Recurring token
+     *
+     * @var string
+     */
+    protected $recurringToken = "123ABC";
+
+    /**
      * Setup function
      *
      * @return void
@@ -62,7 +68,10 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->connector = new Klarna_Checkout_ConnectorStub();
-        $this->order = new Klarna_Checkout_Order($this->connector);
+        $this->recurringOrder = new Klarna_Checkout_RecurringOrder(
+            $this->connector,
+            $this->recurringToken
+        );
     }
 
     /**
@@ -72,15 +81,18 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $location = 'https://checkout.klarna.com/checkout/orders';
-        $this->connector->location = $location;
         $data = array("foo" => "boo");
-        $order = new Klarna_Checkout_Order($this->connector);
-        $order->create($data);
+        $this->recurringOrder->create($data);
 
         $this->assertEquals("POST", $this->connector->applied["method"]);
-        $this->assertEquals($order, $this->connector->applied["resource"]);
-        $this->assertEquals($location, $order->getLocation());
+        $this->assertEquals(
+            $this->recurringOrder,
+            $this->connector->applied["resource"]
+        );
+        $this->assertEquals(
+            "/checkout/recurring/{$this->recurringToken}/orders",
+            $this->recurringOrder->getLocation()
+        );
         $this->assertArrayHasKey(
             "url",
             $this->connector->applied["options"]
@@ -93,43 +105,5 @@ class Klarna_Checkout_OrderWithConnectorTest extends PHPUnit_Framework_TestCase
             $this->connector->applied['options']['data']['foo'],
             'boo'
         );
-    }
-
-    /**
-     * Test that fetch works as intended
-     *
-     * @return void
-     */
-    public function testFetch()
-    {
-        $this->order->setLocation("http://klarna.com/foo/bar/15");
-        $url = $this->order->getLocation();
-        $this->order->fetch();
-
-        $this->assertEquals("GET", $this->connector->applied["method"]);
-        $this->assertEquals($this->order, $this->connector->applied["resource"]);
-        $this->assertArrayHasKey("url", $this->connector->applied["options"]);
-        $this->assertEquals($url, $this->connector->applied["options"]["url"]);
-    }
-
-    /**
-     * Test that update works as intended
-     *
-     * @return void
-     */
-    public function testUpdate()
-    {
-        $this->order->setLocation("http://klarna.com/foo/bar/15");
-        $uri = $this->order->getLocation();
-        $this->order->update(
-            array(
-                'foo' => 'boo'
-            )
-        );
-
-        $this->assertEquals("POST", $this->connector->applied["method"]);
-        $this->assertEquals($this->order, $this->connector->applied["resource"]);
-        $this->assertArrayHasKey("url", $this->connector->applied["options"]);
-        $this->assertEquals($uri, $this->connector->applied["options"]["url"]);
     }
 }

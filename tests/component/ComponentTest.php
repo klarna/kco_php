@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2015 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +21,7 @@
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    Klarna <support@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -34,13 +33,20 @@
  * @package   Klarna_Checkout
  * @author    Rickard D. <rickard.dybeck@klarna.com>
  * @author    Christer G. <christer.gustavsson@klarna.com>
- * @copyright 2012 Klarna AB
+ * @author    Matthias Feist <matthias.feist@klarna.com>
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
 class Klarna_Checkout_Component extends PHPUnit_Framework_TestCase
 {
 
+    /**
+     * The connector to test
+     *
+     * @var Klarna_Checkout_BasicConnector
+     */
+    protected $connector;
 
     /**
      * Set up test
@@ -55,15 +61,22 @@ class Klarna_Checkout_Component extends PHPUnit_Framework_TestCase
 
         $factory = new Klarna_Checkout_CurlFactoryStub();
 
-        Klarna_Checkout_Order::$baseUri = 'test1';
-
-        $factory->addHandle('test1', 201, array('Location: test2'));
-        $factory->addHandle('test2', 200, array());
+        $factory->addHandle(
+            'http://test/checkout/orders',
+            201,
+            array('Location: http://test/checkout/orders/foobar')
+        );
+        $factory->addHandle(
+            'http://test/checkout/orders/foobar',
+            200,
+            array()
+        );
 
         $this->connector = new Klarna_Checkout_BasicConnector(
             new Klarna_Checkout_HTTP_CURLTransport($factory),
             new Klarna_Checkout_Digest,
-            'sharedSecret'
+            'sharedSecret',
+            'http://test'
         );
     }
 
@@ -118,8 +131,10 @@ class Klarna_Checkout_Component extends PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals($order->getLocation(), 'test2');
+        $this->assertEquals(
+            $order->getLocation(),
+            'http://test/checkout/orders/foobar'
+        );
         $order->fetch();
     }
-
 }

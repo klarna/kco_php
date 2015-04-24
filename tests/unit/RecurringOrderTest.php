@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File containing the Klarna_Checkout_ConnectorStub class
+ * File containing the Klarna_Checkout_Order unittest
  *
  * PHP version 5.3
  *
@@ -27,62 +27,64 @@
  */
 
 /**
- * Stub implementation of the Connector
+ * UnitTest for the RecurringOrder class, basic functionality
  *
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    Majid G. <majid.garmaroudi@klarna.com>
  * @author    David K. <david.keijser@klarna.com>
+ * @author    Matthias Feist <matthias.feist@klarna.com>
  * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
-class Klarna_Checkout_ConnectorStub implements Klarna_Checkout_ConnectorInterface
+class Klarna_Checkout_RecurringOrderTest extends PHPUnit_Framework_TestCase
 {
-    public $applied;
-
-    public $location;
+    /**
+     * Order Instance
+     *
+     * @var Klarna_Checkout_RecurringOrder
+     */
+    protected $recurringOrder;
 
     /**
-     * Applying the method on the specific resource
+     * Recurring Token
      *
-     * @param string                            $method   Http methods
-     * @param Klarna_Checkout_ResourceInterface $resource Resource
-     * @param array                             $options  Options
+     * @var string
+     */
+    protected $recurringToken = "123ABC";
+
+    /**
+     * Setup function
      *
      * @return void
      */
-    public function apply(
-        $method,
-        Klarna_Checkout_ResourceInterface $resource,
-        array $options = null
-    ) {
-        $this->applied = array(
-            "method" => $method,
-            "resource" => $resource,
-            "options" => $options
+    public function setUp()
+    {
+        $mock = $this->getMockBuilder('Klarna_Checkout_ConnectorInterface')
+            ->getMock();
+        $mock->method('getDomain')
+            ->willReturn('https://checkout.klarna.com');
+
+        $this->recurringOrder = new Klarna_Checkout_RecurringOrder(
+            $mock,
+            $this->recurringToken
         );
-
-        if ($this->location !== null) {
-            $resource->setLocation($this->location);
-        }
     }
 
     /**
-     * Gets the underlying transport object
+     * Test that location is initialized as null
      *
      * @return void
      */
-    public function getTransport()
+    public function testGetLocation()
     {
-    }
+        $host = "https://checkout.klarna.com";
+        $path = "/checkout/recurring/{$this->recurringToken}/orders";
 
-    /**
-     * Get the current domain
-     *
-     * @return void
-     */
-    public function getDomain()
-    {
+        $this->assertEquals(
+            $host . $path,
+            $this->recurringOrder->getLocation()
+        );
     }
 }

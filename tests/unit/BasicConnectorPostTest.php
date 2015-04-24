@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2015 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +21,7 @@
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    Klarna <support@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -34,7 +33,7 @@
  * @package   Klarna_Checkout
  * @author    Rickard D. <rickard.dybeck@klarna.com>
  * @author    Christer G. <christer.gustavsson@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -247,12 +246,14 @@ class Klarna_Checkout_BasicConnectorPostTest extends PHPUnit_Framework_TestCase
      * Test with a redirect (303) to a Forbidden (503) to ensure exception is
      * thrown.
      *
+     * @throws Exception
+     *
      * @return void
      */
     public function testApplyPost301to503()
     {
         $this->setExpectedException(
-            'Klarna_Checkout_ConnectorException', 'Forbidden', 503
+            'Klarna_Checkout_ApiErrorException', 'API Error', 503
         );
 
         $options = array('url' => 'localhost');
@@ -283,9 +284,8 @@ class Klarna_Checkout_BasicConnectorPostTest extends PHPUnit_Framework_TestCase
             'aboogie'
         );
 
-        $result = null;
         try {
-            $result = $object->apply('POST', $this->orderStub, $options);
+            $object->apply('POST', $this->orderStub, $options);
         } catch (Exception $e) {
             $request = $curl->request;
             $this->assertEquals($redirect, $request->getUrl(), 'Url Option');
@@ -360,6 +360,8 @@ class Klarna_Checkout_BasicConnectorPostTest extends PHPUnit_Framework_TestCase
     /**
      * Ensue that a 301 redirect is not followed by POST.
      *
+     * @throws Exception
+     *
      * @return void
      */
     public function testApplyPostDoesntFollowRedirect301()
@@ -393,9 +395,8 @@ class Klarna_Checkout_BasicConnectorPostTest extends PHPUnit_Framework_TestCase
             'aboogie'
         );
 
-        $result = null;
         try {
-            $result = $object->apply('POST', $this->orderStub, $options);
+            $object->apply('POST', $this->orderStub, $options);
         } catch (Exception $e) {
             throw $e;
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2015 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
  * @package    Payment_Klarna
  * @subpackage Examples
  * @author     Klarna <support@klarna.com>
- * @copyright  2012 Klarna AB
+ * @copyright  2015 Klarna AB
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://developers.klarna.com/
  */
@@ -32,23 +32,28 @@ require_once 'src/Klarna/Checkout.php';
 
 session_start();
 
-Klarna_Checkout_Order::$contentType
-    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
-
 $sharedSecret = 'sharedSecret';
 @$checkoutId = $_GET['klarna_order'];
 
-$connector = Klarna_Checkout_Connector::create($sharedSecret);
+$connector = Klarna_Checkout_Connector::create(
+    $sharedSecret,
+    Klarna_Checkout_Connector::BASE_TEST_URL
+);
 $order = new Klarna_Checkout_Order($connector, $checkoutId);
 
-$order->fetch();
+try {
+    $order->fetch();
+} catch (Klarna_Checkout_ApiErrorException $e) {
+    var_dump($e->getMessage());
+    var_dump($e->getPayload());
+}
 
 if ($order['status'] == "checkout_complete") {
     // At this point make sure the order is created in your system and send a
     // confirmation email to the customer
     $update['status'] = 'created';
     $update['merchant_reference'] = array(
-        'orderid1' => uniqid()
+        "orderid1" => "someUniqueId..."
     );
     $order->update($update);
 }

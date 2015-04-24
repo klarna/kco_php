@@ -14,28 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Example of an update call.
+ * Example of a create recurring order call.
  *
  * PHP version 5.3.4
  *
  * @category  Payment
  * @package   Klarna_Checkout
- * @author    David Keijser <david.keijser@klarna.com>
- * @author    Rickard Dybeck <rickard.dybeck@klarna.com>
+ * @author    Matthias Feist <matthias.feist@klarna.com>
  * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
 
+/*
+ Note! First you must have created a regular aggregated order with
+ the option "recurring" set to true.
+ After that order has received either status "checkout_complete" or
+ "created" you can fetch that resource and retrieve the "recurring_token"
+ property which is needed to create recurring orders.
+ */
+
 require_once 'src/Klarna/Checkout.php';
 
+$eid = '0';
 $sharedSecret = 'sharedSecret';
-$orderUri = 'https://checkout.testdrive.klarna.com/checkout/orders/ABC123';
+$recurringOrderToken = "abc123";
+
 $cart = array(
     array(
         'reference' => '123456789',
         'name' => 'Klarna t-shirt',
-        'quantity' => 4,
+        'quantity' => 2,
         'unit_price' => 12300,
         'discount_rate' => 1000,
         'tax_rate' => 2500
@@ -50,22 +59,50 @@ $cart = array(
     )
 );
 
+
 $connector = Klarna_Checkout_Connector::create(
     $sharedSecret,
     Klarna_Checkout_Connector::BASE_TEST_URL
 );
-$order = new Klarna_Checkout_Order($connector, $orderUri);
+$order = new Klarna_Checkout_RecurringOrder($connector, $recurringOrderToken);
 
-// Reset cart
-$update['cart']['items'] = array();
+// If the order should be activated automatically.
+// Set to true if you instead want a invoice created
+// otherwise you will get a reservation.
+$create['activate'] = true;
+
+$create['purchase_currency'] = 'SEK';
+$create['purchase_country'] = 'SE';
+$create['locale'] = 'sv-se';
+$create['merchant']['id'] = $eid;
+$create['cart'] = array();
+
+$address = array(
+    "postal_code" => "12345",
+    "email" => "checkout-se@testdrive.klarna.com",
+    "country" => "se",
+    "city" => "Ankeborg",
+    "family_name" => "Approved",
+    "given_name" => "Testperson-se",
+    "street_address" => "Stårgatan 1",
+    "phone" => "070 111 11 11"
+);
+$create["billing_address"] = $address;
+$create["shipping_address"] = $address;
+
+$create["merchant_reference"] = array(
+    "orderid1" => "someUniqueId..."
+);
 
 foreach ($cart as $item) {
-    $update['cart']['items'][] = $item;
+    $create['cart']['items'][] = $item;
 }
 
 try {
-    $order->update($update);
+    $order->create($create);
 } catch (Klarna_Checkout_ApiErrorException $e) {
     var_dump($e->getMessage());
     var_dump($e->getPayload());
 }
+
+var_dump($order);
