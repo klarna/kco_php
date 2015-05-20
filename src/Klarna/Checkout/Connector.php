@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2015 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    Klarna <support@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -34,25 +34,37 @@
  * @author    Rickard D. <rickard.dybeck@klarna.com>
  * @author    Christer G. <christer.gustavsson@klarna.com>
  * @author    David K. <david.keijser@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
 class Klarna_Checkout_Connector
 {
     /**
+     * Domain of the testdrive
+     */
+    const BASE_TEST_URL = "https://checkout.testdrive.klarna.com";
+
+    /**
+     * Domain of the live system
+     */
+    const BASE_URL = "https://checkout.klarna.com";
+
+    /**
      * Create a new Checkout Connector
      *
      * @param string $secret string used to sign requests
+     * @param string $domain the domain used for requests
      *
      * @return Klarna_Checkout_ConnectorInterface
      */
-    public static function create($secret)
+    public static function create($secret, $domain = self::BASE_URL)
     {
         return new Klarna_Checkout_BasicConnector(
             Klarna_Checkout_HTTP_Transport::create(),
             new Klarna_Checkout_Digest,
-            $secret
+            $secret,
+            $domain
         );
     }
 }

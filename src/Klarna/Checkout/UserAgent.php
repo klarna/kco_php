@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2015 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +21,7 @@
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    Klarna <support@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -33,7 +32,7 @@
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    David K. <david.keijser@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -54,7 +53,7 @@ class Klarna_Checkout_UserAgent
         $this->_fields = array(
             'Library' => array(
                 'name' => 'Klarna.ApiWrapper',
-                'version' => '2.0.0',
+                'version' => '3.0.0',
             ),
             'OS' => array(
                 'name' => php_uname('s'),
@@ -74,6 +73,7 @@ class Klarna_Checkout_UserAgent
      * @param array  $data  data array with name, version and possibly options
      *
      * @return void
+     * @throws Klarna_Checkout_Exception
      */
     public function addField($field, array $data)
     {

@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2015 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +21,7 @@
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    Klarna <support@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -34,7 +33,7 @@
  * @package   Klarna_Checkout
  * @author    Rickard D. <rickard.dybeck@klarna.com>
  * @author    Christer G. <christer.gustavsson@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -143,7 +142,7 @@ class Klarna_Checkout_BasicConnectorGetTest extends PHPUnit_Framework_TestCase
             'aboogie'
         );
         $this->orderStub->accept = 'zoidberg';
-        $result = $object->apply('GET', $this->orderStub);
+        $object->apply('GET', $this->orderStub);
 
         $this->assertEquals(
             'zoidberg',
@@ -267,12 +266,14 @@ class Klarna_Checkout_BasicConnectorGetTest extends PHPUnit_Framework_TestCase
      * Test with a redirect (302) to a Forbidden (503) to ensure exception is
      * thrown.
      *
+     * @throws Exception
+     *
      * @return void
      */
     public function testApplyGet302to503()
     {
         $this->setExpectedException(
-            'Klarna_Checkout_ConnectorException', 'Forbidden', 503
+            'Klarna_Checkout_ApiErrorException', 'API Error', 503
         );
 
         $options = array('url' => 'localhost');
@@ -303,9 +304,8 @@ class Klarna_Checkout_BasicConnectorGetTest extends PHPUnit_Framework_TestCase
             'aboogie'
         );
 
-        $result = null;
         try {
-            $result = $object->apply('GET', $this->orderStub, $options);
+            $object->apply('GET', $this->orderStub, $options);
         } catch (Exception $e) {
             $request = $curl->request;
             $this->assertEquals($redirect, $request->getUrl(), 'Url Option');

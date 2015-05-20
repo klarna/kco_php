@@ -14,37 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Example of a fetch call.
+ * File containing the Klarna_Checkout_Resource interface
  *
- * PHP version 5.3.4
+ * PHP version 5.3
  *
  * @category  Payment
  * @package   Klarna_Checkout
- * @author    David Keijser <david.keijser@klarna.com>
- * @author    Rickard Dybeck <rickard.dybeck@klarna.com>
- * @author    Matthias Feist <matthias.feist@klarna.com>
+ * @author    Klarna <support@klarna.com>
  * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
 
-require_once 'src/Klarna/Checkout.php';
-
-$sharedSecret = 'sharedSecret';
-$orderUri = 'https://checkout.testdrive.klarna.com/checkout/orders/ABC123';
-
-$connector = Klarna_Checkout_Connector::create(
-    $sharedSecret,
-    Klarna_Checkout_Connector::BASE_TEST_URL
-);
-$order = new Klarna_Checkout_Order($connector, $orderUri);
-
-try {
-    $order->fetch();
-} catch (Klarna_Checkout_ApiErrorException $e) {
-    var_dump($e->getMessage());
-    var_dump($e->getPayload());
+/**
+ * Interface for updateable resource objects
+ *
+ * @category  Payment
+ * @package   Klarna_Checkout
+ * @author    Matthias Feist <matthias.feist@klarna.com>
+ * @copyright 2015 Klarna AB
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
+ * @link      http://developers.klarna.com/
+ */
+interface Klarna_Checkout_ResourceUpdateableInterface
+{
+    /**
+     * Update resource data
+     *
+     * @param array $data data to update the resource with
+     *
+     * @return void
+     */
+    public function update(array $data);
 }
-
-
-var_dump($order);

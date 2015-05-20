@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2013 Klarna AB
+ * Copyright 2015 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,20 +22,16 @@
  * @package   Klarna_Checkout
  * @author    David Keijser <david.keijser@klarna.com>
  * @author    Rickard Dybeck <rickard.dybeck@klarna.com>
- * @copyright 2013 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
 
 require_once 'src/Klarna/Checkout.php';
 
-Klarna_Checkout_Order::$baseUri
-    = 'https://checkout.testdrive.klarna.com/checkout/orders';
-Klarna_Checkout_Order::$contentType
-    = "application/vnd.klarna.checkout.aggregated-order-v2+json";
-
 $eid = '0';
 $sharedSecret = 'sharedSecret';
+
 $cart = array(
     array(
         'reference' => '123456789',
@@ -55,12 +51,16 @@ $cart = array(
     )
 );
 
-$connector = Klarna_Checkout_Connector::create($sharedSecret);
+$connector = Klarna_Checkout_Connector::create(
+    $sharedSecret,
+    Klarna_Checkout_Connector::BASE_TEST_URL
+);
 $order = new Klarna_Checkout_Order($connector);
 
 $create['purchase_country'] = 'SE';
 $create['purchase_currency'] = 'SEK';
 $create['locale'] = 'sv-se';
+// $create['recurring'] = true;
 $create['merchant']['id'] = $eid;
 $create['merchant']['terms_uri'] = 'http://example.com/terms.php';
 $create['merchant']['checkout_uri'] = 'https://example.com/checkout.php';
@@ -74,4 +74,11 @@ foreach ($cart as $item) {
     $create['cart']['items'][] = $item;
 }
 
-$order->create($create);
+try {
+    $order->create($create);
+} catch (Klarna_Checkout_ApiErrorException $e) {
+    var_dump($e->getMessage());
+    var_dump($e->getPayload());
+}
+
+var_dump($order);

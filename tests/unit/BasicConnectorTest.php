@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright 2012 Klarna AB
+ * Copyright 2015 Klarna AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +21,7 @@
  * @category  Payment
  * @package   Klarna_Checkout
  * @author    Klarna <support@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -34,7 +33,7 @@
  * @package   Klarna_Checkout
  * @author    Rickard D. <rickard.dybeck@klarna.com>
  * @author    Christer G. <christer.gustavsson@klarna.com>
- * @copyright 2012 Klarna AB
+ * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
@@ -119,12 +118,13 @@ class Klarna_Checkout_BasicConnectorTest extends PHPUnit_Framework_TestCase
      * @param string $message error message
      *
      * @dataProvider responseErrorCodes
+     *
      * @return void
      */
     public function testApplyGetErrorCode($code, $message)
     {
         $this->setExpectedException(
-            'Klarna_Checkout_ConnectorException', $message, $code
+            'Klarna_Checkout_ApiErrorException', "API Error", $code
         );
 
         $curl = new Klarna_Checkout_HTTP_TransportStub;
@@ -159,12 +159,13 @@ class Klarna_Checkout_BasicConnectorTest extends PHPUnit_Framework_TestCase
      * @param string $message error message
      *
      * @dataProvider responseErrorCodes
+     *
      * @return void
      */
     public function testApplyPostErrorCode($code, $message)
     {
         $this->setExpectedException(
-            'Klarna_Checkout_ConnectorException', $message, $code
+            'Klarna_Checkout_ApiErrorException', "API Error", $code
         );
 
         $curl = new Klarna_Checkout_HTTP_TransportStub;

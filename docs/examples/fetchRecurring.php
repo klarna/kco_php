@@ -14,14 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Example of an update call.
+ * Example of a fetch recurring status.
  *
  * PHP version 5.3.4
  *
  * @category  Payment
  * @package   Klarna_Checkout
- * @author    David Keijser <david.keijser@klarna.com>
- * @author    Rickard Dybeck <rickard.dybeck@klarna.com>
+ * @author    Matthias Feist <matthias.feist@klarna.com>
  * @copyright 2015 Klarna AB
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
@@ -30,41 +29,20 @@
 require_once 'src/Klarna/Checkout.php';
 
 $sharedSecret = 'sharedSecret';
-$orderUri = 'https://checkout.testdrive.klarna.com/checkout/orders/ABC123';
-$cart = array(
-    array(
-        'reference' => '123456789',
-        'name' => 'Klarna t-shirt',
-        'quantity' => 4,
-        'unit_price' => 12300,
-        'discount_rate' => 1000,
-        'tax_rate' => 2500
-    ),
-    array(
-        'type' => 'shipping_fee',
-        'reference' => 'SHIPPING',
-        'name' => 'Shipping Fee',
-        'quantity' => 1,
-        'unit_price' => 4900,
-        'tax_rate' => 2500
-    )
-);
 
 $connector = Klarna_Checkout_Connector::create(
     $sharedSecret,
     Klarna_Checkout_Connector::BASE_TEST_URL
 );
-$order = new Klarna_Checkout_Order($connector, $orderUri);
-
-// Reset cart
-$update['cart']['items'] = array();
-
-foreach ($cart as $item) {
-    $update['cart']['items'][] = $item;
-}
+$recurringStatus = new Klarna_Checkout_RecurringStatus(
+    $connector,
+    'ABC123'
+);
 
 try {
-    $order->update($update);
+    $recurringStatus->fetch();
+    var_dump($recurringStatus["payment_method"]);
+
 } catch (Klarna_Checkout_ApiErrorException $e) {
     var_dump($e->getMessage());
     var_dump($e->getPayload());
