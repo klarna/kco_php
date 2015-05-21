@@ -53,7 +53,7 @@ class Klarna_Checkout_UserAgent
         $this->_fields = array(
             'Library' => array(
                 'name' => 'Klarna.ApiWrapper',
-                'version' => '3.0.0',
+                'version' => '3.0.1',
             ),
             'OS' => array(
                 'name' => php_uname('s'),
