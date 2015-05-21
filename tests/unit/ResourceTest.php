@@ -137,7 +137,7 @@ class Klarna_Checkout_ResourceTest extends PHPUnit_Framework_TestCase
      */
     public function testSetInvalidKey($resource)
     {
-        $key = ["1" => "2"];
+        $key = array("1" => "2");
         $value = "testValue";
 
         $this->setExpectedException("InvalidArgumentException");
@@ -156,7 +156,7 @@ class Klarna_Checkout_ResourceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInvalidKey($resource)
     {
-        $key = ["1" => "2"];
+        $key = array("1" => "2");
 
         $this->setExpectedException("InvalidArgumentException");
 
