@@ -121,7 +121,7 @@ class Klarna_Checkout_ResourceTest extends PHPUnit_Framework_TestCase
         $key = "testKey1";
         $value = "testValue1";
 
-        $resource->parse([$key => $value]);
+        $resource->parse(array($key => $value));
         $this->assertEquals($value, $resource[$key]);
 
     }
