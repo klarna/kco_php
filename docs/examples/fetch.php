@@ -31,20 +31,21 @@
 require_once 'src/Klarna/Checkout.php';
 
 $sharedSecret = 'sharedSecret';
-$orderUri = 'https://checkout.testdrive.klarna.com/checkout/orders/ABC123';
+$orderID = 'ABC123';
 
 $connector = Klarna_Checkout_Connector::create(
     $sharedSecret,
     Klarna_Checkout_Connector::BASE_TEST_URL
 );
-$order = new Klarna_Checkout_Order($connector, $orderUri);
+
+$order = new Klarna_Checkout_Order($connector, $orderID);
 
 try {
     $order->fetch();
 } catch (Klarna_Checkout_ApiErrorException $e) {
     var_dump($e->getMessage());
     var_dump($e->getPayload());
+    die;
 }
-
 
 var_dump($order);

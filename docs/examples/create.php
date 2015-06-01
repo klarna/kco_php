@@ -32,6 +32,29 @@ require_once 'src/Klarna/Checkout.php';
 $eid = '0';
 $sharedSecret = 'sharedSecret';
 
+$connector = Klarna_Checkout_Connector::create(
+    $sharedSecret,
+    Klarna_Checkout_Connector::BASE_TEST_URL
+);
+
+$order = new Klarna_Checkout_Order($connector);
+
+$create['purchase_country'] = 'SE';
+$create['purchase_currency'] = 'SEK';
+$create['locale'] = 'sv-se';
+// $create['recurring'] = true;
+$create['merchant'] = array(
+    'id' => $eid,
+    'terms_uri' => 'http://example.com/terms.html',
+    'checkout_uri' => 'http://example.com/checkout.php',
+    'confirmation_uri' => 'http://example.com/confirmation.php' .
+        '?klarna_order_id={checkout.order.id}',
+    // You can not receive push notification on non publicly available URI
+    'push_uri' => 'http://example.com/push.php' .
+        '?klarna_order_id={checkout.order.id}'
+);
+$create['cart']['items'] = array();
+
 $cart = array(
     array(
         'reference' => '123456789',
@@ -51,24 +74,6 @@ $cart = array(
     )
 );
 
-$connector = Klarna_Checkout_Connector::create(
-    $sharedSecret,
-    Klarna_Checkout_Connector::BASE_TEST_URL
-);
-$order = new Klarna_Checkout_Order($connector);
-
-$create['purchase_country'] = 'SE';
-$create['purchase_currency'] = 'SEK';
-$create['locale'] = 'sv-se';
-// $create['recurring'] = true;
-$create['merchant']['id'] = $eid;
-$create['merchant']['terms_uri'] = 'http://example.com/terms.php';
-$create['merchant']['checkout_uri'] = 'https://example.com/checkout.php';
-$create['merchant']['confirmation_uri']
-    = 'https://example.com/thankyou.php?sid=123&klarna_order={checkout.order.uri}';
-$create['merchant']['push_uri']
-    = 'https://example.com/push.php?sid=123&klarna_order={checkout.order.uri}';
-$create['cart'] = array();
 
 foreach ($cart as $item) {
     $create['cart']['items'][] = $item;
@@ -79,6 +84,7 @@ try {
 } catch (Klarna_Checkout_ApiErrorException $e) {
     var_dump($e->getMessage());
     var_dump($e->getPayload());
+    die;
 }
 
 var_dump($order);

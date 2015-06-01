@@ -29,20 +29,18 @@
 require_once 'src/Klarna/Checkout.php';
 
 $sharedSecret = 'sharedSecret';
+$recurringToken = 'ABC123';
 
 $connector = Klarna_Checkout_Connector::create(
     $sharedSecret,
     Klarna_Checkout_Connector::BASE_TEST_URL
 );
-$recurringStatus = new Klarna_Checkout_RecurringStatus(
-    $connector,
-    'ABC123'
-);
+
+$recurringStatus = new Klarna_Checkout_RecurringStatus($connector, $recurringToken);
 
 try {
     $recurringStatus->fetch();
     var_dump($recurringStatus["payment_method"]);
-
 } catch (Klarna_Checkout_ApiErrorException $e) {
     var_dump($e->getMessage());
     var_dump($e->getPayload());

@@ -38,33 +38,14 @@ require_once 'src/Klarna/Checkout.php';
 
 $eid = '0';
 $sharedSecret = 'sharedSecret';
-$recurringOrderToken = "abc123";
-
-$cart = array(
-    array(
-        'reference' => '123456789',
-        'name' => 'Klarna t-shirt',
-        'quantity' => 2,
-        'unit_price' => 12300,
-        'discount_rate' => 1000,
-        'tax_rate' => 2500
-    ),
-    array(
-        'type' => 'shipping_fee',
-        'reference' => 'SHIPPING',
-        'name' => 'Shipping Fee',
-        'quantity' => 1,
-        'unit_price' => 4900,
-        'tax_rate' => 2500
-    )
-);
-
+$recurringToken = "ABC123";
 
 $connector = Klarna_Checkout_Connector::create(
     $sharedSecret,
     Klarna_Checkout_Connector::BASE_TEST_URL
 );
-$order = new Klarna_Checkout_RecurringOrder($connector, $recurringOrderToken);
+
+$recurringOrder = new Klarna_Checkout_RecurringOrder($connector, $recurringToken);
 
 // If the order should be activated automatically.
 // Set to true if you instead want a invoice created
@@ -94,15 +75,37 @@ $create["merchant_reference"] = array(
     "orderid1" => "someUniqueId..."
 );
 
+$cart = array(
+    array(
+        'reference' => '123456789',
+        'name' => 'Klarna t-shirt',
+        'quantity' => 2,
+        'unit_price' => 12300,
+        'discount_rate' => 1000,
+        'tax_rate' => 2500
+    ),
+    array(
+        'type' => 'shipping_fee',
+        'reference' => 'SHIPPING',
+        'name' => 'Shipping Fee',
+        'quantity' => 1,
+        'unit_price' => 4900,
+        'tax_rate' => 2500
+    )
+);
+
+$create['cart']['items'] = array();
+
 foreach ($cart as $item) {
     $create['cart']['items'][] = $item;
 }
 
 try {
-    $order->create($create);
+    $recurringOrder->create($create);
 } catch (Klarna_Checkout_ApiErrorException $e) {
     var_dump($e->getMessage());
     var_dump($e->getPayload());
+    die;
 }
 
-var_dump($order);
+var_dump($recurringOrder);

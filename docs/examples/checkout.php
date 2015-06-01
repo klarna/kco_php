@@ -34,6 +34,11 @@ $order = null;
 $eid = '0';
 $sharedSecret = 'sharedSecret';
 
+$connector = Klarna_Checkout_Connector::create(
+    $sharedSecret,
+    Klarna_Checkout_Connector::BASE_TEST_URL
+);
+
 $cart = array(
     array(
         'reference' => '123456789',
@@ -53,65 +58,66 @@ $cart = array(
     )
 );
 
-$connector = Klarna_Checkout_Connector::create(
-    $sharedSecret,
-    Klarna_Checkout_Connector::BASE_TEST_URL
-);
-
-if (array_key_exists('klarna_checkout', $_SESSION)) {
+if (array_key_exists('klarna_order_id', $_SESSION)) {
     // Resume session
     $order = new Klarna_Checkout_Order(
         $connector,
-        $_SESSION['klarna_checkout']
+        $_SESSION['klarna_order_id']
     );
+
     try {
         $order->fetch();
 
         // Reset cart
         $update['cart']['items'] = array();
+
         foreach ($cart as $item) {
             $update['cart']['items'][] = $item;
         }
+
         $order->update($update);
     } catch (Exception $e) {
         // Reset session
         $order = null;
-        unset($_SESSION['klarna_checkout']);
+        unset($_SESSION['klarna_order_id']);
     }
 }
 
 if ($order == null) {
     // Start new session
+    $create['purchase_country'] = 'SE';
+    $create['purchase_currency'] = 'SEK';
+    $create['locale'] = 'sv-se';
+    $create['merchant'] = array(
+        'id' => $eid,
+        'terms_uri' => 'http://example.com/terms.html',
+        'checkout_uri' => 'http://example.com/checkout.php',
+        'confirmation_uri' => 'http://example.com/confirmation.php' .
+            '?klarna_order_id={checkout.order.id}',
+        // You can not receive push notification on non publicly available URI
+        'push_uri' => 'http://example.com/push.php' .
+            '?klarna_order_id={checkout.order.id}'
+    );
+    $update['cart']['items'] = array();
+
+    foreach ($cart as $item) {
+        $create['cart']['items'][] = $item;
+    }
+
+    $order = new Klarna_Checkout_Order($connector);
+
     try {
-        $create['purchase_country'] = 'SE';
-        $create['purchase_currency'] = 'SEK';
-        $create['locale'] = 'sv-se';
-        $create['merchant']['id'] = $eid;
-        $create['merchant']['terms_uri'] = 'http://example.com/terms.html';
-        $create['merchant']['checkout_uri'] = 'http://example.com/checkout.php';
-        $create['merchant']['confirmation_uri']
-            = 'http://example.com/confirmation.php' .
-            '?sid=123&klarna_order={checkout.order.uri}';
-        // You can not receive push notification on non publicly available uri
-        $create['merchant']['push_uri'] = 'http://example.com/push.php' .
-            '?sid=123&klarna_order={checkout.order.uri}';
-        $create['cart'] = array();
-
-        foreach ($cart as $item) {
-            $create['cart']['items'][] = $item;
-        }
-
-        $order = new Klarna_Checkout_Order($connector);
         $order->create($create);
         $order->fetch();
     } catch (Klarna_Checkout_ApiErrorException $e) {
         var_dump($e->getMessage());
         var_dump($e->getPayload());
+        die;
     }
 }
 
 // Store location of checkout session
-$_SESSION['klarna_checkout'] = $sessionId = $order->getLocation();
+$_SESSION['klarna_order_id'] = $sessionID = $order['id'];
 
 if (isset($order['gui']['snippet'])) {
     // Display checkout
