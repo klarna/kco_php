@@ -6,7 +6,8 @@
     <property name="phpunit.conf" location="${work.dir}/phpunit.xml.dist" />
     <property name="checkstyle.standard" value="PEAR" />
     <property name="phpmd.file" value="${tmp.dir}/phpmd.xml" />
-    <property name="phpdoc.dir" location="${docs.dir}/phpdoc" />
+    <property name="phpdoc.src" location="${work.dir}/src" />
+    <property name="phpdoc.dest" location="${docs.dir}/reference" />
 
     <patternset id="source">
         <include name="**/*.php" />
@@ -37,13 +38,24 @@
         </parallel>
     </target>
 
-    <target
-        name="create-doc"
-        description="Generate documentation"
-    >
-        <!--
-        <phpdoc dir="${src.dir}" dest="${phpdoc.dir}" />
-        !-->
+    <target name="-pre-archive">
+        <sequential>
+            <exec dir="${work.dir}" executable="${composer}">
+                <arg value="require" />
+                <arg value="apigen/apigen:4.0.1" />
+                <arg value="--no-interaction" />
+            </exec>
+            <exec dir="${work.dir}" executable="${composer}">
+                <arg value="require" />
+                <arg value="klarna/apigen-theme:1.0.0" />
+                <arg value="--no-interaction" />
+            </exec>
+        </sequential>
+    </target>
+
+    <target name="create-doc" description="Generate documentation">
+        <delete dir="${phpdoc.dir}"/>
+        <phpdoc src="${phpdoc.src}" dest="${phpdoc.dest}"/>
     </target>
 
     <target
