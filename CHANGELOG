@@ -2,6 +2,13 @@
 Klarna Checkout PHP library
 ===========================
 
+v4.0.0
+----------------
+Date: 2015-06-01
+
+    Christer G. <support@klarna.com>
+        Update resource constructors. Only allow creation with IDs instead of full URIs
+
 v3.0.2, v3.0.1
 ----------------
 Date: 2015-05-21
