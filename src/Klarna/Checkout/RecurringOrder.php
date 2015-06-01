@@ -36,8 +36,8 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
-class Klarna_Checkout_RecurringOrder extends Klarna_Checkout_Resource
-    implements Klarna_Checkout_ResourceCreateableInterface
+class Klarna_Checkout_RecurringOrder extends Klarna_Checkout_Resource implements
+    Klarna_Checkout_ResourceCreateableInterface
 {
     /**
      * Path that is used to create resources
@@ -72,9 +72,14 @@ class Klarna_Checkout_RecurringOrder extends Klarna_Checkout_Resource
         Klarna_Checkout_ConnectorInterface $connector,
         $recurringToken
     ) {
-        $uri = $connector->getDomain()
-            . sprintf($this->relativePath, $recurringToken);
-        parent::__construct($connector, $uri);
+        parent::__construct($connector);
+
+        $uri = $this->connector->getDomain() . sprintf(
+            $this->relativePath,
+            $recurringToken
+        );
+
+        $this->setLocation($uri);
     }
 
 
