@@ -72,10 +72,10 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
     /**
      * Create a new Checkout Connector
      *
-     * @param Klarna_Checkout_HTTP_TransportInterface $http     transport
+     * @param Klarna_Checkout_HTTP_TransportInterface $http     Transport
      * @param Klarna_Checkout_Digest                  $digester Digest Generator
-     * @param string                                  $secret   shared secret
-     * @param string                                  $domain   the domain of the request
+     * @param string                                  $secret   Shared secret
+     * @param string                                  $domain   Domain of the request
      */
     public function __construct(
         Klarna_Checkout_HTTP_TransportInterface $http,
@@ -312,7 +312,9 @@ class Klarna_Checkout_BasicConnector implements Klarna_Checkout_ConnectorInterfa
      * @param array                             $visited  list of visited locations
      *
      * @throws Klarna_Checkout_Exception        if 4xx or 5xx response code.
-     * @return Klarna_Checkout_HTTP_Response    Result object containing status code and payload
+     *
+     * @return Klarna_Checkout_HTTP_Response    Result object containing status code
+     *                                          and payload
      */
     protected function handle(
         $method,

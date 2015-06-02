@@ -41,6 +41,8 @@
 class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Object to test.
+     *
      * @var Klarna_Checkout_HTTP_CURLTransport
      */
     protected $http;
@@ -257,7 +259,8 @@ class Klarna_Checkout_HTTP_CURLTransportTest extends PHPUnit_Framework_TestCase
         $error = 'CURL_ERROR';
 
         $this->setExpectedException(
-            'Klarna_Checkout_ConnectionErrorException', $error
+            'Klarna_Checkout_ConnectionErrorException',
+            $error
         );
 
         $url = 'maybe-localhost';

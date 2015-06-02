@@ -38,11 +38,12 @@
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://developers.klarna.com/
  */
-class Klarna_Checkout_HTTP_CURLHandle
-    implements Klarna_Checkout_HTTP_CURLHandleInterface
+class Klarna_Checkout_HTTP_CURLHandle implements
+    Klarna_Checkout_HTTP_CURLHandleInterface
 {
     /**
-     * cURL handle
+     * Handle for cURL.
+     *
      * @var resource
      */
     private $_handle = null;

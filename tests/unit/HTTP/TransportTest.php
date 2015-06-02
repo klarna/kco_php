@@ -38,8 +38,9 @@
  */
 class Klarna_Checkout_HTTP_TransportTest extends PHPUnit_Framework_TestCase
 {
-
     /**
+     * Object to test.
+     *
      * @var Klarna_checkout_HTTP_Transport
      */
     protected $transport;

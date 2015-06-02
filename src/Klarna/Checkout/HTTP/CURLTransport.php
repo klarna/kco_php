@@ -38,13 +38,13 @@
  * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link       http://developers.klarna.com/
  */
-class Klarna_Checkout_HTTP_CURLTransport
-    implements Klarna_Checkout_HTTP_TransportInterface
+class Klarna_Checkout_HTTP_CURLTransport implements
+    Klarna_Checkout_HTTP_TransportInterface
 {
     const DEFAULT_TIMEOUT = 10;
 
     /**
-     * cUrl
+     * Factory for cUrl
      *
      * @var Klarna_Checkout_HTTP_CURLFactory
      */
@@ -58,7 +58,7 @@ class Klarna_Checkout_HTTP_CURLTransport
     protected $timeout;
 
     /**
-     * cURL Options
+     * Options for cURL
      *
      * @var array
      */
