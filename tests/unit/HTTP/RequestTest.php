@@ -41,6 +41,8 @@
 class Klarna_Checkout_HTTP_RequestTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Object to test.
+     *
      * @var Klarna_Checkout_HTTP_Request
      */
     protected $request;
@@ -122,7 +124,8 @@ class Klarna_Checkout_HTTP_RequestTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($this->request->getHeaders()));
         $this->assertEquals('value', $this->request->getHeader('test'));
         $this->assertEquals(
-            array('test' => 'value'), $this->request->getHeaders()
+            array('test' => 'value'),
+            $this->request->getHeaders()
         );
 
         $this->assertEquals(null, $this->request->getHeader('undefined'));

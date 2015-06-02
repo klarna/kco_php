@@ -38,8 +38,8 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache license v2.0
  * @link      http://developers.klarna.com/
  */
-class Klarna_Checkout_Order extends Klarna_Checkout_Resource
-    implements Klarna_Checkout_ResourceCreateableInterface,
+class Klarna_Checkout_Order extends Klarna_Checkout_Resource implements
+    Klarna_Checkout_ResourceCreateableInterface,
     Klarna_Checkout_ResourceFetchableInterface,
     Klarna_Checkout_ResourceUpdateableInterface
 {
@@ -57,6 +57,24 @@ class Klarna_Checkout_Order extends Klarna_Checkout_Resource
      */
     protected $contentType
         = "application/vnd.klarna.checkout.aggregated-order-v2+json";
+
+    /**
+     * Create a new order.
+     *
+     * @param Klarna_Checkout_ConnectorInterface $connector connector to use
+     * @param string                             $id        Order id
+     */
+    public function __construct(
+        Klarna_Checkout_ConnectorInterface $connector,
+        $id = null
+    ) {
+        parent::__construct($connector);
+
+        if ($id !== null) {
+            $uri = $this->connector->getDomain() . "{$this->relativePath}/{$id}";
+            $this->setLocation($uri);
+        }
+    }
 
     /**
      * Create a new order

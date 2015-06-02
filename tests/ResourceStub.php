@@ -90,6 +90,8 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
      * Set the content type
      *
      * @param string $contentType Content type
+     *
+     * @return void
      */
     public function setContentType($contentType)
     {
@@ -100,6 +102,8 @@ class Klarna_Checkout_ResourceStub implements Klarna_Checkout_ResourceInterface
      * Set the accept type
      *
      * @param string $accept Accept type
+     *
+     * @return void
      */
     public function setAccept($accept)
     {

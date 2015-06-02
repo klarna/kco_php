@@ -41,6 +41,8 @@
 class Klarna_Checkout_HTTP_CURLHeadersTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Object to test.
+     *
      * @var Klarna_Checkout_HTTP_CURLHeaders
      */
     protected $parser;

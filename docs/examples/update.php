@@ -30,7 +30,15 @@
 require_once 'src/Klarna/Checkout.php';
 
 $sharedSecret = 'sharedSecret';
-$orderUri = 'https://checkout.testdrive.klarna.com/checkout/orders/ABC123';
+$orderID = 'ABC123';
+
+$connector = Klarna_Checkout_Connector::create(
+    $sharedSecret,
+    Klarna_Checkout_Connector::BASE_TEST_URL
+);
+
+$order = new Klarna_Checkout_Order($connector, $orderID);
+
 $cart = array(
     array(
         'reference' => '123456789',
@@ -49,12 +57,6 @@ $cart = array(
         'tax_rate' => 2500
     )
 );
-
-$connector = Klarna_Checkout_Connector::create(
-    $sharedSecret,
-    Klarna_Checkout_Connector::BASE_TEST_URL
-);
-$order = new Klarna_Checkout_Order($connector, $orderUri);
 
 // Reset cart
 $update['cart']['items'] = array();

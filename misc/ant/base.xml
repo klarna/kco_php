@@ -28,10 +28,11 @@
     <property name="coverage.dir" location="${tmp.dir}/coverage" />
     <property name="autoload.file" location="${work.dir}/vendor/autoload.php" />
 
+    <property name="composer" value="composer" />
     <property name="phpunit" value="vendor/bin/phpunit" />
     <property name="phpcs" value="vendor/bin/phpcs" />
     <property name="phpmd" value="vendor/bin/phpmd" />
-    <property name="phpdoc" value="phpdoc" />
+    <property name="apigen" value="vendor/bin/apigen" />
     <property name="git" value="git" />
 
     <!-- export a few properties about the system and the build !-->
@@ -167,15 +168,17 @@
     </macrodef>
 
     <macrodef name="phpdoc">
-        <attribute name="dir" default="${src.dir}" />
-        <attribute name="dest" default="${docs.dir}/phpdoc" />
+        <attribute name="src" default="${phpdoc.src}" />
+        <attribute name="dest" default="${phpdoc.dir}" />
 
         <sequential>
-            <exec dir="${work.dir}" executable="${phpdoc}">
+            <exec dir="${work.dir}" executable="${apigen}">
+                <arg value="generate" />
+                <arg value="-s" />
+                <arg value="@{src}" />
                 <arg value="-d" />
-                <arg value="@{dir}" />
-                <arg value="-t" />
                 <arg value="@{dest}" />
+                <arg value="--template-config=vendor/klarna/apigen-theme/src/config.neon" />
             </exec>
         </sequential>
     </macrodef>

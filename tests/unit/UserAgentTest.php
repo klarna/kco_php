@@ -27,7 +27,7 @@
  */
 
 /**
- * unittest of the UserAgent class
+ * Unittest of the UserAgent class
  *
  * @category  Payment
  * @package   Klarna_Checkout

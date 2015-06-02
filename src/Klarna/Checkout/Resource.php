@@ -87,16 +87,10 @@ abstract class Klarna_Checkout_Resource
      * Create a new Resource object
      *
      * @param Klarna_Checkout_ConnectorInterface $connector connector to use
-     * @param string                             $uri       uri of resource
      */
-    public function __construct(
-        Klarna_Checkout_ConnectorInterface $connector,
-        $uri = null
-    ) {
+    public function __construct(Klarna_Checkout_ConnectorInterface $connector)
+    {
         $this->connector = $connector;
-        if ($uri !== null) {
-            $this->setLocation($uri);
-        }
     }
 
     /**

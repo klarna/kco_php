@@ -28,7 +28,7 @@
  */
 
 /**
- * Stub implemenation of the Curl Factory
+ * Stub implementation of the Curl Factory
  *
  * @category   Payment
  * @package    Payment_Klarna
@@ -41,11 +41,15 @@
 class Klarna_Checkout_CurlFactoryStub extends Klarna_Checkout_HTTP_CURLFactory
 {
     /**
+     * List of stubbed handles.
+     *
      * @var array
      */
     public $handles;
 
     /**
+     * Stubbed data.
+     *
      * @var array
      */
     public $data = array();

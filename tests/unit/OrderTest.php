@@ -48,10 +48,15 @@ class Klarna_Checkout_OrderTest extends PHPUnit_Framework_TestCase
     public function testSetLocationFromConstructor()
     {
         $mock = $this->getMock('Klarna_Checkout_ConnectorInterface');
-        $uri = "http://foobar";
+        $mock->expects($this->once())
+            ->method('getDomain')
+            ->willReturn('https://whatever.com');
 
-        $order = new Klarna_Checkout_Order($mock, $uri);
+        $order = new Klarna_Checkout_Order($mock, 'foobar');
 
-        $this->assertEquals($uri, $order->getLocation());
+        $this->assertEquals(
+            'https://whatever.com/checkout/orders/foobar',
+            $order->getLocation()
+        );
     }
 }

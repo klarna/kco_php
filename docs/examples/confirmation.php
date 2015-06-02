@@ -33,21 +33,21 @@ require_once 'src/Klarna/Checkout.php';
 session_start();
 
 $sharedSecret = 'sharedSecret';
-
-// https://checkout.testdrive.klarna.com/checkout/orders/123
-$checkoutId = $_SESSION['klarna_checkout'];
+$orderID = $_SESSION['klarna_order_id'];
 
 $connector = Klarna_Checkout_Connector::create(
     $sharedSecret,
     Klarna_Checkout_Connector::BASE_TEST_URL
 );
-$order = new Klarna_Checkout_Order($connector, $checkoutId);
+
+$order = new Klarna_Checkout_Order($connector, $orderID);
 
 try {
     $order->fetch();
 } catch (Klarna_Checkout_ApiErrorException $e) {
     var_dump($e->getMessage());
     var_dump($e->getPayload());
+    die;
 }
 
 if ($order['status'] == 'checkout_incomplete') {
@@ -61,4 +61,4 @@ $snippet = $order['gui']['snippet'];
 // padding or margin)
 echo "<div>{$snippet}</div>";
 
-unset($_SESSION['klarna_checkout']);
+unset($_SESSION['klarna_order_id']);
