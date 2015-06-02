@@ -1,5 +1,8 @@
 ## Klarna Checkout PHP library
-[![Build Status](https://travis-ci.org/klarna/kco_php.svg?branch=v3.0)](https://travis-ci.org/klarna/kco_php) [![Coverage Status](https://coveralls.io/repos/klarna/kco_php/badge.png?branch=v3.0)](https://coveralls.io/r/klarna/kco_php?branch=v3.0)
+
+[![Packagist Version][packagist-shield]](https://packagist.org/packages/klarna/checkout)
+[![Build Status][travis-shield]](https://travis-ci.org/klarna/kco_php)
+[![Coverage Status][coveralls-shield]](https://coveralls.io/r/klarna/kco_php)
 
 Klarna Checkout is a revolutionary new payment solution that is changing the way
 people shop online. First, consumers verify their purchase with a minimal
@@ -60,3 +63,7 @@ please contact [integration@klarna.com](mailto:integration@klarna.com).
 ## License
 The Klarna Checkout PHP library is released under
 [Apache License, Version 2.0](http://www.apache.org/LICENSE-2.0)
+
+[packagist-shield]: https://img.shields.io/packagist/v/klarna/checkout.svg?style=flat
+[travis-shield]: https://img.shields.io/travis/klarna/kco_php/v4.0.svg?style=flat
+[coveralls-shield]: https://img.shields.io/coveralls/klarna/kco_php/v4.0.svg?style=flat
