@@ -81,10 +81,13 @@ foreach ($cart as $item) {
 
 try {
     $order->create($create);
+    $order->fetch();
+
+    $orderID = $order['id'];
+
+    echo sprintf('Order ID: %s', $orderID);
 } catch (Klarna_Checkout_ApiErrorException $e) {
     var_dump($e->getMessage());
     var_dump($e->getPayload());
     die;
 }
-
-var_dump($order);
