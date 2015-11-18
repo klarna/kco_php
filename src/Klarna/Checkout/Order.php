@@ -63,6 +63,8 @@ class Klarna_Checkout_Order extends Klarna_Checkout_Resource implements
      *
      * @param Klarna_Checkout_ConnectorInterface $connector connector to use
      * @param string                             $id        Order id
+     *
+     * @throws Klarna_Checkout_DomainMismatchException
      */
     public function __construct(
         Klarna_Checkout_ConnectorInterface $connector,
@@ -71,8 +73,18 @@ class Klarna_Checkout_Order extends Klarna_Checkout_Resource implements
         parent::__construct($connector);
 
         if ($id !== null) {
-            $uri = $this->connector->getDomain() . "{$this->relativePath}/{$id}";
-            $this->setLocation($uri);
+            $domain = $this->connector->getDomain();
+            if (strpos($id, $domain) === 0) {
+                $this->setLocation($id);
+            } elseif (strpos($id, '://') !== false) {
+                throw new Klarna_Checkout_DomainMismatchException(
+                    'OrderURI '.var_export($id, true).'does not match domain '
+                    .var_export($domain, true)
+                );
+            } else {
+                $uri = $domain.$this->relativePath.'/'.$id;
+                $this->setLocation($uri);
+            }
         }
     }
 
