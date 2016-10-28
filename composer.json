@@ -5,7 +5,7 @@
     "license": "Apache-2.0",
     "type": "library",
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.3.0 <7.0",
         "ext-curl": "*"
     },
     "require-dev": {
