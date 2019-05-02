@@ -1,16 +1,13 @@
-## Klarna Checkout PHP library
+## Klarna Checkout PHP library (DEPRECATED)
 
 [![Packagist Version][packagist-shield]](https://packagist.org/packages/klarna/checkout)
 [![Build Status][travis-shield]](https://travis-ci.org/klarna/kco_php)
 [![Coverage Status][coveralls-shield]](https://coveralls.io/r/klarna/kco_php)
 
-Klarna Checkout is a revolutionary new payment solution that is changing the way
-people shop online. First, consumers verify their purchase with a minimal
-amount of information through intelligent identification, securing your order
-immediately, and then complete their payment afterwards – separating buying
-from paying and dramatically increasing conversion. Klarna Checkout also allows
-merchants to offer all payment methods through one supplier, minimizing
-administration, costs and integration time.
+# Deprecation notice
+
+This repo has been marked as deprecated. The SDK is not longer supported.
+Please use https://github.com/klarna/kco_rest_php SDK instead.
 
 ## About Klarna
 Klarna was founded in Stockholm in 2005 with the idea of providing a
@@ -22,6 +19,15 @@ fastest growing companies. In just 8 years, we've grown to 800 employees
 operating in 7 European countries with over 8 million consumers. But we are not
 satisfied with that. Our goal is to become market leaders within invoice-based
 payments worldwide and change the way the world shops online.
+
+
+Klarna Checkout is a revolutionary new payment solution that is changing the way
+people shop online. First, consumers verify their purchase with a minimal
+amount of information through intelligent identification, securing your order
+immediately, and then complete their payment afterwards – separating buying
+from paying and dramatically increasing conversion. Klarna Checkout also allows
+merchants to offer all payment methods through one supplier, minimizing
+administration, costs and integration time.
 
 ## Documentation
 Documentation and more examples can be found at
