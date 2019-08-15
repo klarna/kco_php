@@ -38,7 +38,7 @@ At Klarna, we strive toward achieving the highest possible quality for our
 products. Therefore, we require you to follow these guidelines if you wish
 to contribute.
 
-To contribute, the following criteria needs to be fulfilled:
+To contribute, the following criteria need to be fulfilled:
 * Description regarding what has been changed and why
 * Pull requests should implement a boxed change
 * All code and documentation must follow the
