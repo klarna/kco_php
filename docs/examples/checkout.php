@@ -117,7 +117,7 @@ if ($order == null) {
 }
 
 // Store location of checkout session
-$_SESSION['klarna_order_id'] = $sessionID = $order['id'];
+$_SESSION['klarna_order_id'] = $order['id'];
 
 if (isset($order['gui']['snippet'])) {
     // Display checkout
